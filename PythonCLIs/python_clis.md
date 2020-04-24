@@ -1,3 +1,7 @@
+<!-- 
+author: Erik O'Shaughnessy
+date: 23 Apr 2020
+-->
 # An Exploration of Modern Python CLI and Packaging
 
 The goal here is twofold: help the new developer learn how to create
@@ -6,12 +10,12 @@ and secondly why things are named and organized they way they are.
 
 ## In the Beginning...
 
-First, some history about command-line driven design from a [UNIX][13]
+First, some history about command-line driven design from a [Unix][11]
 persepective.
 
-UNIX is a computer operating system and is the ancestor of Linux and
+Unix is a computer operating system and is the ancestor of Linux and
 MacOS (and [many other operating systems][11] as well). The primary
-language for developing programs under UNIX is [C][12], often called the
+language for developing programs under Unix is [C][12], often called the
 portable assembler.  C is the language that built the Internet and
 most of the cool things that we rely on everyday: web browsers, web
 servers, operating systems, DNS, TCP/IP, and nearly every other piece
@@ -37,7 +41,7 @@ fair.
 
 The function argument variables `argc` and `argv` together describe a
 list of strings which were typed on the command line when the program
-was invoked. In typical terse UNIX naming tradition, `argc` means
+was invoked. In typical terse Unix naming tradition, `argc` means
 _argument count_ and `argv` means _argument vector_. Vector sounds
 cooler than list and `argl` would have sounded like a strangled cry
 from help.
@@ -78,9 +82,9 @@ used to parse that argument string. Using `getopt` makes parsing
 the command-line pretty easy and improves the user experience. 
 
 The [GNU][1] project came along and introduced longer format
-command-line arguments for their implementations of traditional UNIX
+command-line arguments for their implementations of traditional Unix
 command-line tools, things like '--file-format foo'. Of course we real
-UNIX programmers hated that, but like the dinosaurs we are, we lost.
+Unix programmers hated that, but like the dinosaurs we are, we lost.
 These arguments also tended to have short names like '-f foo' that had
 to be interpreted too.  All of this choice resulted in more workload
 for the programmer who just wanted to know what the user was
@@ -122,7 +126,7 @@ There have been several iterations of argument parsing modules in the
 Python standard library; [`getopt`][3], [`optparse`][4], and most
 recently [`argparse`][5]. `Argparse` allows the programmer to provide
 the user with a pretty consistent and helpful UX, but like it's GNU
-antecedents it took a lot of work and ['boiler plate code'][17] on the
+antecedents it took a lot of work and ['boilerplate code'][17] on the
 part of the programmer to make it "good".
 
 ```python
@@ -163,7 +167,7 @@ if __name__ == '__main__':
     echo()
 ```
 
-You can see some of the same boiler plate code in the `click.option`
+You can see some of the same boilerplate code in the `click.option`
 decorator as you saw with `argparse`. But the "work" of creating and
 managing the argument parser has been abstracted away. Now the function
 `echo` is called _magically_ with the command-line arguments parsed.
@@ -176,7 +180,7 @@ definition.
 
 Built on-top of `Click`, [`typer`][8] is an even newer CLI framework
 which combines the functionality of `Click` with modern Python [type
-hinting][10]. One of the drawbacks of using `Click` is the boiler plate
+hinting][10]. One of the drawbacks of using `Click` is the boilerplate
 decorators that have to be added to a function. Arguments to a
 function (and a CLI) had to be specified in two places; the decorator
 and the function argument. `Typer` [DRYs][9] out CLI specifications,
@@ -205,22 +209,21 @@ it's own collection of warts and goinks.
 
 
 
-
+<!-- URLS -->
 [0]: https://opensource.com/article/19/5/how-write-good-c-main-function
-[1]: link to GNU project
-[2]: link to what is a UNIX manual page 
-[3]: docs.python.org getopt
-[4]: docs.python.org optparse
-[5]: docs.python.org argparse
-[6]: pallets click
-[7]: docs.python.org decorators
-[8]: typer
-[9]: definiton for DRY Don't Repeat Yourself
-[10]: description of python type hinting
-[11]: unix family tree wikipedia page
-[12]: c language wikipedia page
-[13]: unix wikipedia page
-[14]: c standard library wiki page
-[15]: getopt man page
-[16]: docs.python.org for sys module
-[17]: definition of boiler plate code
+[1]: https://www.gnu.org
+[2]: https://en.wikipedia.org/wiki/Man_page
+[3]: https://docs.python.org/2/library/getopt.html
+[4]: https://docs.python.org/2/library/optparse.html
+[5]: https://docs.python.org/3/library/argparse.html
+[6]: https://click.palletsprojects.com/en/7.x/
+[7]: https://wiki.python.org/moin/PythonDecorators
+[8]: https://typer.tiangolo.com
+[9]: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+[10]: https://docs.python.org/3/library/typing.html
+[11]: https://en.wikipedia.org/wiki/Unix
+[12]: https://en.wikipedia.org/wiki/C_(programming_language)
+[14]: https://en.wikipedia.org/wiki/C_standard_library
+[15]: http://man7.org/linux/man-pages/man3/getopt.3.html
+[16]: https://docs.python.org/3/library/sys.html
+[17]: https://en.wikipedia.org/wiki/Boilerplate_code
