@@ -1,0 +1,69 @@
+Christo  10:57 AM 23 Apr 2020
+
+Hi Erik
+
+I hope you are well. I have compiled a rough list of the first
+questions that come to mind whenever I start out wanting to develop a
+CLI tool. I have just jotted them down as a rough list.
+
+1.  What should the folder structure be for a CLI app that is to be
+    executed from the command line without launching it through python
+    name_of_app.py <argument1> <argument2> ?
+
+
+2.  What should I call the module in my app in which I define my entry point?
+
+2.1 Why should it be called this?
+
+3.  Where in my folder structure should this module be located?
+
+3.1 Why is this the location in which the module should be located?
+
+4.  What should be the name of this module?
+
+4.1 Why should I name it like this?
+
+5.  Should I ever put any code in the __init__.py module of a package in my app?
+
+5.1 What is the reason for adding code to the __init__.py module of my package?
+
+5.2 Is there any guidance on what code is valid to include in
+    __init__.py of a package?
+
+6.  Where should I place non python files such as config files, or
+    SQLite files that my application depends on as part of it functioning?
+
+7.  What is the best way to structure my code for CLI applications?
+
+7.1 How do I structure my code to have multi level command trees? For
+    example the docker cli command allowing different second arguments
+    based on the first argument (or command) I pass into it?
+
+8.  What are the most effective ways to parse arguments for CLI apps?
+
+8.1 If argparse is considered an outdated way of parsing arguments
+    what are the best alternatives?
+
+8.2 Are there any drawbacks to using third party argument parsing
+    packages such as Click or Typer?
+
+9.  How do I package my applications for distribution to users for
+    installation without using PIP? (if setup.py and setuptools is not the
+    correct way)
+
+9.1 How do I package my applications so that they can be installed via PIP?
+
+10. How do I include non-Python files that my application depend on
+    such as config files or SQLite database files etc in my distribution?
+
+
+11. Is there a standard way or a new Python recommended way for
+    developing CLI tools?
+
+12. How do I create progress bars on the command line?
+
+I am more than happy to start doing research on these. If you could
+provide some guidance on things like best practice and the questions
+dealing with layout and packaging it would be greatly
+appreciated. Feel free to tell me if you think I should be able to
+find the answer to some of these questions in a book or online.
