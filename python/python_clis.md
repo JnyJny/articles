@@ -77,7 +77,7 @@ name of the program. The rest of `argv` will contain the arguments:
    argv[4] == "-baz"
    
    /* Note: not valid C */
-```	
+``` 
 
 In C, we have many choices to handle the strings in `argv`. We could
 loop over the array `argv` _manually_ and interpret each of the
@@ -91,10 +91,10 @@ include <stdio.h>
 /* A simple C program that prints the contents of argv */
 
 int main(int argc, char **argv) {
-	int i;
-	
-	for(i=0; i<argc; i++)
-	  printf("%s\n", argv[i]);
+    int i;
+    
+    for(i=0; i<argc; i++)
+      printf("%s\n", argv[i]);
 }
 ```
 
@@ -118,26 +118,26 @@ improves the user experience (UX).
 extern char *optarg;
 
 int main(int argc, char **argv) {
-	int opt;
-	char *bar = NULL;
-	char *foo = NULL;
-	
-	while((opt=getopt(argc, argv, OPTSTR)) != EOF)
-	   switch(opt) {
-	      case 'b':
-			  bar = optarg;
-			  break;
-	      case 'f':
-			  foo = optarg;
-			  break;
-	      case 'h':
-		  default':
-		      fprintf(stderr, "Huh? try again.");
-			  exit(-1);
-			  /* NOTREACHED */
+    int opt;
+    char *bar = NULL;
+    char *foo = NULL;
+    
+    while((opt=getopt(argc, argv, OPTSTR)) != EOF)
+       switch(opt) {
+          case 'b':
+              bar = optarg;
+              break;
+          case 'f':
+              foo = optarg;
+              break;
+          case 'h':
+          default':
+              fprintf(stderr, "Huh? try again.");
+              exit(-1);
+              /* NOTREACHED */
        }
-	printf("%s\n", foo ? foo : "Empty foo");
-	printf("%s\n", bar ? bar : "Empty bar");
+    printf("%s\n", foo ? foo : "Empty foo");
+    printf("%s\n", bar ? bar : "Empty bar");
 }
 ```
 
@@ -241,12 +241,12 @@ import click
 @click.option('-f', '--foo', default='foo', help='User supplied foo.')
 @click.option('-b', '--bar', default='bar', help='User supplied bar.')
 def echo(foo, bar):
-	"""My Cool Program
-	
-	It does stuff. Here is the documentation for it.
-	"""
-	print(foo, bar)
-	
+    """My Cool Program
+    
+    It does stuff. Here is the documentation for it.
+    """
+    print(foo, bar)
+    
 if __name__ == '__main__':
     echo()
 ```
@@ -278,12 +278,12 @@ typer = typer.Typer()
 
 @typer.command()
 def echo(foo: str = 'foo', bar: str = 'bar'):
-	"""My Cool Program
-	
-	It does stuff. Here is the documentation for it.
-	"""
-	print(foo, bar)
-	
+    """My Cool Program
+    
+    It does stuff. Here is the documentation for it.
+    """
+    print(foo, bar)
+    
 if __name__ == '__main__':
     typer.run()
 ```
