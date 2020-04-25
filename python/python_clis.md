@@ -160,8 +160,8 @@ had to be supported too.  All of this choice resulted in more
 workload for the programmer who just wanted to know what the user
 was asking for and get on with it.  But the user got an even more
 consistent UX; long and short format options and automatically
-generated help that often kept the user from having to resort to
-reading a difficult-to-parse [manual][2] page (see [`ps`][18] for
+generated help that often kept the user from attempting to read
+infamously difficult-to-parse [manual][2] pages (see [`ps`][18] for
 a particularly egregious example).
 
 ## But We're Talking About Python?
@@ -221,16 +221,18 @@ advantage of [batteries included][28]? Sometimes the circumstances
 of your project dictate that you have limited or no access to
 third-party libraries, and you have to "make do" with the Python
 standard library.
-   
+
 ### A Modern Approach to CLIs
 
 And then there was [Click][6]. The`Click` framework uses a
-[decorator][7] approach to building command-line parsing. The
-primary advantage is it's powerful argument parsing with a
-consistent interface which allows the programmer to reduce the
-lines of code needed while improving the UX. Any time you can write
-less code and still get things done is a "win". And we all want
-"wins".
+[decorator][7] approach to building command-line parsing. All of
+the sudden it's fun and easy to write a rich command-line
+interface. Much of the complexity melts away under the cool and
+futuristic use of decorators and users marvel at the automatic
+support for keyword completion as well as contextual help. All
+while writing less code than previous solutions.  Any time you can
+write less code and still get things done is a "win". And we all
+want "wins".
 
 ```python
 import click
@@ -239,6 +241,10 @@ import click
 @click.option('-f', '--foo', default='foo', help='User supplied foo.')
 @click.option('-b', '--bar', default='bar', help='User supplied bar.')
 def echo(foo, bar):
+	"""My Cool Program
+	
+	It does stuff. Here is the documentation for it.
+	"""
 	print(foo, bar)
 	
 if __name__ == '__main__':
@@ -257,12 +263,12 @@ definition.
 
 ## But Wait, There's More!
 
-Built on top of `Click`, [`typer`][8] is an even _newer_ CLI framework
-which combines the functionality of `Click` with modern Python [type
-hinting][10]. One of the drawbacks of using `Click` is the stack of
-decorators that have to be added to a function. Arguments to a
-function (and a CLI) had to be specified in two places; the decorator
-and the function argument. `Typer` [DRYs][9] out CLI specifications,
+Built on top of `Click`, [`Typer`][8] is an even _newer_ CLI
+framework which combines the functionality of `Click` with modern
+Python [type hinting][10]. One of the drawbacks of using `Click` is
+the stack of decorators that have to be added to a function. CLI
+arguments have to be specified in two places; the decorator and the
+function argument list. `Typer` [DRYs][9] out CLI specifications,
 resulting in code that's easier to read and maintain.
 
 ```python
@@ -272,6 +278,10 @@ typer = typer.Typer()
 
 @typer.command()
 def echo(foo: str = 'foo', bar: str = 'bar'):
+	"""My Cool Program
+	
+	It does stuff. Here is the documentation for it.
+	"""
 	print(foo, bar)
 	
 if __name__ == '__main__':
@@ -291,7 +301,7 @@ alternate implementations to see which one suits you best.
 
 Finally, there are _many_ third-party packages for parsing
 command-line arguments in Python. I've only presented the ones I like
-or have used. It is entirely fine and expected for you to like and use
+or have used. It is entirely fine and expected for you to like and/or use
 different packages. My advice is to start with these and see where you
 end up.
 
