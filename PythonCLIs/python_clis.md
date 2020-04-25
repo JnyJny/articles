@@ -3,25 +3,29 @@ author: Erik O'Shaughnessy
 date: 23 Apr 2020
 -->
 
-# An Exploration of Modern Python Command Line Interface Design
+# An Exploration of the Modern Python Command-Line Interface
 
 The goal here is simple: help the new Python developer with some of
-the history and terminology around command line interfaces (CLIs)
+the history and terminology around [command-line interfaces][20] (CLIs)
 and explore how we write these useful programs in Python.
 
 ## In the Beginning...
 
-First, some history about command line design from a [Unix][11]
-persepective.
+First, a [Unix][11] persepective on command-line interface design.
 
-Unix is a computer operating system and is the ancestor of Linux and
-MacOS (and [many other operating systems][11] as well). The primary
-language for developing programs under Unix is [C][12], which has
-amazing power and expressiveness.  C is the language that built the
-Internet and most of the cool things that we rely on everyday: web
-browsers, web servers, operating systems, DNS, TCP/IP, and nearly
-every other piece of software that contributes to the ecosystem of
-today's Internet.
+Unix is a computer operating system and is the ancestor of Linux
+and MacOS (and [many other operating systems][11] as well).  Before
+graphical user interfaces, the user interacted with the computer
+via a command-line prompt (think of today's [bash][21]
+environment). The primary language for developing these programs
+under Unix is [C][12], which has amazing power for both [good][23] and
+[evil][22].
+
+>
+>  C get's sh*t done.
+>
+>            - a handsome and yet anonymous C programmer
+
 
 So it behooves us to at least understand the basics of a [C program][0] .
 
@@ -36,33 +40,34 @@ is a function called **`main`** whose signature looks like:
 ```
 
 This shouldn't look too strange to a Python programmer. C functions
-have a return type first, the name, and then the typed arguments
-inside the parenthesis. Lastly, the body of the function resides
-between the curly braces. The function name **`main`** is how the
-run-time linker (the program that runs programs) decides where to
-start executing your program. If you write a C program and don't
-include a function named **`main`**, it will not do anything. Harsh but
-fair.
+have a return type first, a function name, and then the typed
+arguments inside the parenthesis. Lastly, the body of the function
+resides between the curly braces. The function name **`main`** is
+how the [runtime linker][24] (the program that constructs and runs
+programs) decides where to start executing your program. If you
+write a C program and it doesn't include a function named
+**`main`**, it will not do anything. Sad.
 
-The function argument variables `argc` and `argv` together describe a
-list of strings which were typed on the command line when the program
-was invoked. In typical terse Unix naming tradition, `argc` means
-_argument count_ and `argv` means _argument vector_. Vector sounds
-cooler than list and `argl` would have sounded like a strangled cry
-from help.
+The function argument variables `argc` and `argv` together describe
+a list of strings which were typed by the user on the command-line
+when the program was invoked. In typical terse Unix naming
+tradition, `argc` means _argument count_ and `argv` means _argument
+vector_. Vector sounds cooler than list and `argl` would have
+sounded like a strangled cry from help. We are Unix system
+programmers and we do not cry for "help". We make _other_ people cry
+for help.
 
-## Moving On
+### Moving On
 
 ```console
 $ ./myprog foo bar -x baz
 ```
 
-If `myprog` is implemented in C, `argc` will have the value 4 (C is a
-zero indexed language, like Python), and `argv` will be an array of
-pointers to characters with five entries (don't worry if that sounds
-super-technical, it's a list of five strings). The first entry in the
-vector, `argv[0]`, will be the name of the program. The rest of `argv`
-will contain the arguments:
+If `myprog` is implemented in C, `argc` will have the value 5 and
+`argv` will be an array of pointers to characters with five entries
+(don't worry if that sounds super-technical, it's a list of five
+strings). The first entry in the vector, `argv[0]`, will be the
+name of the program. The rest of `argv` will contain the arguments:
 
 ```C
    argv[1] == "foo"
@@ -79,46 +84,97 @@ strings according to the needs of the program. This is relatively
 easy, but leads to programs with wildly different interfaces as
 different programmers have different ideas about what is "good".
 
-The next weapon in the command line arsenal is a [C standard
+```C
+include <stdio.h>
+
+/* A simple C program that prints the contents of argv */
+
+int main(int argc, char **argv) {
+	int i;
+	
+	for(i=0; i<argc; i++)
+	  puts(argv[i]);
+}
+```
+
+### Early Attempts to Standardize the Command-Line
+
+The next weapon in the command-line arsenal is a [C standard
 library][14] function called [`getopt`][15]. This function allows the
 programmer to parse switches, arguments with a dash preceeding it like
-'-x' and optionally pair follow-on arguments with their
+`-x` and optionally pair follow-on arguments with their
 switches. Think about command invocations like `/bin/ls -alSh`,
 `getopt` is the function originally used to parse that argument
-string. Using `getopt` makes parsing the command line pretty easy and
-improves the user experience.
+string. Using `getopt` makes parsing the command-line pretty easy and
+improves the user experience (UX).
+
+```
+#include <stdio.h>
+#include <getopt.h>
+
+#define OPTSTR "b:f:"
+
+extern char *optarg;
+
+int main(int argc, char **argv) {
+	int opt;
+	char *bar = NULL;
+	char *foo = NULL;
+	
+	while((opt=getopt(argc, argv, OPTSTR)) != EOF)
+	   switch(opt) {
+	      case 'b':
+			  bar = optarg;
+			  break;
+	      case 'f':
+			  foo = optarg;
+			  break;
+	      case 'h':
+		  default':
+		      fprintf(stderr, "Huh? try again.");
+			  exit(-1);
+			  /* NOTREACHED */
+       }
+	printf("%s\n", foo ? foo : "Empty foo");
+	printf("%s\n", bar ? bar : "Empty bar");
+}
+```
+
+On a personal note, I *wish* Python had switches but that will
+[never][25] [happen][26].
+
+
+### The GNU Generation
 
 The [GNU][1] project came along and introduced longer format arguments
-for their implementations of traditional Unix command line tools,
+for their implementations of traditional Unix command-line tools,
 things like `--file-format foo`. Of course we _real_ Unix programmers
 hated that because it was too much to type, but like the dinosaurs we
-are, we lost because the users _liked_ them.
+are, we lost because the users _liked_ them. Also, no C example in this
+section because I never wrote any code using them.
 
-GNU-style arguments also tended to have short names like '-f foo' that
-had to be interpreted too.  All of this choice resulted in more
-workload for the programmer who just wanted to know what the user was
-requesting and get on with it.  But the user got an even more
-consistent user experience (UX); long and short format options and
-automatically generated help that kept the user from having to read a
-difficult manual page (see [`getopt`][15]).
+GNU-style arguments also accepted short names like '-f foo' that
+had to be supported too.  All of this choice resulted in more
+workload for the programmer who just wanted to know what the user
+was asking for and get on with it.  But the user got an even more
+consistent UX; long and short format options and automatically
+generated help that often kept the user from having to resort to
+reading a difficult-to-parse [manual][2] page (see [`ps`][18] for
+a particularly egregious example).
 
 ## But We're Talking About Python?
 
-That should be enough commmmand-line history for you to have some
-context about how command line interfaces work with our favorite
-language. Python gives us a similar number of choices for command line
-parsing; do it yourself, a battries-included option and several
-third-party options.
+You have now been exposed to enough command-line history to have
+some context about how to approach CLIs written with our favorite
+language. Python gives us a similar number of choices for
+command-line parsing; do it yourself, a batteries-included option
+and a multitude of third-party options. Which one you choose
+depends on your particular circumstances and needs.
 
-### Do It Yourself
+### First, Do It Yourself
 
-We can get our program's arguments from the [`sys`][16] module. This
-program just prints the values of the list `sys.argv`.  It's named
-`argv` because a C programmer wrote the first Python implementation
-and he probably didn't want to come up with a new name. Again, `argl`
-would just be weird. Preserving those names across languages also
-makes Python seem more friendly to C programmers. The downside is
-new Python programmers are like "whuuuut?".
+We can get our program's arguments from the [`sys`][16]
+module. 
 
 ```python
 import sys
@@ -129,19 +185,19 @@ if __name__ == '__main__':
 ```
 
 You can see the C heritage in this short program. There's a reference
-to `main` and `argv`. The name `argc` is missing since Python list
-objects incorporate the concept of length (or count) internally. If
-you are writing a quick throw-away script, this is probably your
-go-to move. 
+to `main` and `argv`. The name `argc` is missing since the Python [list][27]
+class incorporates the concept of length (or count) internally. If
+you are writing a quick throw-away script, this is definitely your
+go-to move.
 
 ### Batteries Included
 
-There have been several implementations of argument parsing modules in
-the Python standard library; [`getopt`][3], [`optparse`][4], and most
-recently [`argparse`][5]. `Argparse` allows the programmer to provide
-the user with a pretty consistent and helpful UX, but like it's GNU
-antecedents it took a lot of work and ['boilerplate code'][17] on the
-part of the programmer to make it "good".
+There have been several implementations of argument parsing modules
+in the Python standard library; [`getopt`][3], [`optparse`][4], and
+most recently [`argparse`][5]. `Argparse` allows the programmer to
+provide the user with a consistent and helpful UX, but like it's
+GNU antecedents it takes a lot of work and ['boilerplate code'][17]
+on the part of the programmer to make it "good".
 
 ```python
 from argparse import ArgumentParser
@@ -151,28 +207,27 @@ if __name__ == '__main__':
    argparser = ArgumentParser(description='My Cool Program')
    argparser.add_argument('--foo', '-f', help='A user supplied foo')
    argparser.add_argument('--bar', '-b', help='A user supplied bar')
-   # more argument definitions 
    
    results = argparser.parse_args()
    print(results.foo, results.bar)
 ```
 
-The payoff for the user is the automatically generated help available
-when the user invokes the program with `--help`.
-
+The payoff for the user is automatically generated help available
+when the user invokes the program with `--help`. But what about the
+advantage of [batteries included][28]? Sometimes the circumstances
+of your project dictate that you have limited or no access to
+third-party libraries, and you have to "make do" with the Python
+standard library.
    
 ### A Modern Approach to CLIs
 
-And then there was [Click][6]. The `Click` framework uses a
-[decorator][7] approach to building command line parsing. The primary
-advantage is it's powerful argument parsing engine with a consistent
-interface which allows the programmer to reduce code while really
-improving the user experience. Any time you can write less code and
-still get things done is a "win". And we all want "wins". Experienced
-programmers generally prefer library solutions to homegrown solutions
-since libraries tend to handle all the corner and edge cases that we
-haven't considered in our own solution. [Not invented here][18] is
-real.
+And then there was [Click][6]. The`Click` framework uses a
+[decorator][7] approach to building command-line parsing. The
+primary advantage is it's powerful argument parsing with a
+consistent interface which allows the programmer to reduce the
+lines of code needed while improving the UX. Any time you can write
+less code and still get things done is a "win". And we all want
+"wins".
 
 ```python
 import click
@@ -187,14 +242,15 @@ if __name__ == '__main__':
     echo()
 ```
 
-You can see some of the same boilerplate code in the `click.option`
+You can see some of the same boilerplate code in the `@click.option`
 decorator as you saw with `argparse`. But the "work" of creating and
-managing the argument parser has been abstracted away. Now the function
-`echo` is called _magically_ with the command line arguments parsed.
+managing the argument parser has been abstracted away. Now our function
+`echo` is called _magically_ with the command-line arguments parsed and
+the values assigned to the function arguments.
 
 Adding arguments to a `click` interface is as easy as adding another
 decorator to the stack and adding the new argument to the function
-definition. 
+definition.
 
 ## But Wait, There's More!
 
@@ -219,21 +275,24 @@ if __name__ == '__main__':
     typer.run()
 ```
 
-Which one of these approaches is right? It depends on your use
-case. Are you writting a quick and dirty script? Just use `sys.argv`
-directly and drive on. Do you need more robust command line parsing?
-Maybe `argparse` is enough. Maybe you have lots of subcommands and
-complicated options? Now you should definitely consider `Click` or
-`Typer`.  Personally, I prefer `Typer` but it's not without it's own
-collection of warts and goinks.
+## Time to Start Writing Some Code
+
+Which one of these approaches is right? It depends on _your_ use
+case. Are you writing a quick and dirty script that only you will
+use? Use `sys.argv` directly and drive on. Do you need more
+robust command-line parsing?  Maybe `argparse` is enough. Maybe you
+have lots of subcommands and complicated options and your team is
+going to use it daily? Now you should definitely consider `Click`
+or `Typer`. Part of the fun of being a programmer is hacking out
+alternate implementations to see which one suits you best. 
 
 Finally, there are _many_ third-party packages for parsing
-command line arguments in Python. I've only presented the ones I like
+command-line arguments in Python. I've only presented the ones I like
 or have used. It is entirely fine and expected for you to like and use
 different packages. My advice is to start with these and see where you
 end up.
 
-## 
+Go write something cool.
 
 <!-- URLS -->
 [0]: https://opensource.com/article/19/5/how-write-good-c-main-function
@@ -253,3 +312,14 @@ end up.
 [15]: http://man7.org/linux/man-pages/man3/getopt.3.html
 [16]: https://docs.python.org/3/library/sys.html
 [17]: https://en.wikipedia.org/wiki/Boilerplate_code
+[18]: http://man7.org/linux/man-pages/man1/ps.1.html
+[19]: https://en.wikipedia.org/wiki/Guido_van_Rossum
+[20]: https://en.wikipedia.org/wiki/Command-line_interface
+[21]: https://www.gnu.org/software/bash/
+[22]: https://www.radford.edu/ibarland/Manifestoes/whyC++isBad.shtml
+[23]: https://www.toptal.com/c/after-all-these-years-the-world-is-still-powered-by-c-programming
+[24]: https://en.wikipedia.org/wiki/Dynamic_linker
+[25]: https://www.python.org/dev/peps/pep-0275/
+[26]: https://www.python.org/dev/peps/pep-3103/
+[27]: https://docs.python.org/3/tutorial/datastructures.html
+[28]: https://www.python.org/dev/peps/pep-0206/
