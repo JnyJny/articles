@@ -2,16 +2,16 @@
 author: Erik O'Shaughnessy
 date: 23 Apr 2020
 -->
-# An Exploration of Modern Python CLI and Packaging
 
-The goal here is twofold: help the new Python developer learn how to
-create and package their own command-line applications (a CLI) written
-in Python and secondly; why things are named and organized the way
-they are.
+# An Exploration of Modern Python Command Line Interface Design
+
+The goal here is simple: help the new Python developer with some of
+the history and terminology around command line interfaces (CLIs)
+and explore how we write these useful programs in Python.
 
 ## In the Beginning...
 
-First, some history about command-line driven design from a [Unix][11]
+First, some history about command line design from a [Unix][11]
 persepective.
 
 Unix is a computer operating system and is the ancestor of Linux and
@@ -79,17 +79,17 @@ strings according to the needs of the program. This is relatively
 easy, but leads to programs with wildly different interfaces as
 different programmers have different ideas about what is "good".
 
-The next weapon in the command-line arsenal is a [C standard
+The next weapon in the command line arsenal is a [C standard
 library][14] function called [`getopt`][15]. This function allows the
 programmer to parse switches, arguments with a dash preceeding it like
 '-x' and optionally pair follow-on arguments with their
 switches. Think about command invocations like `/bin/ls -alSh`,
 `getopt` is the function originally used to parse that argument
-string. Using `getopt` makes parsing the command-line pretty easy and
+string. Using `getopt` makes parsing the command line pretty easy and
 improves the user experience.
 
 The [GNU][1] project came along and introduced longer format arguments
-for their implementations of traditional Unix command-line tools,
+for their implementations of traditional Unix command line tools,
 things like `--file-format foo`. Of course we _real_ Unix programmers
 hated that because it was too much to type, but like the dinosaurs we
 are, we lost because the users _liked_ them.
@@ -163,8 +163,8 @@ when the user invokes the program with `--help`.
    
 ### A Modern Approach to CLIs
 
-And then there was[Click][6]. The `Click` package uses a
-[decorator][7] approach to building command-line parsing. The primary
+And then there was [Click][6]. The `Click` framework uses a
+[decorator][7] approach to building command line parsing. The primary
 advantage is it's powerful argument parsing engine with a consistent
 interface which allows the programmer to reduce code while really
 improving the user experience. Any time you can write less code and
@@ -190,7 +190,7 @@ if __name__ == '__main__':
 You can see some of the same boilerplate code in the `click.option`
 decorator as you saw with `argparse`. But the "work" of creating and
 managing the argument parser has been abstracted away. Now the function
-`echo` is called _magically_ with the command-line arguments parsed.
+`echo` is called _magically_ with the command line arguments parsed.
 
 Adding arguments to a `click` interface is as easy as adding another
 decorator to the stack and adding the new argument to the function
@@ -198,7 +198,7 @@ definition.
 
 ## But Wait, There's More!
 
-Built on top of `Click`, [`typer`][8] is an even newer CLI framework
+Built on top of `Click`, [`typer`][8] is an even _newer_ CLI framework
 which combines the functionality of `Click` with modern Python [type
 hinting][10]. One of the drawbacks of using `Click` is the stack of
 decorators that have to be added to a function. Arguments to a
@@ -220,88 +220,18 @@ if __name__ == '__main__':
 ```
 
 Which one of these approaches is right? It depends on your use
-case. Is it a quick and dirty script? Just use `sys.argv` directly and
-drive on. Do you need more robust command-line parsing? Maybe
-`argparse` is enough. Maybe you have lots of subcommands and
+case. Are you writting a quick and dirty script? Just use `sys.argv`
+directly and drive on. Do you need more robust command line parsing?
+Maybe `argparse` is enough. Maybe you have lots of subcommands and
 complicated options? Now you should definitely consider `Click` or
-`Typer`.  Personally, these days I prefer `Typer` but it's not without
-it's own collection of warts and goinks.
+`Typer`.  Personally, I prefer `Typer` but it's not without it's own
+collection of warts and goinks.
 
-Also, there are _many_ third-party packages for parsing command-line
-arguments in Python. I've only presented the ones I like. It is
-entirely fine and expected for you to like different packages. My
-advice is to start with these and see where you end up.
-
-## What is a Package and Why Do I Want One?
-
-### Here Comes Another History Lesson
-
-In the days of yore, when you needed a library to extend the
-functionality of your program, you only had a few choices. First you
-could write it yourself. Next, maybe your operating system provides
-it.  Best and worst of all, you could look for it on the
-[Internet][27] and hope you could get it running on your machine, with
-your compiler and operating system.
-
-Finding things with the early Internet was difficult; it took
-patience, hard-won experience and luck. You had to follow your
-favorite topic in [USENET][21] news groups, exchange [email][27] with
-other developers or hang out in [IRC][22] chats, or maybe hear about
-the latest coolest thing while hacking out your semester project in
-the computer lab. Later, newfangled _"web"_ servers started popping up
-using the untested and weird ["Hyper-Text Transfer
-Protocol"][26]. These "websites" soon proved their use, becoming
-gateways to anonymous ftp and gopher sites and aggregating
-information.
-
-Once you'd deduced the existence and location of software on the early
-Internet, your next task was usually porting it to your particular
-combination of compiler, operating system and hardware. A majority of
-software was written in C which made task easier, but you still had to
-work around the different services offered by different operating
-system floavors and different C compiler implementations.
-
-After lots of hacking and learning far more about your OS and compiler
-than from reading any book, you finally have a library that you add
-to your project and get on with whatever it was you were trying to
-accomplish. You can see why "roll your own" was a viable option,
-sometimes it was easier to just learn how to write the functionality
-you needed than to find on the Internet.
-
-And then the nightmare scenario; seven months later after your program
-has been put into production and you have moved on to another project
-a shadow falls across your desk. There's a bug and it stems from the
-library you worked so hard to incorporate into this now-indespensible
-application. You again have choices; hope you can fix the library,
-hope the library maintainer has fixed the bug and the source is still
-accessible, or hope the Internet has offered up a replacement library
-in the interim.
-
-Notice there is a lot of hoping there. Hope is not a plan.
-
-### Why Python is Cooler Than Other Language Ecosystems
-
-Python as a language is pretty friendly to new programmers while
-providing enough depth and mystique to draw in hard-core nerds. But
-the real strength of Python isn't the language, it's the ecosystem
-that allows us to flippantly say "Oh, you need a high performance web
-server for your new RESTful API? Just `pip install gunicorn`."
-
-Admittedly, the discovery story hasn't improved a whole lot since the
-fun-old-days of trawling USENET. It still helps to be plugged into the
-Python world thru websites, podcasts, and Slack chats. But when I have
-a sudden need for specialized libraries, often the first thing I do is:
-
-```console
-$ python3 -m pip list | grep 'weird but helpful topic'
-```
-
-and most of the time _something_ shows up in that list! 
-
-The foundational technology that makes all of this magic possible is
-the concept and practice of Python packaging.
-
-
+Finally, there are _many_ third-party packages for parsing
+command line arguments in Python. I've only presented the ones I like
+or have used. It is entirely fine and expected for you to like and use
+different packages. My advice is to start with these and see where you
+end up.
 
 ## 
 
@@ -323,12 +253,3 @@ the concept and practice of Python packaging.
 [15]: http://man7.org/linux/man-pages/man3/getopt.3.html
 [16]: https://docs.python.org/3/library/sys.html
 [17]: https://en.wikipedia.org/wiki/Boilerplate_code
-[18]: https://en.wikipedia.org/wiki/Not_invented_here
-[19]: https://pypi.org
-[20]: https://www.pypa.io/en/latest/
-[21]: usenet
-[22]: irc
-[23]: ftp
-[24]: gopher
-[25]: telnet
-[26]: HTTP
