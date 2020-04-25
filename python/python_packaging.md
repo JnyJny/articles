@@ -20,7 +20,7 @@ with the world.
 
 ## Here Comes Another History Lesson
 
-[tl;dr][#Why-Python-is-Cooler-Than Other-Language-Ecosystems] - life
+[tl;dr][#Why-Python-is-Cooler-Than-Other-Language-Ecosystems] - life
 was hard on the Internet before Python.
 
 In the days of yore, when you needed a library to extend the
