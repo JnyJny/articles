@@ -155,7 +155,7 @@ but like the dinosaurs we are, we lost because the users _liked_
 the longer options. I never wrote any code using the GNU-style
 option parsing, so no code example.
 
-GNU-style arguments also accepted short names like '-f foo' that
+GNU-style arguments also accepted short names like `-f foo` that
 had to be supported too.  All of this choice resulted in more
 workload for the programmer who just wanted to know what the user
 was asking for and get on with it.  But the user got an even more
