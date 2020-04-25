@@ -22,10 +22,10 @@ under Unix is [C][12], which has amazing power for both [good][23] and
 [evil][22].
 
 >
->       "C get's sh*t done."
+>      "C get's sh*t done."
 >
->            - a handsome and yet anonymous C programmer
-
+>          - a handsome and yet anonymous C programmer
+>
 
 So it behooves us to at least understand the basics of a [C program][0] .
 
@@ -70,6 +70,7 @@ strings). The first entry in the vector, `argv[0]`, will be the
 name of the program. The rest of `argv` will contain the arguments:
 
 ```C
+   argv[0] == "./myprog"
    argv[1] == "foo"
    argv[2] == "bar"
    argv[3] == "-x"
@@ -93,7 +94,7 @@ int main(int argc, char **argv) {
 	int i;
 	
 	for(i=0; i<argc; i++)
-	  puts(argv[i]);
+	  printf("%s\n", argv[i]);
 }
 ```
 
@@ -146,12 +147,13 @@ On a personal note, I *wish* Python had switches but that will
 
 ### The GNU Generation
 
-The [GNU][1] project came along and introduced longer format arguments
-for their implementations of traditional Unix command-line tools,
-things like `--file-format foo`. Of course we _real_ Unix programmers
-hated that because it was too much to type, but like the dinosaurs we
-are, we lost because the users _liked_ them. Also, no C example in this
-section because I never wrote any code using them.
+The [GNU][1] project came along and introduced longer format
+arguments for their implementations of traditional Unix
+command-line tools, things like `--file-format foo`. Of course we
+_real_ Unix programmers hated that because it was too much to type,
+but like the dinosaurs we are, we lost because the users _liked_
+the longer options. I never wrote any code using the GNU-style
+option parsing, so no code example.
 
 GNU-style arguments also accepted short names like '-f foo' that
 had to be supported too.  All of this choice resulted in more
@@ -164,12 +166,13 @@ a particularly egregious example).
 
 ## But We're Talking About Python?
 
-You have now been exposed to enough command-line history to have
-some context about how to approach CLIs written with our favorite
-language. Python gives us a similar number of choices for
-command-line parsing; do it yourself, a batteries-included option
-and a multitude of third-party options. Which one you choose
-depends on your particular circumstances and needs.
+You have now been exposed to enough (too much?) command-line
+history to have some context about how to approach CLIs written
+with our favorite language. Python gives us a similar number of
+choices for command-line parsing; do it yourself, a
+batteries-included option and a [plethora][29] of third-party
+options. Which one you choose depends on your particular
+circumstances and needs.
 
 ### First, Do It Yourself
 
@@ -323,3 +326,4 @@ Go write something cool.
 [26]: https://www.python.org/dev/peps/pep-3103/
 [27]: https://docs.python.org/3/tutorial/datastructures.html
 [28]: https://www.python.org/dev/peps/pep-0206/
+[29]: https://www.youtube.com/watch?v=-mTUmczVdik
