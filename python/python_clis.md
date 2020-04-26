@@ -53,7 +53,7 @@ a list of strings which were typed by the user on the command-line
 when the program was invoked. In typical terse Unix naming
 tradition, `argc` means _argument count_ and `argv` means _argument
 vector_. Vector sounds cooler than list and `argl` would have
-sounded like a strangled cry from help. We are Unix system
+sounded like a strangled cry for help. We are Unix system
 programmers and we do not cry for "help". We make _other_ people cry
 for help.
 
@@ -74,7 +74,7 @@ name of the program. The rest of `argv` will contain the arguments:
    argv[1] == "foo"
    argv[2] == "bar"
    argv[3] == "-x"
-   argv[4] == "-baz"
+   argv[4] == "baz"
    
    /* Note: not valid C */
 ``` 
