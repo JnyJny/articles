@@ -1,6 +1,6 @@
-<!-- 
-author: Erik O'Shaughnessy
-date: 23 Apr 2020
+<!--
+Author: Erik O'Shaughnessy (erik.oshaughnessy@gmail.com)
+Date: 23 Apr 2020
 -->
 
 # An Exploration of the Modern Python Command-Line Interface
@@ -109,7 +109,7 @@ switches. Think about command invocations like `/bin/ls -alSh`,
 string. Using `getopt` makes parsing the command-line pretty easy and
 improves the user experience (UX).
 
-```
+```C
 #include <stdio.h>
 #include <getopt.h>
 
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 }
 ```
 
-On a personal note, I *wish* Python had switches but that will
+On a personal note, I *wish* Python had `switch`es but that will
 [never][25] [happen][26].
 
 
@@ -205,11 +205,11 @@ on the part of the programmer to make it "good".
 ```python
 from argparse import ArgumentParser
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
    argparser = ArgumentParser(description='My Cool Program')
-   argparser.add_argument('--foo', '-f', help='A user supplied foo')
-   argparser.add_argument('--bar', '-b', help='A user supplied bar')
+   argparser.add_argument("--foo", "-f", help="A user supplied foo")
+   argparser.add_argument("--bar", "-b", help="A user supplied bar")
    
    results = argparser.parse_args()
    print(results.foo, results.bar)
@@ -238,8 +238,8 @@ want "wins".
 import click
 
 @click.command()
-@click.option('-f', '--foo', default='foo', help='User supplied foo.')
-@click.option('-b', '--bar', default='bar', help='User supplied bar.')
+@click.option("-f", "--foo", default="foo", help="User supplied foo.")
+@click.option("-b", "--bar", default="bar", help="User supplied bar.")
 def echo(foo, bar):
     """My Cool Program
     
@@ -247,7 +247,7 @@ def echo(foo, bar):
     """
     print(foo, bar)
     
-if __name__ == '__main__':
+if __name__ == "__main__":
     echo()
 ```
 
@@ -274,18 +274,18 @@ resulting in code that's easier to read and maintain.
 ```python
 import typer
 
-typer = typer.Typer()
+cli = typer.Typer()
 
-@typer.command()
-def echo(foo: str = 'foo', bar: str = 'bar'):
+@cli.command()
+def echo(foo: str = "foo", bar: str = "bar"):
     """My Cool Program
     
     It does stuff. Here is the documentation for it.
     """
     print(foo, bar)
     
-if __name__ == '__main__':
-    typer.run()
+if __name__ == "__main__":
+    cli()
 ```
 
 ## Time to Start Writing Some Code
@@ -297,7 +297,7 @@ robust command-line parsing?  Maybe `argparse` is enough. Maybe you
 have lots of subcommands and complicated options and your team is
 going to use it daily? Now you should definitely consider `Click`
 or `Typer`. Part of the fun of being a programmer is hacking out
-alternate implementations to see which one suits you best. 
+alternate implementations to see which one suits you best.
 
 Finally, there are _many_ third-party packages for parsing
 command-line arguments in Python. I've only presented the ones I like
