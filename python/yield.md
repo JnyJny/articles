@@ -155,7 +155,7 @@ Python context manager expressions begin with the `with` keyword and
 can help manage a resource like an open file or a database
 connection. In this simple bit of code, we have some sophisticated
 behavior!  Here we are simply printing out the different phases of a
-context manager; setup, inside and teardown. The `yield` in the
+context manager; setup, inside and teardown. The yield in the
 `manager` function gives the nested code in the body of the `with`
 statement the opportunity to run. When the code block finishes,
 control is handed back to the manager function just after the yield.
@@ -163,6 +163,6 @@ control is handed back to the manager function just after the yield.
 The pytest package uses this pattern extensively to allow the user to
 create testing fixtures of arbitrary complexity.
 
-Just remember, if you see `yield` in a function then it’s a
+Just remember, if you see yield in a function then it’s a
 generator. Generators are one-time use only but can reduce latency and
 conserve memory.
