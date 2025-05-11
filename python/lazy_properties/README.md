@@ -116,7 +116,7 @@ class Cached:
 
 ## 🧪 Benchmark Setup
 
-All benchmarks were collected using **Python 3.13.3** on a **2024 MacBook Air M3 (Apple Silicon)** running **macOS 14.4.1 (Sequoia)**. The tests were executed using the standard library’s `timeit` module with garbage collection disabled to reduce noise.
+All benchmarks were collected using **Python 3.13.3** on a **2024 MacBook Air M3 (Apple Silicon)** running **macOS 15.4.1 (Sequoia)**. The tests were executed using the standard library’s `timeit` module with garbage collection disabled to reduce noise.
 
 > ⚠️ Results may vary depending on Python version, CPU architecture, operating system, and runtime optimizations. For accurate comparisons, you should run the provided benchmark code on your own system.
 
