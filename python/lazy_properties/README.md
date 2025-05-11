@@ -122,7 +122,7 @@ All benchmarks were collected using **Python 3.13.3** on a **2024 MacBook Air M3
 
 ### Environment
 
-- **System**: MacBook Air M3 (2024), macOS 14.x
+- **System**: MacBook Air M3 (2024), macOS 15.4.1
 - **Python**: 3.13.3 (arm64)
 - **Timing tool**: `timeit`
 - **Iterations**: 1,000,000 (cold), 10,000 loops × 100 accesses (warm)
