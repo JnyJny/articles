@@ -10,8 +10,7 @@ Python developers have several patterns at their disposal to implement lazily co
 
 This analysis includes microbenchmark timing data for cold and warm access scenarios, as well as total access time across different usage profiles. The goal is to provide actionable insights into which pattern is most appropriate under different conditions.
 
-> 📂 All benchmark code and graphs are available in this GitHub repository:  
-> [JnyJny/articles/python/lazy_properties][repo]
+> 📂 All benchmark code and graphs are available in this GitHub repository: [Lazy Properties][repo]
 
 ---
 
@@ -192,21 +191,8 @@ Choosing the right lazy evaluation pattern depends on your Python version, perfo
 - [Lazy Evaluation – Wikipedia](https://en.wikipedia.org/wiki/Lazy_evaluation)
 - [Python Descriptor HowTo Guide](https://docs.python.org/3/howto/descriptor.html)
 
----
-
-✅ All source code and graphs are available in this GitHub repo:  
-[https://github.com/JnyJny/articles/python/lazy_properties][repo]
-
----
-
-## Markdown Endlinks
-
 [repo]: https://github.com/JnyJny/articles/tree/master/python/lazy_properties
 [script]: https://github.com/JnyJny/articles/python/lazy_properties/blob/main/benchmark.py  
 [cold]: https://github.com/JnyJny/articles/python/lazy_properties/raw/main/graphs/cold_access.png  
 [warm]: https://github.com/JnyJny/articles/python/lazy_properties/raw/main/graphs/warm_access.png  
 [total]: https://github.com/JnyJny/articles/python/lazy_properties/raw/main/graphs/total_time_vs_accesses.png
-
----
-
-Let me know if you'd like this rendered for a static site generator (like MkDocs or Hugo), or exported to PDF/HTML.
