@@ -135,40 +135,17 @@ You can run the full benchmark and generate the graphs using this script:
 
 ## Cold Access Performance (First Access)
 
-| Method             | Time per call (ns) | Relative to Fastest |
-|--------------------|--------------------|----------------------|
-| LBYL               | 90.9 ns            | 1.00×                |
-| `@cached_property` | 192.4 ns           | 2.12×                |
-| EAFP               | 348.0 ns           | 3.83×                |
-
 ![Cold Access Graph][cold]
 
 ---
 
 ## Warm Access Performance (Cached Property Read)
 
-| Method             | Time per call (ns) | Relative |
-|--------------------|--------------------|----------|
-| `@cached_property` | 18.9 ns            | 1.00×    |
-| EAFP               | 21.0 ns            | 1.11×    |
-| LBYL               | 36.5 ns            | 1.93×    |
-
 ![Warm Access Graph][warm]
 
 ---
 
 ## Total Time vs Number of Accesses (Derived)
-
-| Accesses | EAFP (ns) | LBYL (ns) | Cached (ns) |
-|----------|-----------|-----------|-------------|
-| 1        | 348.0     | 90.9      | 192.4       |
-| 2        | 369.0     | 127.4     | 211.3       |
-| 5        | 432.0     | 237.4     | 268.0       |
-| 10       | 483.0     | 419.9     | 330.5       |
-| 100      | 2,418.0   | 3,735.9   | 2,081.4     |
-| 1,000    | 21,348.0  | 36,540.9  | 19,842.4    |
-| 10,000   | 201,348.0 | 365,409.0 | 198,424.0   |
-| 100,000  | 2,001,348 | 3,654,090 | 1,984,240   |
 
 ![Total Time Graph][total]
 
