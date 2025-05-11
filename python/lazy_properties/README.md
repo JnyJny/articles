@@ -1,4 +1,4 @@
-# Benchmarking Lazy Property Patterns in Python: EAFP vs LBYL vs `@cached_property`
+# Lazy Property Patterns: EAFP vs LBYL vs `@cached_property`
 
 In performance-sensitive Python applications, it is often beneficial to defer the computation of an attribute until it is first accessed. This technique, known as lazy evaluation, is useful when a value is expensive to compute and may not always be needed.
 
