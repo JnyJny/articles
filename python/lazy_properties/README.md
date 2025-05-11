@@ -193,6 +193,6 @@ Choosing the right lazy evaluation pattern depends on your Python version, perfo
 
 [repo]: https://github.com/JnyJny/articles/tree/master/python/lazy_properties
 [script]: https://github.com/JnyJny/articles/python/lazy_properties/blob/main/benchmark.py  
-[cold]: https://github.com/JnyJny/articles/python/lazy_properties/raw/main/graphs/cold_access.png  
+[cold]: https://github.com/JnyJny/articles/blob/24bd2c29eb4208021ddb96b6133092e9c73b74f9/python/lazy_properties/graphs/cold_access.png
 [warm]: https://github.com/JnyJny/articles/python/lazy_properties/raw/main/graphs/warm_access.png  
 [total]: https://github.com/JnyJny/articles/python/lazy_properties/raw/main/graphs/total_time_vs_accesses.png
