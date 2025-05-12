@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
 ```
 
 On a personal note, I *wish* Python had `switch`es but that will
-[never][25] [happen][26].
+[never][25] [happen][26]. Edit: [It happend][30].
 
 
 ### The GNU Generation
@@ -337,3 +337,4 @@ Go write something cool.
 [27]: https://docs.python.org/3/tutorial/datastructures.html
 [28]: https://www.python.org/dev/peps/pep-0206/
 [29]: https://www.youtube.com/watch?v=-mTUmczVdik
+[30]: https://peps.python.org/pep-0634/
