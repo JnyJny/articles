@@ -169,7 +169,7 @@ Choosing the right lazy evaluation pattern depends on your Python version, perfo
 - [Python Descriptor HowTo Guide](https://docs.python.org/3/howto/descriptor.html)
 
 [repo]: https://github.com/JnyJny/articles/tree/master/python/lazy_properties
-[script]: https://github.com/JnyJny/articles/python/lazy_properties/blob/master/benchmark.py  
+[script]: https://github.com/JnyJny/articles/blob/master/python/lazy_properties/benchmark.py
 [cold]: https://github.com/JnyJny/articles/blob/master/python/lazy_properties/graphs/cold_access.png
 [warm]: https://github.com/JnyJny/articles/blob/master/python/lazy_properties/graphs/warm_access.png
 [total]: https://github.com/JnyJny/articles/blob/master/python/lazy_properties/graphs/total_time_vs_accesses.png
