@@ -578,7 +578,7 @@ comments to let me know.
 <!-- fin, end links follow -->
 
 [0]: https://github.com/JnyJny/meowmeow.git
-[1]: https://opensource.com/article/19/5/how-write-good-c-main-function
+[1]: https://github.com/JnyJny/articles/blob/master/c/how-i-write-main/article.md
 [2]: https://en.wikipedia.org/wiki/Unix
 [3]: http://www.jabberwocky.com/software/moomooencode.html
 [4]: https://en.wikipedia.org/wiki/Cats_and_the_Internet
@@ -601,12 +601,13 @@ comments to let me know.
 
 <!-- Links to articles referenced by this article that remain to be written -->
 
-[article-man]: https://github.com/JnyJny/meowmeow/articles/05-Manpages.md
-[article-makefile]: https://github.com/JnyJny/meowmeow/articles/10-Makefiles.md
-[article-headers]: https://github.com/JnyJny/meowmeow/articles/20-Headers.md
-[article-unix-fs]: https://github.com/JnyJny/meowmeow/articles/30-Unix_Filesystem.md
-[article-syscalls]: https://github.com/JnyJny/meowmeow/articles/40-SystemCalls.md
-[article-namespaces]: https://github.com/JnyJny/meowmeow/articles/50-Namespaces.md
-[article-files]: https://github.com/JnyJny/meowmeow/articles/60-Working-With-Files.md
-[article-compiling]: https://github.com/JnyJny/meowmeow/articles/70-Compiling.md
-[article-shared-object]: https://github.com/JnyJny/meowmeow/articles/80-Shared-Object.md
+[article-man]: https://github.com/JnyJny/articles/blob/master/unix/05-Manpages.md
+[article-makefile]: https://github.com/JnyJny/articles/blob/master/unix/10-Makefiles.md
+[article-headers]: https://github.com/JnyJny/articles/blob/master/c/headers.md
+[article-unix-fs]: https://github.com/JnyJny/articles/blob/master/unix/30-Unix_Filesystem.md
+[article-syscalls]: https://github.com/JnyJny/articles/blob/master/unix/40-SystemCalls.md
+[article-namespaces]: https://github.com/JnyJny/articles/blob/master/c//c-namespaces.md
+[article-files]: https://github.com/JnyJny/articles/blob/master/c/working-with-files.md
+[article-compiling]: https://github.com/JnyJny/articles/blob/master/c/c-compiler-tool-chain.md
+[article-shared-object]: https://github.com/JnyJny/articles/blob/master/c/c-shared-objects.md
+
