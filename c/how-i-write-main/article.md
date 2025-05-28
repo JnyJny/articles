@@ -40,7 +40,7 @@ Correct and boring. We can do better.
 ## Main functions are unique
 
 The main() function is the first function in your program that is
-executed when it begins executing, but it's not the first function
+called when the program begins running, but it's not the first function
 executed. The first function is [_start()][linker-aliens], which is
 typically provided by the C runtime library, linked in automatically
 when your program is compiled. The details are highly dependent on the
