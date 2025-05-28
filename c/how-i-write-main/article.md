@@ -97,7 +97,7 @@ I'll talk about each of these numbered sections, except for zero,
 below. If you have to put copyright or licensing text in your source,
 put it there.
 
-Another thing I won't talk about is adding to your program is comments.
+Another thing I won't talk about is adding comments to your program.
 
 > "Comments lie."
 > - A cynical but smart and good looking programmer.
