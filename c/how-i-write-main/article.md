@@ -45,7 +45,7 @@ executed. The first function is [_start()][linker-aliens], which is
 typically provided by the C runtime library, linked in automatically
 when your program is compiled. The details are highly dependent on the
 operating system and [compiler toolchain][toolchain], so I'm going to
-pretend I didn't mention it.
+pretend I didn't mention it for now.
 
 Moving on.
 
@@ -97,7 +97,7 @@ I'll talk about each of these numbered sections, except for zero,
 below. If you have to put copyright or licensing text in your source,
 put it there.
 
-Another thing I won't talk about adding to your program is comments.
+Another thing I won't talk about is adding to your program is comments.
 
 > "Comments lie."
 > - A cynical but smart and good looking programmer.
