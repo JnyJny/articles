@@ -41,10 +41,10 @@ Correct and boring. We can do better.
 
 The main() function is the first function in your program that is
 called when the program begins running, but it's not the first function
-executed. The first function is [_start()][linker-aliens], which is
-typically provided by the C runtime library, linked in automatically
+executed. The first function is _start(), which is typically provided 
+by the C runtime library, [linked][linker-aliens] in automatically
 when your program is compiled. The details are highly dependent on the
-operating system and [compiler toolchain][toolchain], so I'm going to
+operating system and [compiler toolchain][c-toolchain], so I'm going to
 pretend I didn't mention it for now.
 
 Moving on.
