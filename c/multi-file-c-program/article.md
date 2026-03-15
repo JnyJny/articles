@@ -171,7 +171,7 @@ For instance, this little gem:
 03 	cc -o my_sweet_program main.c
 ```
 
-Text after an [octothorpe][17] is a comment, like line 00.
+Text after an [octothorpe][9] is a comment, like line 00.
 
 Line 01 is a variable assignment where the variable TARGET takes on
 the string value "my_sweet_program". By convention, ok my
