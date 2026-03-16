@@ -26,18 +26,15 @@ int x = 42;
 ```
 
 You already know `x` has the value 42. What you might not think about
-is that `x` also has an address -- some number like `0x7ffeeb34a8bc`
+is that `x` also has an address -- some number like `0x7ffe..a8bc`
 that identifies the specific bytes in memory where that 42 is being
 stored.
 
-```mermaid
-block-beta
-    columns 3
-    block:memory:3
-        columns 3
-        space:2 addr["0x7ffeeb34a8bc"]
-        x["x"] space val["42"]
-    end
+```
+    Variable       Address          Value
+    ┌──────────┬──────────────┬──────────────┐
+    │ int x    │ 0x7ffe..a8bc │           42 │
+    └──────────┴──────────────┴──────────────┘
 ```
 
 You don't normally care about addresses. You just say `x` and
@@ -106,9 +103,14 @@ int *p = &x;    /* p now holds the address of x */
 
 After this, `p` contains the address where `x` lives in memory:
 
-```mermaid
-graph LR
-    p["p<br/><small>0x7ffeeb34a8bc</small>"] -->|points to| x["x<br/><small>42</small>"]
+```
+    Variable       Address          Value
+    ┌──────────┬──────────────┬──────────────┐
+    │ int *p   │ 0x7ffe..a8b0 │ 0x7ffe..a8bc │─ ─ ┐
+    └──────────┴──────────────┴──────────────┘     │  p's value IS
+    ┌──────────┬──────────────┬──────────────┐     │  x's address
+    │ int x    │ 0x7ffe..a8bc │           42 │◄─ ─ ┘
+    └──────────┴──────────────┴──────────────┘
 ```
 
 We say "p _points to_ x" because that's less tedious than saying "p
@@ -146,9 +148,14 @@ printf("%d\n", x);    /* prints 99 */
 We changed `x` without ever mentioning `x` by name. We went through
 the pointer:
 
-```mermaid
-graph LR
-    p["p"] -->|"*p = 99"| x["x<br/><small>42 → 99</small>"]
+```
+    Variable       Address          Value
+    ┌──────────┬──────────────┬──────────────┐
+    │ int *p   │ 0x7ffe..a8b0 │ 0x7ffe..a8bc │─ ─ ┐  *p = 99
+    └──────────┴──────────────┴──────────────┘     │  writes through
+    ┌──────────┬──────────────┬──────────────┐     │  the pointer
+    │ int x    │ 0x7ffe..a8bc │     42 → 99  │◄─ ─ ┘
+    └──────────┴──────────────┴──────────────┘
 ```
 
 This is not a parlor trick -- it's the fundamental mechanism that
@@ -220,13 +227,23 @@ to be dangerous.
 An array name, in most contexts, _decays_ to a pointer to its first
 element:
 
-```mermaid
-graph LR
-    p["p"] --> n0["10"]
-    n0 --- n1["20"]
-    n1 --- n2["30"]
-    n2 --- n3["40"]
-    n3 --- n4["50"]
+```
+    Variable       Address          Value
+    ┌──────────┬──────────────┬──────────────┐
+    │ int *p   │ 0x7ffe..b000 │ 0x7ffe..b010 │─ ─ ┐
+    └──────────┴──────────────┴──────────────┘     │
+                                                   ▼  p points here
+    ┌──────────┬──────────────┬──────────────┐     │
+    │ int [0]  │ 0x7ffe..b010 │           10 │◄─ ─ ┘
+    ├──────────┼──────────────┼──────────────┤
+    │ int [1]  │ 0x7ffe..b014 │           20 │
+    ├──────────┼──────────────┼──────────────┤
+    │ int [2]  │ 0x7ffe..b018 │           30 │
+    ├──────────┼──────────────┼──────────────┤
+    │ int [3]  │ 0x7ffe..b01c │           40 │
+    ├──────────┼──────────────┼──────────────┤
+    │ int [4]  │ 0x7ffe..b020 │           50 │
+    └──────────┴──────────────┴──────────────┘
 ```
 
 ```C
@@ -305,9 +322,20 @@ printf("%s: (%d, %d)\n", p->label, p->x, p->y);
 The `->` operator means "dereference the pointer on the left and
 access the member on the right."
 
-```mermaid
-graph LR
-    p["p"] --> struct["point_t<br/>─────────<br/>x: 0<br/>y: 0<br/>label: &quot;origin&quot;"]
+```
+    Variable       Address          Value
+    ┌──────────┬──────────────┬──────────────┐
+    │ point_t  │ 0x7ffe..c000 │ 0x7ffe..c010 │─ ─ ┐
+    │ *p       │              │              │     │
+    └──────────┴──────────────┴──────────────┘     │
+                                                   │
+    ┌──────────┬──────────────┬──────────────┐     │
+    │ .x       │ 0x7ffe..c010 │            0 │◄─ ─ ┘  p->x
+    ├──────────┼──────────────┼──────────────┤
+    │ .y       │ 0x7ffe..c014 │            0 │         p->y
+    ├──────────┼──────────────┼──────────────┤
+    │ .label   │ 0x7ffe..c018 │ 0x0040..1000 │─ ─ ─ ▸ "origin"
+    └──────────┴──────────────┴──────────────┘
 ```
 
 You will use this operator constantly. It's the most common thing
@@ -323,10 +351,12 @@ int *p = (int *)NULL;
 point_t *origin = (point_t *)NULL;
 ```
 
-```mermaid
-graph LR
-    p["p"] -->|"NULL"| nowhere["∅ <br/><small>nowhere</small>"]
-    style nowhere fill:#ff6b6b,color:#fff
+```
+    Variable       Address          Value
+    ┌──────────┬──────────────┬──────────────┐
+    │ int *p   │ 0x7ffe..a8b0 │ 0x0000000000 │─ ─ ─ ▸ NOWHERE
+    └──────────┴──────────────┴──────────────┘        (SIGSEGV if
+                                                       you try)
 ```
 
 [Sir Tony Hoare][hoare] called null references his "billion-dollar
