@@ -17,9 +17,10 @@ Let's fix that.
 ## Every Variable Lives Somewhere
 
 Here's the thing people forget: your computer has memory. When you
-declare a variable, the compiler picks a spot in that memory to put
-it. The variable has a _value_ (the thing you put in it) and an
-_address_ (where the compiler put it).
+declare a variable, the compiler (with help from the
+[linker][linker-aliens]) picks a spot in that memory to put it. The
+variable has a _value_ (the thing you put in it) and an _address_
+(where it ended up).
 
 ```C
 int x = 42;
@@ -354,16 +355,21 @@ point_t *origin = (point_t *)NULL;
 ```
     Variable    Address    Value
     ┌────────┬──────────┬────────┐
-    │ int *p │  0x4000  │ 0x0000 │─ ─ ▸ NOWHERE
-    └────────┴──────────┴────────┘      (SIGSEGV if
-                                         you try)
+    │ int *p │  0x4000  │ 0x0000 │─ ─ ▸ address zero
+    └────────┴──────────┴────────┘      (no-access page)
 ```
 
+NULL is typically a macro for zero, and address zero in your
+[process's address space][address-space] is deliberately mapped with
+no read or write permissions. Try to dereference it and the hardware
+raises a fault, the operating system delivers a [SIGSEGV
+signal][signals] to your process, and that's the end of that. The
+_why_ of address zero being special is a topic for when we talk about
+[memory layout][address-space] -- for now, just know that NULL means
+"points to a place you're not allowed to touch."
+
 [Sir Tony Hoare][hoare] called null references his "billion-dollar
-mistake" and he's probably being modest about the dollar amount. A
-NULL pointer dereference will crash your program. The operating system
-will send your process a [SIGSEGV signal][signals] and that's the end
-of that.
+mistake" and he's probably being modest about the dollar amount.
 
 The good news is that NULL is something you can _check_ for:
 
@@ -497,5 +503,7 @@ Go make the computer do something interesting.
 [segfault]: signals-and-segfaults
 [how-i-write-main]: ../how-i-write-main/article.md
 [names-and-spaces]: more-tales-from-the-land-of-the-linker-aliens
+[linker-aliens]: XX-my-time-among-the-linker-aliens
+[address-space]: process-address-space-and-memory-layout
 [hoare]: https://en.wikipedia.org/wiki/Tony_Hoare#Apologies_and_retractions
 [signals]: oh-boy-this-is-a-doozie
