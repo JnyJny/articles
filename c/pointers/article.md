@@ -26,15 +26,15 @@ int x = 42;
 ```
 
 You already know `x` has the value 42. What you might not think about
-is that `x` also has an address -- some number like `0x7ffe..a8bc`
+is that `x` also has an address -- some number like `0x4004`
 that identifies the specific bytes in memory where that 42 is being
 stored.
 
 ```
-    Variable       Address          Value
-    ┌──────────┬──────────────┬──────────────┐
-    │ int x    │ 0x7ffe..a8bc │           42 │
-    └──────────┴──────────────┴──────────────┘
+    Variable    Address    Value
+    ┌────────┬──────────┬────────┐
+    │ int x  │  0x4004  │     42 │
+    └────────┴──────────┴────────┘
 ```
 
 You don't normally care about addresses. You just say `x` and
@@ -104,13 +104,13 @@ int *p = &x;    /* p now holds the address of x */
 After this, `p` contains the address where `x` lives in memory:
 
 ```
-    Variable       Address          Value
-    ┌──────────┬──────────────┬──────────────┐
-    │ int *p   │ 0x7ffe..a8b0 │ 0x7ffe..a8bc │─ ─ ┐
-    └──────────┴──────────────┴──────────────┘     │  p's value IS
-    ┌──────────┬──────────────┬──────────────┐     │  x's address
-    │ int x    │ 0x7ffe..a8bc │           42 │◄─ ─ ┘
-    └──────────┴──────────────┴──────────────┘
+    Variable    Address    Value
+    ┌────────┬──────────┬────────┐
+    │ int *p │  0x4000  │ 0x4004 │─ ─ ┐
+    └────────┴──────────┴────────┘     │  p's value IS
+    ┌────────┬──────────┬────────┐     │  x's address
+    │ int x  │  0x4004  │     42 │◄─ ─ ┘
+    └────────┴──────────┴────────┘
 ```
 
 We say "p _points to_ x" because that's less tedious than saying "p
@@ -149,13 +149,13 @@ We changed `x` without ever mentioning `x` by name. We went through
 the pointer:
 
 ```
-    Variable       Address          Value
-    ┌──────────┬──────────────┬──────────────┐
-    │ int *p   │ 0x7ffe..a8b0 │ 0x7ffe..a8bc │─ ─ ┐  *p = 99
-    └──────────┴──────────────┴──────────────┘     │  writes through
-    ┌──────────┬──────────────┬──────────────┐     │  the pointer
-    │ int x    │ 0x7ffe..a8bc │     42 → 99  │◄─ ─ ┘
-    └──────────┴──────────────┴──────────────┘
+    Variable    Address    Value
+    ┌────────┬──────────┬────────┐
+    │ int *p │  0x4000  │ 0x4004 │─ ─ ┐  *p = 99
+    └────────┴──────────┴────────┘     │  writes through
+    ┌────────┬──────────┬────────┐     │  the pointer
+    │ int x  │  0x4004  │ 42→99  │◄─ ─ ┘
+    └────────┴──────────┴────────┘
 ```
 
 This is not a parlor trick -- it's the fundamental mechanism that
@@ -228,22 +228,22 @@ An array name, in most contexts, _decays_ to a pointer to its first
 element:
 
 ```
-    Variable       Address          Value
-    ┌──────────┬──────────────┬──────────────┐
-    │ int *p   │ 0x7ffe..b000 │ 0x7ffe..b010 │─ ─ ┐
-    └──────────┴──────────────┴──────────────┘     │
-                                                   ▼  p points here
-    ┌──────────┬──────────────┬──────────────┐     │
-    │ int [0]  │ 0x7ffe..b010 │           10 │◄─ ─ ┘
-    ├──────────┼──────────────┼──────────────┤
-    │ int [1]  │ 0x7ffe..b014 │           20 │
-    ├──────────┼──────────────┼──────────────┤
-    │ int [2]  │ 0x7ffe..b018 │           30 │
-    ├──────────┼──────────────┼──────────────┤
-    │ int [3]  │ 0x7ffe..b01c │           40 │
-    ├──────────┼──────────────┼──────────────┤
-    │ int [4]  │ 0x7ffe..b020 │           50 │
-    └──────────┴──────────────┴──────────────┘
+    Variable    Address    Value
+    ┌────────┬──────────┬────────┐
+    │ int *p │  0x3000  │ 0x5000 │─ ─ ┐
+    └────────┴──────────┴────────┘     │
+                                       │
+    ┌────────┬──────────┬────────┐     │
+    │ int[0] │  0x5000  │     10 │◄─ ─ ┘
+    ├────────┼──────────┼────────┤
+    │ int[1] │  0x5004  │     20 │
+    ├────────┼──────────┼────────┤
+    │ int[2] │  0x5008  │     30 │
+    ├────────┼──────────┼────────┤
+    │ int[3] │  0x500C  │     40 │
+    ├────────┼──────────┼────────┤
+    │ int[4] │  0x5010  │     50 │
+    └────────┴──────────┴────────┘
 ```
 
 ```C
@@ -323,19 +323,19 @@ The `->` operator means "dereference the pointer on the left and
 access the member on the right."
 
 ```
-    Variable       Address          Value
-    ┌──────────┬──────────────┬──────────────┐
-    │ point_t  │ 0x7ffe..c000 │ 0x7ffe..c010 │─ ─ ┐
-    │ *p       │              │              │     │
-    └──────────┴──────────────┴──────────────┘     │
-                                                   │
-    ┌──────────┬──────────────┬──────────────┐     │
-    │ .x       │ 0x7ffe..c010 │            0 │◄─ ─ ┘  p->x
-    ├──────────┼──────────────┼──────────────┤
-    │ .y       │ 0x7ffe..c014 │            0 │         p->y
-    ├──────────┼──────────────┼──────────────┤
-    │ .label   │ 0x7ffe..c018 │ 0x0040..1000 │─ ─ ─ ▸ "origin"
-    └──────────┴──────────────┴──────────────┘
+    Variable    Address    Value
+    ┌────────┬──────────┬────────┐
+    │point_t │  0x6000  │ 0x7000 │─ ─ ┐
+    │ *p     │          │        │     │
+    └────────┴──────────┴────────┘     │
+                                       │
+    ┌────────┬──────────┬────────┐     │
+    │ .x     │  0x7000  │      0 │◄─ ─ ┘  p->x
+    ├────────┼──────────┼────────┤
+    │ .y     │  0x7004  │      0 │         p->y
+    ├────────┼──────────┼────────┤
+    │ .label │  0x7008  │ 0x2000 │─ ─ ▸ "origin"
+    └────────┴──────────┴────────┘
 ```
 
 You will use this operator constantly. It's the most common thing
@@ -352,11 +352,11 @@ point_t *origin = (point_t *)NULL;
 ```
 
 ```
-    Variable       Address          Value
-    ┌──────────┬──────────────┬──────────────┐
-    │ int *p   │ 0x7ffe..a8b0 │ 0x0000000000 │─ ─ ─ ▸ NOWHERE
-    └──────────┴──────────────┴──────────────┘        (SIGSEGV if
-                                                       you try)
+    Variable    Address    Value
+    ┌────────┬──────────┬────────┐
+    │ int *p │  0x4000  │ 0x0000 │─ ─ ▸ NOWHERE
+    └────────┴──────────┴────────┘      (SIGSEGV if
+                                         you try)
 ```
 
 [Sir Tony Hoare][hoare] called null references his "billion-dollar
