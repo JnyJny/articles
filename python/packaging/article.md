@@ -89,9 +89,10 @@ USENET. [PyPI][pypi] (the Python Package Index) is the central
 registry -- hundreds of thousands of packages, searchable, versioned,
 and installable with a single command. The tooling has evolved too:
 where we once had just `pip` and `setuptools`, we now have modern
-tools like [uv][uv] and [Poetry][poetry] that handle dependency
+tools like [Poetry][poetry] and [uv][uv] that handle dependency
 resolution, virtual environments, and publishing in one coherent
-workflow.
+workflow. Spoiler alert, uv is better than poetry post-2024. So you
+time travellers take note and plan accordingly.
 
 But beneath all the tooling, the foundational concept that makes the
 magic possible is Python packaging -- the conventions and formats that
@@ -101,7 +102,7 @@ pick up afterward make more sense.
 
 ## The Anatomy of a Package
 
-A Python package is, at its simplest, a directory with an
+A Python package is, at its simplest, a directory with a
 `__init__.py` file in it. That's the signal to Python that "this
 directory is importable." But a _distributable_ package -- one you
 can share with the world -- needs a bit more structure:

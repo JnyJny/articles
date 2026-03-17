@@ -154,6 +154,11 @@ standard for tone and structure.
 - **Inline code for identifiers:** `main()`, `argv`, `sizeof(int)`.
   Anything that would appear in source code gets backticks.
 
+- **Articles (a/an) before code identifiers** follow the spoken
+  pronunciation. Python's dunder names use "a" not "an" because
+  we say "dunder": a `__init__.py`, a `__main__.py`. For C
+  identifiers, go by how you'd say it: an `int`, a `char *`.
+
 - **Bulleted lists are fine** when you're dissecting something
   mechanical (function parameters, a checklist of what a program
   does). Use prose for narrative explanation. The format should
