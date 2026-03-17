@@ -34,9 +34,9 @@ hang out in [IRC][irc] chats, or hear about the latest thing while
 hacking out your semester project in the computer lab. Later,
 newfangled "web" servers started popping up using the untested and
 weird [Hyper-Text Transfer Protocol][http]. These "websites" soon
-proved their worth, becoming gateways to anonymous [FTP][ftp] and
-[gopher][gopher] sites and aggregating information on various esoteric
-topics.
+proved their worth, becoming gateways to pre-existing but hard to find
+anonymous [FTP][ftp] and [gopher][gopher] sites as well as aggregating
+information on various esoteric topics.
 
 If you found something close to what you needed, you then had to get
 it running on your particular magic combination of hardware, compiler,
@@ -82,7 +82,7 @@ Python as a language is friendly to new programmers while providing
 enough depth and mystique to draw in hard-core nerds. But the real
 strength of Python isn't the language -- it's the ecosystem that
 allows us to flippantly say "Oh, you need a high performance web
-server for your new RESTful API? Just install [gunicorn][gunicorn]."
+server for your new RESTful API? Just `pip install [gunicorn][gunicorn]`."
 
 The discovery story has improved since the fun-old-days of trawling
 USENET. [PyPI][pypi] (the Python Package Index) is the central
@@ -105,7 +105,18 @@ pick up afterward make more sense.
 A Python package is, at its simplest, a directory with a
 `__init__.py` file in it. That's the signal to Python that "this
 directory is importable." But a _distributable_ package -- one you
-can share with the world -- needs a bit more structure:
+can share with the world -- needs a bit more structure. 
+
+The turning point came with [PEP 518][pep-518], which introduced
+`pyproject.toml` as a standard way to declare build requirements.
+Before that, Python packaging was a maze of `setup.py` scripts that
+had to import `setuptools` to declare that they depended on
+`setuptools` -- a bootstrapping problem that made everyone miserable.
+PEP 518 broke the cycle by giving projects a declarative file that
+tools could read _before_ executing any Python code. Later,
+[PEP 621][pep-621] standardized the `[project]` table for metadata,
+so your project name, version, and dependencies all live in one
+place regardless of which build tool you choose.
 
 ```
 my-project/
@@ -162,6 +173,8 @@ Pick one. Build a package. Put it on PyPI. The world is waiting for
 your awesome Python thingy.
 
 <!-- Links -->
+[pep-518]: https://peps.python.org/pep-0518/
+[pep-621]: https://peps.python.org/pep-0621/
 [uv-article]: ../packaging-with-uv/article.md
 [poetry-article]: ../packaging-with-poetry/article.md
 [usenet]: https://en.wikipedia.org/wiki/Usenet
