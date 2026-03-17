@@ -60,6 +60,8 @@ The rest can be read in any order once you have the fundamentals.
 |---------|--------|
 | [The Modern Python Command-Line Interface](python/command-line-interface/article.md) | Published |
 | [Python Packaging Demystified](python/packaging/article.md) | Published |
+| Packaging with uv | Planned |
+| [Packaging with Poetry](python/packaging-with-poetry/article.md) | Draft |
 | [What The Heck Is Yield For?](python/yield/article.md) | Published |
 | Why Python Is Cool | Planned |
 

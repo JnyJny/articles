@@ -1,122 +1,170 @@
-<!-- 
-author: Erik O'Shaughnessy
-date: 26 Apr 2020
+<!--
+Author: Erik O'Shaughnessy
+Editor: Johnny (Jny)
+Date: April 2020 (revised March 2026)
+Status: published
+Series: Python
+Prerequisites: none
+Next: packaging-with-uv
 -->
 
 # Python Packaging Demystified
 
-Often then next question from a new Python programmer is:
-
-```HUMAN
+The next question from every new Python programmer, right after "how
+do I print stuff," is:
 
 "How do I make my awesome Python thingy available to other people?"
 
-```
-
-To answer this question, we first need to learn a little bit about the
-Python ecosystem and how to structure our code to share it efficiently
-with the world.
-
+To answer that, we need to talk about the Python ecosystem and why
+packaging matters. Not the mechanics -- we'll get to those in
+separate articles on [uv](../packaging-with-uv/article.md) and
+[Poetry](../packaging-with-poetry/article.md). This is about the
+_why_.
 
 ## Here Comes Another History Lesson
 
-[tl;dr](#Why-Python-is-Cooler-Than-Other-Language-Ecosystems) - life
-was hard on the Internet before Python.
-
 In the days of yore, when you needed a library to extend the
-functionality of your program, you only had a few choices. First you
-could write it yourself. Another alternative was maybe your operating
-system provided it.  Best and worst of all, you could look for it on
-the [Internet][27]. If you found something close, you would need to
-get it running on the magic combination of your hardware, compiler
-and operating system.
+functionality of your program, you only had a few choices. You could
+write it yourself. Your operating system might provide it. Or -- best
+and worst of all -- you could look for it on the Internet.
 
-Finding things with the early Internet was difficult; it took
-patience, hard-won experience and luck. You had to follow your
-favorite topic in [USENET][21] news groups, exchange [email][27] with
-other developers/students/afficiandos, hang out in [IRC][22] chats, or
-maybe hear about the latest coolest thing while hacking out your
-semester project in the computer lab. Later, newfangled _"web"_
-servers started popping up using the untested and weird ["Hyper-Text
-Transfer Protocol"][26]. These "websites" soon proved their use,
-becoming gateways to anonymous [FTP][23] and [gopher][24] sites and
+Finding things on the early Internet was difficult. It took patience,
+hard-won experience, and luck. You had to follow your favorite topic
+in [USENET](https://en.wikipedia.org/wiki/Usenet) news groups,
+exchange email with other developers, hang out in
+[IRC](https://en.wikipedia.org/wiki/IRC) chats, or hear about the
+latest thing while hacking out your semester project in the computer
+lab. Later, newfangled "web" servers started popping up using the
+untested and weird [Hyper-Text Transfer
+Protocol](https://en.wikipedia.org/wiki/HTTP). These "websites" soon
+proved their worth, becoming gateways to anonymous
+[FTP](https://en.wikipedia.org/wiki/File_Transfer_Protocol) and
+[gopher](https://en.wikipedia.org/wiki/Gopher_(protocol)) sites and
 aggregating information on various esoteric topics.
 
-Once you'd deduced the existence and location of software on the early
-Internet, your next task was usually porting it to your particular
-combination of compiler, operating system and hardware. The early
-Internet was not homogenous in composition as it is now; there were
-lots of different flavors of [Unix][0], [VMS][1], [OS/2][2] and many
-others now [forgotten][3] running on just as many different machines with
-varying architectures and capabililites.
+If you found something close to what you needed, you then had to get
+it running on your particular magic combination of hardware, compiler,
+and operating system. The early Internet was not homogeneous -- there
+were lots of different flavors of
+[Unix](https://en.wikipedia.org/wiki/Unix),
+[VMS](https://en.wikipedia.org/wiki/OpenVMS),
+[OS/2](https://en.wikipedia.org/wiki/OS/2), and many others now
+[forgotten](https://en.wikipedia.org/wiki/BeOS) running on just as
+many different machines with varying architectures and capabilities.
 
-The majority of software was written in C which made task of porting
-easier, but it was far from simple. You had to work around the
-different services offered by different operating system flavors and
-different C compiler implementations. Not to mention the different
-capabilities offered by different hardware platforms; not everybody
-had access to fancy new CD-ROM drives and had to make do with 3.5"
-floppy disks. 
+The majority of software was written in C, which made porting easier
+but far from simple. You had to work around different services offered
+by different operating system flavors and different C compiler
+implementations. Not to mention the different capabilities offered by
+different hardware platforms -- not everybody had access to fancy new
+CD-ROM drives and had to make do with 3.5" floppy disks.
 
-After lots of hacking and learning far more about your machine, OS and
-compiler than you ever could from reading any book, you finally have a
-compiled version of the library that you hope works. 
+After lots of hacking and learning far more about your machine, OS,
+and compiler than you ever wanted, you finally have a compiled version
+of the library that you hope works.
 
-| "Testing? It compiled didn't it!? Ship it." - Embarassingly, me
+> "Testing? It compiled didn't it!? Ship it." - Embarrassingly, me.
 
-You [shim][27] it into your project and get on with whatever it was
-you were trying to accomplish. You can see why "roll your own" was a
-viable option, sometimes it was easier to just learn how to write the
-functionality you needed than to find it on the Internet and get
-someone else's software working. That's how we got experts in
-cryptography, compression, networking, languages and all the other
-things that make computers fun.
+You shim it into your project and get on with whatever it was you were
+trying to accomplish. You can see why "roll your own" was a viable
+option -- sometimes it was easier to just learn how to write the
+functionality you needed than to find someone else's software and get
+it running. That's how we got experts in cryptography, compression,
+networking, languages, and all the other things that make computers
+fun.
 
-Finally, the nightmare scenario. Seven months later after your program
-has been put into production and you have moved on to another project
-a shadow falls across your desk. There's a bug and it stems from the
-library you worked so hard to incorporate into this now-indespensible
-application. You again have choices; hope you can fix the library,
-hope the library maintainer has fixed the bug and the source is still
-accessible, or hope the Internet has offered up a replacement library
-in the interim.
+Finally, the nightmare scenario. Seven months later, after your
+program has been put into production and you have moved on to another
+project, a shadow falls across your desk. There's a bug and it stems
+from the library you worked so hard to incorporate. You again have
+choices: hope you can fix the library, hope the maintainer has fixed
+the bug and the source is still accessible, or hope the Internet has
+offered up a replacement in the interim.
 
 Notice there is a lot of hoping there. Hope is not a plan.
 
 ## Why Python is Cooler Than Other Language Ecosystems
 
-Python as a language is pretty friendly to new programmers while
-providing enough depth and mystique to draw in hard-core nerds. But
-the real strength of Python isn't the language, it's the ecosystem
-that allows us to flippantly say "Oh, you need a high performance web
-server for your new RESTful API? Just `pip install gunicorn`."
+Python as a language is friendly to new programmers while providing
+enough depth and mystique to draw in hard-core nerds. But the real
+strength of Python isn't the language -- it's the ecosystem that
+allows us to flippantly say "Oh, you need a high performance web
+server for your new RESTful API? Just install
+[gunicorn](https://pypi.org/project/gunicorn/)."
 
-Admittedly, the discovery story hasn't improved a whole lot since the
-fun-old-days of trawling USENET. It still helps to be plugged into the
-Python world thru websites, podcasts, and Slack chats. But when I have
-a sudden need for specialized libraries, often the first thing I do is:
+The discovery story has improved since the fun-old-days of trawling
+USENET. [PyPI](https://pypi.org) (the Python Package Index) is the
+central registry -- hundreds of thousands of packages, searchable,
+versioned, and installable with a single command. The tooling has
+evolved too: where we once had just `pip` and `setuptools`, we now
+have modern tools like [uv](https://docs.astral.sh/uv/) and
+[Poetry](https://python-poetry.org/) that handle dependency
+resolution, virtual environments, and publishing in one coherent
+workflow.
 
-```console
-$ python3 -m pip list | grep 'weird but helpful topic'
+But beneath all the tooling, the foundational concept that makes the
+magic possible is Python packaging -- the conventions and formats that
+let us describe, build, distribute, and install Python code in a
+predictable way. Understanding that foundation makes every tool you
+pick up afterward make more sense.
+
+## The Anatomy of a Package
+
+A Python package is, at its simplest, a directory with an
+`__init__.py` file in it. That's the signal to Python that "this
+directory is importable." But a _distributable_ package -- one you
+can share with the world -- needs a bit more structure:
+
+```
+my-project/
+    pyproject.toml       <- the modern single source of truth
+    src/
+        my_package/
+            __init__.py
+            core.py
+    tests/
+        test_core.py
 ```
 
-and most of the time _something_ shows up in that list! 
+The `pyproject.toml` file is where everything lives now: project
+metadata, dependencies, build system configuration, tool settings.
+It replaced the old `setup.py` / `setup.cfg` / `requirements.txt`
+sprawl that confused everybody (including the tools).
 
-The foundational technology that makes all of this magic possible is
-the concept and practice of Python packaging.
+A minimal `pyproject.toml` looks like:
 
-[0]: Unix
-[1]: VMS
-[2]: OS/2
-[3]: BeOS
+```toml
+[project]
+name = "my-package"
+version = "0.1.0"
+description = "Does something useful, probably"
+requires-python = ">=3.11"
 
-[18]: https://en.wikipedia.org/wiki/Not_invented_here
-[19]: https://pypi.org
-[20]: https://www.pypa.io/en/latest/
-[21]: usenet
-[22]: irc
-[23]: ftp
-[24]: gopher
-[25]: telnet
-[26]: HTTP
-[27]: software shim
+dependencies = [
+    "requests>=2.28",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+```
+
+This tells the packaging ecosystem everything it needs to know: what
+your project is called, what Python version it needs, what it depends
+on, and how to build it. The specific build backend (`hatchling`,
+`setuptools`, `flit`, `pdm`) is a choice you make once and rarely
+think about again.
+
+## Where To Go From Here
+
+Now you know _why_ Python packaging exists and what problem it
+solves. The next step is picking a tool and building something. We
+have separate articles for the two modern approaches:
+
+- [Packaging with uv](../packaging-with-uv/article.md) -- the fast,
+  Rust-powered newcomer that's eating everybody's lunch
+- [Packaging with Poetry](../packaging-with-poetry/article.md) -- the
+  established, opinionated tool that got dependency management right
+
+Pick one. Build a package. Put it on PyPI. The world is waiting for
+your awesome Python thingy.
