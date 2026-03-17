@@ -119,14 +119,14 @@ so your project name, version, and dependencies all live in one
 place regardless of which build tool you choose.
 
 ```
-my-project/
-    pyproject.toml       <- the modern single source of truth
-    src/
-        my_package/
-            __init__.py
-            core.py
-    tests/
-        test_core.py
+my-project
+├── pyproject.toml
+├── src
+│   └── my_package
+│       ├── __init__.py
+│       └── core.py
+└── tests
+    └── test_core.py
 ```
 
 The `pyproject.toml` file is where everything lives now: project
