@@ -136,15 +136,15 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.7,<0.8"]
+build-backend = "uv_build"
 ```
 
 This tells the packaging ecosystem everything it needs to know: what
 your project is called, what Python version it needs, what it depends
-on, and how to build it. The specific build backend (`hatchling`,
-`setuptools`, `flit`, `pdm`) is a choice you make once and rarely
-think about again.
+on, and how to build it. The build backend (`uv_build`, `hatchling`,
+`setuptools`, `flit`) is a choice you make once and rarely think
+about again.
 
 ## Where To Go From Here
 
