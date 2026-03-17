@@ -17,9 +17,8 @@ do I print stuff," is:
 
 To answer that, we need to talk about the Python ecosystem and why
 packaging matters. Not the mechanics -- we'll get to those in
-separate articles on [uv](../packaging-with-uv/article.md) and
-[Poetry](../packaging-with-poetry/article.md). This is about the
-_why_.
+separate articles on [uv][uv-article] and [Poetry][poetry-article].
+This is about the _why_.
 
 ## Here Comes Another History Lesson
 
@@ -30,26 +29,20 @@ and worst of all -- you could look for it on the Internet.
 
 Finding things on the early Internet was difficult. It took patience,
 hard-won experience, and luck. You had to follow your favorite topic
-in [USENET](https://en.wikipedia.org/wiki/Usenet) news groups,
-exchange email with other developers, hang out in
-[IRC](https://en.wikipedia.org/wiki/IRC) chats, or hear about the
-latest thing while hacking out your semester project in the computer
-lab. Later, newfangled "web" servers started popping up using the
-untested and weird [Hyper-Text Transfer
-Protocol](https://en.wikipedia.org/wiki/HTTP). These "websites" soon
-proved their worth, becoming gateways to anonymous
-[FTP](https://en.wikipedia.org/wiki/File_Transfer_Protocol) and
-[gopher](https://en.wikipedia.org/wiki/Gopher_(protocol)) sites and
-aggregating information on various esoteric topics.
+in [USENET][usenet] news groups, exchange email with other developers,
+hang out in [IRC][irc] chats, or hear about the latest thing while
+hacking out your semester project in the computer lab. Later,
+newfangled "web" servers started popping up using the untested and
+weird [Hyper-Text Transfer Protocol][http]. These "websites" soon
+proved their worth, becoming gateways to anonymous [FTP][ftp] and
+[gopher][gopher] sites and aggregating information on various esoteric
+topics.
 
 If you found something close to what you needed, you then had to get
 it running on your particular magic combination of hardware, compiler,
 and operating system. The early Internet was not homogeneous -- there
-were lots of different flavors of
-[Unix](https://en.wikipedia.org/wiki/Unix),
-[VMS](https://en.wikipedia.org/wiki/OpenVMS),
-[OS/2](https://en.wikipedia.org/wiki/OS/2), and many others now
-[forgotten](https://en.wikipedia.org/wiki/BeOS) running on just as
+were lots of different flavors of [Unix][unix], [VMS][vms],
+[OS/2][os2], and many others now [forgotten][beos] running on just as
 many different machines with varying architectures and capabilities.
 
 The majority of software was written in C, which made porting easier
@@ -89,16 +82,14 @@ Python as a language is friendly to new programmers while providing
 enough depth and mystique to draw in hard-core nerds. But the real
 strength of Python isn't the language -- it's the ecosystem that
 allows us to flippantly say "Oh, you need a high performance web
-server for your new RESTful API? Just install
-[gunicorn](https://pypi.org/project/gunicorn/)."
+server for your new RESTful API? Just install [gunicorn][gunicorn]."
 
 The discovery story has improved since the fun-old-days of trawling
-USENET. [PyPI](https://pypi.org) (the Python Package Index) is the
-central registry -- hundreds of thousands of packages, searchable,
-versioned, and installable with a single command. The tooling has
-evolved too: where we once had just `pip` and `setuptools`, we now
-have modern tools like [uv](https://docs.astral.sh/uv/) and
-[Poetry](https://python-poetry.org/) that handle dependency
+USENET. [PyPI][pypi] (the Python Package Index) is the central
+registry -- hundreds of thousands of packages, searchable, versioned,
+and installable with a single command. The tooling has evolved too:
+where we once had just `pip` and `setuptools`, we now have modern
+tools like [uv][uv] and [Poetry][poetry] that handle dependency
 resolution, virtual environments, and publishing in one coherent
 workflow.
 
@@ -161,10 +152,27 @@ Now you know _why_ Python packaging exists and what problem it
 solves. The next step is picking a tool and building something. We
 have separate articles for the two modern approaches:
 
-- [Packaging with uv](../packaging-with-uv/article.md) -- the fast,
-  Rust-powered newcomer that's eating everybody's lunch
-- [Packaging with Poetry](../packaging-with-poetry/article.md) -- the
-  established, opinionated tool that got dependency management right
+- [Packaging with uv][uv-article] -- the fast, Rust-powered newcomer
+  that's eating everybody's lunch
+- [Packaging with Poetry][poetry-article] -- the established,
+  opinionated tool that got dependency management right
 
 Pick one. Build a package. Put it on PyPI. The world is waiting for
 your awesome Python thingy.
+
+<!-- Links -->
+[uv-article]: ../packaging-with-uv/article.md
+[poetry-article]: ../packaging-with-poetry/article.md
+[usenet]: https://en.wikipedia.org/wiki/Usenet
+[irc]: https://en.wikipedia.org/wiki/IRC
+[http]: https://en.wikipedia.org/wiki/HTTP
+[ftp]: https://en.wikipedia.org/wiki/File_Transfer_Protocol
+[gopher]: https://en.wikipedia.org/wiki/Gopher_(protocol)
+[unix]: https://en.wikipedia.org/wiki/Unix
+[vms]: https://en.wikipedia.org/wiki/OpenVMS
+[os2]: https://en.wikipedia.org/wiki/OS/2
+[beos]: https://en.wikipedia.org/wiki/BeOS
+[gunicorn]: https://pypi.org/project/gunicorn/
+[pypi]: https://pypi.org
+[uv]: https://docs.astral.sh/uv/
+[poetry]: https://python-poetry.org/
