@@ -88,10 +88,8 @@ code while it runs, and the hardware will object if it tries. You can
 talk the system into allowing it, and the stories that follow tend to
 end with "I can't believe we got away with that!"
 
-That permission has a pleasant side effect. Since the code never
-changes, every process running the same program can share one physical
-copy. Ten terminals running the same editor are using one copy of the
-editor's instructions.
+Code that never changes has a pleasant side effect, but it's one for
+the [virtual memory][virtual-memory] article.
 
 String literals tend to end up in read-only memory close to the code,
 which explains a crash that has ambushed many a beginner:
@@ -356,10 +354,9 @@ loader uses it to bring in shared libraries, `malloc()` uses it for
 large blocks, and you can use it to treat a file as if it were an
 array.
 
-Every program that calls `printf()` has a copy of libc mapped into this
-area, and as with the **TEXT** region, every process on the machine
-shares the same physical pages of its code. You'll see libc in the
-output below, mapped four times with four different permission sets.
+Every program that calls `printf()` has libc mapped into this area.
+You'll see libc in the output below, mapped four times with four
+different permission sets.
 It also shows the dynamic linker (`ld-linux`) that put it there and
 a `[vdso]`, a page of code the kernel provides so that a few system
 calls, like reading the clock, don't require a trip into the kernel.
