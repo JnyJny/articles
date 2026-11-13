@@ -73,6 +73,11 @@ arranged differently, and there is no `/proc` to ask. I ran
 everything here in a Linux container. Any Linux box will show you the
 same thing, with different numbers.
 
+In the spirit of magnanimity, Windows has an address space too. I'm
+told it is divided into segments for bugs, hacks, hacked bugs,
+exploits, terrible code, and Clippy. Someone braver than me can draw
+that map.
+
 ## Text: Where Your Code Lives
 
 When you compile a program, the compiler produces machine
