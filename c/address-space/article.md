@@ -14,8 +14,8 @@ The first time I got a segfault, I assumed the computer was broken. The
 second time, I assumed I was. By the tenth I had figured out that the
 computer had a map, I didn't, and it was enforcing the borders anyway.
 
-**Me**: a crusty Unix system programmer who has segfaulted in every
-region of the map and lived to tell about it.
+**Me**: an old Unix hand who navigated by core dump before debuggers
+had colors.
 
 **You**: someone who knows what a pointer is and wants to know what
 it's pointing _into_.
