@@ -38,7 +38,8 @@ Ideas and loose ends that don't belong in the article being written.
   article.
 - Third story seed: Erik patched a running kernel to fix a performance
   problem in a counter collection subsystem. "Dicey but it worked."
-  Platform and details unknown; ask Erik.
+  Solaris on SPARC. Other details unknown; ask Erik. (Erik did fewer
+  bad things to AIX and POWER, being less confident then.)
 - Idea: a `misc/` article collecting these ("I can't believe we got away
   with that!"), with the address space article carrying a one-line
   teaser.
