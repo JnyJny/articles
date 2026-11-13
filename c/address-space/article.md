@@ -487,7 +487,7 @@ When you can name the region an address lives in, you can read a
 segfault. When you're ready for the **HEAP** in detail, the next article
 is [memory allocation][memory-allocation].
 
-Go draw your own map.
+Take the map and find out where the dragons live on your machine.
 
 <!-- Links -->
 [pointers]: ../pointers/article.md
