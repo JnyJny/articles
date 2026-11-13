@@ -24,6 +24,15 @@ Ideas and loose ends that don't belong in the article being written.
 - Draft in Erik's voice, run every example in the Linux container, Erik
   edits the next day.
 
+- Story seed for the **TEXT** section ("I can't believe we got away with
+  that!"): Erik's branch tracing framework on SPARC. It replaced branch
+  instructions (control transfer instructions, CTIs) with `ILLTRAP`, and
+  the `ILLTRAP` trap handler emitted a trace record, emulated the branch,
+  and returned control to wherever the CTI was supposed to go. Needs
+  writable text. Erik says he abused the stack more than the gap. Re-read
+  the old framework for the details first (delay slots? where the handler
+  ran?).
+
 ## Pointer pitfalls
 
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
