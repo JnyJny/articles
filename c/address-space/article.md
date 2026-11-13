@@ -201,7 +201,7 @@ $ ulimit -s
 8192
 ```
 
-That's 8192 KiB, eight megabytes. We can use up eight megabytes quickly
+That's 8192 KB, eight megabytes. We can use up eight megabytes quickly
 with a function that calls itself forever:
 
 ```C
@@ -460,7 +460,7 @@ against the ranges in the rest, and the map shows up:
     └───────┴────────────────┴──────────────────────────────────────┘
 ```
 
-A few things to notice. The **HEAP** mapping is 132 KiB although we
+A few things to notice. The **HEAP** mapping is 132 KB although we
 asked for four bytes, because the allocator grabs a generous chunk from
 the kernel and parcels it out, and asking the kernel is the expensive
 part. The **DATA** and **BSS** variables sit twenty bytes apart in the
