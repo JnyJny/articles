@@ -22,7 +22,7 @@ I admire the conviction.
 | [How To Write a Good C Program, Like Me](c/how-i-write-main/article.md) | Published |
 | [Pointers: Embrace the Dark Magic](c/pointers/article.md) | Published |
 | [Multi-File C Programs](c/multi-file-c-program/article.md) | Published |
-| [A Map of Memory: The Process Address Space](c/address-space/article.md) | Stub |
+| [A Map of Memory: The Process Address Space](c/address-space/article.md) | Draft |
 | [Pointers II: Everything Is On Fire](c/pointer-pitfalls/article.md) | Stub |
 | Anatomy of C Header Files | Stub |
 | The Compiler Tool Chain | Stub |
