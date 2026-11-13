@@ -164,7 +164,7 @@ disk. The name comes from a 1950s assembler directive, "Block Started
 by Symbol," and nobody has had enough reason to rename it in seventy
 years. Wikipedia has the [history][bss].
 
-One honest caveat: the kernel doesn't distinguish **DATA** from **BSS** at
+One caveat: the kernel doesn't distinguish **DATA** from **BSS** at
 runtime. Both end up in a single read-write mapping, as you'll see in
 a few pages. The split exists in the file.
 

@@ -46,6 +46,7 @@ standard for tone and structure.
 - genuinely
 - ceremony
 - quietly
+- honest (and honestly)
 
 ## Avoid marketing adjectives
 
