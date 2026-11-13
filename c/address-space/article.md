@@ -83,8 +83,10 @@ that map.
 When you compile a program, the compiler produces machine
 instructions. When you run it, the kernel maps those instructions into
 the bottom of your address space as the **Text** region and marks it
-_read-only and executable_. Your own program cannot change its code
-while it runs, and the hardware makes sure of it.
+_read-only and executable_. Your own program should not change its
+code while it runs, and the hardware will object if it tries. You can
+talk the system into allowing it, and the stories that follow tend to
+end with "I can't believe we got away with that!"
 
 That permission has a pleasant side effect. Since the code never
 changes, every process running the same program can share one physical
