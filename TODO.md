@@ -2,6 +2,13 @@
 
 Ideas and loose ends that don't belong in the article being written.
 
+## Address space
+
+- Preface the whole article: we are talking about one specific version of
+  Linux (gcc 14, aarch64, non-PIE), and working out the specifics of your
+  own operating system is up to you. Currently only the Mac and Windows
+  asides gesture at this.
+
 ## Pointer pitfalls
 
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
