@@ -65,8 +65,11 @@ which is where every example in this article was run:
     Low addresses
 ```
 
-Every region has rules and a way to get you in trouble. We'll walk
-the map from the bottom up.
+Every region has rules and a way to get you in trouble. Break the
+rules, or wander off the map entirely, and the kernel stops your
+program with a _segmentation fault_, or _segfault_ if you've been
+through one. We'll walk the map from the bottom up, and you'll meet a
+few.
 
 If you're on a Mac, the same regions exist but the neighborhood is
 arranged differently, and there is no `/proc` to ask. I ran
