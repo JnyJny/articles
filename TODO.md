@@ -8,22 +8,6 @@ Ideas and loose ends that don't belong in the article being written.
   Linux (gcc 14, aarch64, non-PIE), and working out the specifics of your
   own operating system is up to you. Currently only the Mac and Windows
   asides gesture at this.
-
-## Memory allocation
-
-- Write `c/memory-allocation/` after the address space edit pass is done.
-  Promised by the [address space][address-space] metadata (`Next:`) and
-  by the pointers article. No directory and no README row yet.
-- Scope: the API and using it correctly. `malloc()`, `calloc()`,
-  `realloc()`, `free()`; the `sizeof(*p)` idiom; checking for **NULL**;
-  the `realloc()` leak trap; why `calloc()` exists; where the memory
-  comes from (**HEAP** and `mmap()`); `strdup()`, `reallocarray()`,
-  `aligned_alloc()`, and a warning about `alloca()`.
-- Leave the failure modes (use-after-free, double free, overflows,
-  Valgrind, AddressSanitizer) to pointer pitfalls.
-- Draft in Erik's voice, run every example in the Linux container, Erik
-  edits the next day.
-
 - Story seed for the **TEXT** section ("I can't believe we got away with
   that!"): Erik's branch tracing framework on SPARC. It replaced branch
   instructions (control transfer instructions, CTIs) with `ILLTRAP`, and
@@ -44,8 +28,23 @@ Ideas and loose ends that don't belong in the article being written.
   with that!"), with the address space article carrying a one-line
   teaser.
 
+## Memory allocation
+
+- Drafted 2026-11-13 on `features/memory-allocation-article`, waiting for
+  Erik's edit pass.
+- Overcommit: on Linux `malloc()` rarely returns **NULL** for plausible
+  sizes, because the kernel promises memory it hasn't got and the failure
+  shows up later (the OOM killer). Left out of the article on purpose; it
+  belongs with virtual memory.
+- glibc internals behind what the article shows: chunk headers, the
+  24-byte minimum block, the 16 bytes scribbled on a freed block, arenas,
+  `brk()` versus `mmap()`. Candidate for an article of its own.
+
 ## Pointer pitfalls
 
+- The memory allocation article promises two things here: a proper
+  introduction to `-fsanitize=address`, and what goes wrong when pointers
+  into a block outlive a `realloc()` that moved it.
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
   alike and behave differently. The pointer refers to read-only
   characters in `.rodata`, and writing through it segfaults. The array

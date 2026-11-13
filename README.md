@@ -23,6 +23,7 @@ I admire the conviction.
 | [Pointers: Embrace the Dark Magic](c/pointers/article.md) | Published |
 | [Multi-File C Programs](c/multi-file-c-program/article.md) | Published |
 | [A Map of Memory: The Process Address Space](c/address-space/article.md) | Draft |
+| [Borrowing Memory: malloc, free, and the Rest of the Family](c/memory-allocation/article.md) | Draft |
 | [Pointers II: Everything Is On Fire](c/pointer-pitfalls/article.md) | Stub |
 | Anatomy of C Header Files | Stub |
 | The Compiler Tool Chain | Stub |
