@@ -142,21 +142,21 @@ please" and the kernel hands over pages of zeros at load time. Compare
 two programs that differ only in whether the array has an initializer:
 
 ```C
-int table[1000000];         /* bss.c  */
-int table[1000000] = {1};   /* data.c */
+int table[1000000];         /* no_init.c   */
+int table[1000000] = {1};   /* with_init.c */
 ```
 
 Each has a trivial `main()` that returns `table[0]`. Compile both and
 look at the files:
 
 ```console
-$ ls -l bss data
--rwxr-xr-x. 1 root root   70368 Nov 13 00:40 bss
--rwxr-xr-x. 1 root root 4070368 Nov 13 00:40 data
-$ size bss data
+$ ls -l no_init with_init
+-rwxr-xr-x. 1 root root   70376 Nov 13 01:26 no_init
+-rwxr-xr-x. 1 root root 4070376 Nov 13 01:26 with_init
+$ size no_init with_init
    text	   data	    bss	    dec	    hex	filename
-   1225	    576	4000008	4001809	 3d1011	bss
-   1225	4000576	      8	4001809	 3d1011	data
+   1225	    576	4000008	4001809	 3d1011	no_init
+   1225	4000576	      8	4001809	 3d1011	with_init
 ```
 
 Same array, same four megabytes at runtime, and a 4 MB difference on
