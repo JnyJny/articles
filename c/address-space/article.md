@@ -42,7 +42,7 @@ which is where every example in this article was run:
 ```
     High addresses
     ┌─────────────────────────────┐
-    │            Stack            │  ← grows downward
+    │            STACK            │  ← grows downward
     │              ↓              │
     ├─────────────────────────────┤
     │       (unmapped gap)        │
@@ -52,13 +52,13 @@ which is where every example in this article was run:
     │       (unmapped gap)        │
     ├─────────────────────────────┤
     │              ↑              │
-    │            Heap             │  ← grows upward
+    │            HEAP             │  ← grows upward
     ├─────────────────────────────┤
     │             BSS             │  ← uninitialized globals
     ├─────────────────────────────┤
-    │            Data             │  ← initialized globals
+    │            DATA             │  ← initialized globals
     ├─────────────────────────────┤
-    │            Text             │  ← your compiled code
+    │            TEXT             │  ← your compiled code
     ├─────────────────────────────┤
     │         (reserved)          │  ← NULL lives here
     └─────────────────────────────┘
@@ -451,16 +451,16 @@ lines against the ranges in the rest, and the map shows up:
 ```
     Region   Address          Found in /proc/self/maps
     ┌───────┬────────────────┬──────────────────────────────────────┐
-    │ Stack │ 0xfffff027e654 │ fffff025e000-fffff027f000  [stack]   │
+    │ STACK │ 0xfffff027e654 │ fffff025e000-fffff027f000  [stack]   │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ Map   │ 0xffff8481f000 │ ffff8481f000-ffff84822000  anonymous │
+    │ MAP   │ 0xffff8481f000 │ ffff8481f000-ffff84822000  anonymous │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ Heap  │ 0x2644f2a0     │ 2644f000-26470000          [heap]    │
+    │ HEAP  │ 0x2644f2a0     │ 2644f000-26470000          [heap]    │
     ├───────┼────────────────┼──────────────────────────────────────┤
     │ BSS   │ 0x420074       │ 00420000-00421000          rw-p      │
-    │ Data  │ 0x420060       │ (same mapping as BSS)                │
+    │ DATA  │ 0x420060       │ (same mapping as BSS)                │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ Text  │ 0x40083c       │ 00400000-00401000          r-xp      │
+    │ TEXT  │ 0x40083c       │ 00400000-00401000          r-xp      │
     └───────┴────────────────┴──────────────────────────────────────┘
 ```
 
