@@ -35,9 +35,9 @@ programmer to operating system wizard. Master the map first and the
 wizards will let you in.
 
 The kernel carves that space into regions. Each region has a purpose
-and a set of permissions: can you read here, write here, execute code
-here? Here is the layout on Linux, which is where every example in this
-article was run:
+and a set of permissions that answer three questions: can you read
+here, write here, execute code here? Here is the layout on Linux,
+which is where every example in this article was run:
 
 ```
     High addresses
