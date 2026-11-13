@@ -33,6 +33,25 @@ standard for tone and structure.
   yet. There's a difference. Never say "simply" or "obviously" about
   something you're taking the time to explain.
 
+## Avoid these linguistic conventions
+
+- "It's X, not Y" and its cousins ("X, not Y")
+- "X in an overcoat" / "X masquerading as Y"
+- Throat-clearing openers like "The short version is"
+- Evenly sized one-topic-per-paragraph structure
+- doing work
+
+## Avoid these words
+
+- genuinely
+- ceremony
+- quietly
+
+## Avoid marketing adjectives
+
+- Avoid marketing adjectives ('professional', 'modern') in docs/comments.
+  Use specific, concrete descriptions instead.
+
 ## Structure
 
 - **One article per directory.** Each topic gets its own folder under
