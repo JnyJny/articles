@@ -255,9 +255,11 @@ somewhere before depth 8000 the **STACK** runs out. gcc saw this coming
 and said so. Yes, this is where the website gets its name.
 
 The **STACK** has one more trap, and it's the one that bites people who
-are otherwise careful. Frames are temporary. A pointer to a local
-variable points into a frame that stops existing the moment the
-function returns:
+are otherwise careful. Frames get reused. When a function returns, its
+frame is still sitting there with its contents intact, but the next
+call is free to overwrite it. A pointer to a local variable keeps
+pointing at that spot, and what you read through it is a matter of
+luck:
 
 ```C
 /* dangling.c - hand back a pointer to a local variable */
