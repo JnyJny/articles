@@ -181,9 +181,9 @@ responsible for giving every block back.
 "Dynamic" allocation means the size and lifetime of the memory are
 decided while the program runs. The compiler has no say. That freedom is
 why linked lists and growable buffers are possible, and it is also why
-leaks, double frees, and use-after-free exist. The next article, [memory
-allocation][memory-allocation], takes the **HEAP** apart. For now,
-notice where it lives.
+leaks, double frees, and use-after-free exist. The article on [memory
+allocation][memory-allocation] takes the **HEAP** apart. For now, notice
+where it lives.
 
 ## Stack: The Call Stack
 
@@ -477,8 +477,8 @@ than the **STACK** limit and read the crash. Print a few more addresses
 and predict which mapping each one will land in before you look.
 
 When you can name the region an address lives in, you can read a
-segfault. When you're ready for the **HEAP** in detail, the next article
-is [memory allocation][memory-allocation].
+segfault. When you're ready for the **HEAP** in detail, read [memory
+allocation][memory-allocation].
 
 Take the map and find out where the dragons live on your machine.
 
