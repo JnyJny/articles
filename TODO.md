@@ -36,6 +36,12 @@ Ideas and loose ends that don't belong in the article being written.
   itself to do something dumb, while trying to monitor CPU throttling due
   to temperature on Solaris. Details lost; ask Erik. May fit a different
   article.
+- Third story seed: Erik patched a running kernel to fix a performance
+  problem in a counter collection subsystem. "Dicey but it worked."
+  Platform and details unknown; ask Erik.
+- Idea: a `misc/` article collecting these ("I can't believe we got away
+  with that!"), with the address space article carrying a one-line
+  teaser.
 
 ## Pointer pitfalls
 
