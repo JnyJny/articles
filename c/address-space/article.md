@@ -27,9 +27,12 @@ Let's draw the map.
 People say "memory" as if it were one enormous array of bytes. What
 your program actually gets is a _virtual address space_: a private
 range of addresses that the operating system builds for your process
-and that no other process can see. Your `0x4004` and another process's
-`0x4004` are different bytes in different places, and neither of you
-can tell.
+and that no other process can see. Your `0x4004` and another
+process's `0x4004` are different bytes in different places, and
+neither of you can tell. How does that work? It's a [sacred
+mystery][virtual-memory], the next rung on the ladder from C
+programmer to operating system wizard. Master the map first and the
+wizards will let you in.
 
 The kernel carves that space into regions. Each region has a purpose
 and a set of permissions: may you read here, write here, execute code
@@ -479,6 +482,7 @@ Go draw your own map.
 
 <!-- Links -->
 [pointers]: ../pointers/article.md
+[virtual-memory]: ../virtual-memory/article.md
 [memory-allocation]: ../memory-allocation/article.md
 [pointer-pitfalls]: ../pointer-pitfalls/article.md
 [linker-aliens]: XX-my-time-among-the-linker-aliens
