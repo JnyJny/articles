@@ -335,10 +335,10 @@ finds a bug can't rely on knowing where anything is. Three runs of the
 same program:
 
 ```console
-$ ./address_map | grep Stack
-Stack  local variable         0xffffe8b42c54
-Stack  local variable         0xfffff505bf74
-Stack  local variable         0xffffc7cd7f14
+$ ./address_map | grep STACK
+STACK  local variable         0xffffe8b42c54
+STACK  local variable         0xfffff505bf74
+STACK  local variable         0xffffc7cd7f14
 ```
 
 Never hardcode an address, and never compare addresses printed by
@@ -378,7 +378,7 @@ map from `/proc/self/maps`:
 #include <stdlib.h>
 #include <sys/mman.h>
 
-int initialized_global = 42;    /* Data */
+int initialized_global = 42;    /* DATA */
 int uninitialized_global;       /* BSS  */
 
 void show(const char *region, const char *what, void *address) {
@@ -391,13 +391,13 @@ int main(int argc, char *argv[]) {
     void *mapped = mmap((void *)NULL, 4096, PROT_READ | PROT_WRITE,
                         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
-    show("Text", "main()", (void *)main);
-    show("Text", "string literal", (void *)"hello");
-    show("Data", "initialized_global", &initialized_global);
+    show("TEXT", "main()", (void *)main);
+    show("TEXT", "string literal", (void *)"hello");
+    show("DATA", "initialized_global", &initialized_global);
     show("BSS", "uninitialized_global", &uninitialized_global);
-    show("Heap", "malloc(4) block", heap_block);
-    show("Map", "mmap() page", mapped);
-    show("Stack", "local variable", &local);
+    show("HEAP", "malloc(4) block", heap_block);
+    show("MAP", "mmap() page", mapped);
+    show("STACK", "local variable", &local);
 
     if (argc > 1) {
         /* the kernel's own account of the map, Linux only */
@@ -417,13 +417,13 @@ int main(int argc, char *argv[]) {
 ```console
 $ gcc -Wall -o address_map address_map.c
 $ ./address_map maps
-Text   main()                 0x40083c
-Text   string literal         0x4009f0
-Data   initialized_global     0x420060
+TEXT   main()                 0x40083c
+TEXT   string literal         0x4009f0
+DATA   initialized_global     0x420060
 BSS    uninitialized_global   0x420074
-Heap   malloc(4) block        0x2644f2a0
-Map    mmap() page            0xffff8481f000
-Stack  local variable         0xfffff027e654
+HEAP   malloc(4) block        0x2644f2a0
+MAP    mmap() page            0xffff8481f000
+STACK  local variable         0xfffff027e654
 00400000-00401000 r-xp 00000000 00:43 138531946    /tmp/address_map
 0041f000-00420000 r--p 0000f000 00:43 138531946    /tmp/address_map
 00420000-00421000 rw-p 00010000 00:43 138531946    /tmp/address_map
