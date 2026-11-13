@@ -9,6 +9,21 @@ Ideas and loose ends that don't belong in the article being written.
   own operating system is up to you. Currently only the Mac and Windows
   asides gesture at this.
 
+## Memory allocation
+
+- Write `c/memory-allocation/` after the address space edit pass is done.
+  Promised by the [address space][address-space] metadata (`Next:`) and
+  by the pointers article. No directory and no README row yet.
+- Scope: the API and using it correctly. `malloc()`, `calloc()`,
+  `realloc()`, `free()`; the `sizeof(*p)` idiom; checking for **NULL**;
+  the `realloc()` leak trap; why `calloc()` exists; where the memory
+  comes from (**HEAP** and `mmap()`); `strdup()`, `reallocarray()`,
+  `aligned_alloc()`, and a warning about `alloca()`.
+- Leave the failure modes (use-after-free, double free, overflows,
+  Valgrind, AddressSanitizer) to pointer pitfalls.
+- Draft in Erik's voice, run every example in the Linux container, Erik
+  edits the next day.
+
 ## Pointer pitfalls
 
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
