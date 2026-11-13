@@ -32,6 +32,10 @@ Ideas and loose ends that don't belong in the article being written.
   writable text. Erik says he abused the stack more than the gap. Re-read
   the old framework for the details first (delay slots? where the handler
   ran?).
+- Second story seed, probably not **TEXT**: Erik wrote Python that modified
+  itself to do something dumb, while trying to monitor CPU throttling due
+  to temperature on Solaris. Details lost; ask Erik. May fit a different
+  article.
 
 ## Pointer pitfalls
 
