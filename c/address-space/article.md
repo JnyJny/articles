@@ -1,6 +1,6 @@
 <!--
 Author: Erik O'Shaughnessy
-Editor: Johnny (Jny)
+Editor: Claude
 Date: November 2026
 Status: draft
 Series: C Programming
