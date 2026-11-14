@@ -102,6 +102,14 @@ best.
   to go write code, not summarize what they just read. They were
   there. They know.
 
+- **Length follows the topic.** An article is as long as it needs to be
+  for the reader to ask good questions about the topic or start using
+  the idea. There is no word target. When two lengths would both do,
+  take the shorter one, since long articles are tiring to read. A
+  section that raises and answers its own questions is a candidate for
+  an article of its own, the way the `brk` material was split out of
+  the memory allocation article.
+
 ## Code
 
 - **All code examples must compile and run.** If you show it, it
