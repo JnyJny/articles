@@ -2,6 +2,24 @@
 
 Ideas and loose ends that don't belong in the article being written.
 
+## Housekeeping
+
+- Sweep the articles for binary-prefix units (`KiB`, `MiB`, `GiB`, `TiB`)
+  and write them as `KB`, `MB`, `GB`, `TB`, which is how Erik writes
+  1024-based sizes. Checked 2026-11-13: only the address space article
+  had any, and those are fixed on `main`. Run the grep again when new
+  articles land.
+- Sweep the older articles for link text. The rule (2026-11-14): link a
+  phrase that belongs in the sentence, in lowercase, with a capital only
+  at the start of a sentence, and never the full playful title. The new
+  articles `memory-allocation` and `memory-allocation-brk` are done. Left
+  to check: `address-space` (already lowercase, so probably fine),
+  `pointers` (one title-cased link, `[How I Write Main]`), and the rest.
+- Four pointer-arrow diagrams in the `pointers` article have the elbows
+  one column apart (around lines 114/117, 160/163, 239/243 and 335/340).
+  The fix is the aligned pattern in `STYLE.md`: `─ ─ ─┐` over
+  `◄─ ──┘`. Erik hasn't said yes yet. Render the page afterward.
+
 ## Address space
 
 - Preface the whole article: we are talking about one specific version of
@@ -32,6 +50,23 @@ Ideas and loose ends that don't belong in the article being written.
 
 - Drafted 2026-11-13 on `features/memory-allocation-article`, waiting for
   Erik's edit pass.
+- Restructured 2026-11-14: the `brk()` and `sbrk()` material moved to its
+  own article, `c/memory-allocation-brk/`. `memory-allocation` now opens
+  by saying it covers glibc's allocator, goes `malloc()` then `calloc()`,
+  and has a "Type Them In" section. `realloc()` is only mentioned in the
+  family table, on purpose: Erik almost never uses it. `lines.c` became
+  a linked list so the article needs nothing but `malloc()`, `strdup()`
+  and `free()`.
+- Pointers in Erik's rewrite of `memory-allocation` (2026-11-14):
+  - `[future-libc-article]` is "the C library". It points at the stub
+    `c/standard-library/article.md`, which is where the libc discussion
+    (glibc, musl, the BSDs) belongs. Erik's call, 2026-11-14.
+  - `[link-to-glibc-docs]` points at the GNU C Library manual,
+    https://www.gnu.org/software/libc/manual/. Check it's the page Erik
+    wants.
+  - There is deliberately no pointer for `sizeof`. Erik wants links to be
+    big chunks for the reader to chew on. A reader who wonders what
+    `sizeof` is can search for it, and raising the question is enough.
 - Overcommit: on Linux `malloc()` rarely returns **NULL** for plausible
   sizes, because the kernel promises memory it hasn't got and the failure
   shows up later (the OOM killer). Left out of the article on purpose; it
@@ -39,12 +74,25 @@ Ideas and loose ends that don't belong in the article being written.
 - glibc internals behind what the article shows: chunk headers, the
   24-byte minimum block, the 16 bytes scribbled on a freed block, arenas,
   `brk()` versus `mmap()`. Candidate for an article of its own.
+- `memory-allocation-brk` could grow: `bump()` with a `bump_free()` that
+  only frees the last block, a free-list allocator in 50 lines that
+  reuses holes, and a look at where glibc's numbers come from. Erik's
+  idea: the simplest and oldest allocators help a person evaluate modern
+  ones.
 
 ## Pointer pitfalls
 
-- The memory allocation article promises two things here: a proper
-  introduction to `-fsanitize=address`, and what goes wrong when pointers
-  into a block outlive a `realloc()` that moved it.
+- The memory allocation article promises a proper introduction to
+  `-fsanitize=address` here. The `realloc()` leak trap (`p = realloc(p,
+  n)` loses `p` on failure) and pointers into a block that outlive a
+  `realloc()` that moved it no longer have a home in that article, since
+  it skips `realloc()`. They fit here.
+- Good opener for the AddressSanitizer introduction: run `overflow.c`
+  from the memory allocation article with `-fsanitize=address`. It
+  aborts with "calloc parameters overflow: count * size
+  (4611686018427387904 * 4) cannot be represented in type size_t"
+  instead of letting `calloc()` return NULL. Verified on gcc 14, aarch64
+  Linux.
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
   alike and behave differently. The pointer refers to read-only
   characters in `.rodata`, and writing through it segfaults. The array
@@ -59,6 +107,30 @@ Ideas and loose ends that don't belong in the article being written.
 - In a non-PIE executable, `(void *)printf` is the address of the PLT
   stub in the executable (`0x4005e0` in one run), not the address of
   `printf()` in libc. Found while writing the address space article.
+
+## Unix names
+
+- Seed from the memory allocation article's `brk()` opener: an article on
+  how Unix names got formed. Erik's version of the rules: drop the
+  vowels, shorten what's left, and when all else fails use the initials
+  of whoever wrote it. `brk` is _break_ with the vowel gone. More
+  examples to collect (`creat`, `ls`, `cp`, `grep`, and the stories
+  behind them). Let it grow; no rush. Erik likes the line "a
+  three-letter incantation" and may want it back here.
+
+## Integers
+
+- Seed from the memory allocation article, where `count * sizeof(int)`
+  wraps around to zero: an article on how integers are stored and how
+  they misbehave. Two's complement, wraparound, shifts, rounding, and
+  the difference between signed and unsigned overflow.
+- `sizeof` goes with this note, as a piece of a discussion of C data
+  types where `sizeof` is incidental. Erik's call, 2026-11-14. Things
+  that discussion could cover: `sizeof` is an operator evaluated at
+  compile time, not a function; it takes a type or an expression, which
+  is why `sizeof(*p)` works with `p` unset; its result is a `size_t`;
+  arrays decay to pointers and lose their size; padding in structures.
+  No link from `memory-allocation`.
 
 ## Virtual memory
 
