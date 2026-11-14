@@ -19,7 +19,10 @@ standard for tone and structure.
   **You**: someone who knows a little C and...
   ```
 
-  Adapt the specifics to the article. Keep the format.
+  Adapt the specifics to the article. The Me/You pairing is canon: say
+  who you are and who the reader is, early. The labeled block is only
+  one way to do it. Two sentences of prose that say the same thing
+  work as well.
 
 - **Have opinions and state them.** "I do this" is better than
   "one approach is." If there's a religious war (asterisk placement,
@@ -33,6 +36,23 @@ standard for tone and structure.
   yet. There's a difference. Never say "simply" or "obviously" about
   something you're taking the time to explain.
 
+- **Say what "it" is.** A pronoun whose noun lives in an earlier
+  sentence makes the reader go back and find it. Repeat the noun and
+  spend the extra words: "Keep the pointer after the function returns",
+  not "Keep it". When a sentence starts with "It", "This" or "That",
+  make sure the noun is the last thing in the sentence before.
+
+- **Pass on experience.** The reader can pick up knowledge in all sorts
+  of ways, some harder and some easier. What they can't get elsewhere
+  is what you learned the hard way. Keep the surprises, the mistakes,
+  and the stories ("I expected stale data and got **NULL**"). Run the
+  example before you write about it so the surprise is real.
+
+- **Simplify early, correct later.** An early simplification is fine
+  when it eases the reader into a hard concept. Save the sharp corners
+  (the "acktually") for after they have the broad picture, and then
+  say so.
+
 ## Avoid these linguistic conventions
 
 - "It's X, not Y" and its cousins ("X, not Y")
@@ -40,6 +60,9 @@ standard for tone and structure.
 - Throat-clearing openers like "The short version is"
 - Evenly sized one-topic-per-paragraph structure
 - doing work
+
+These are rules of thumb. Break one on purpose when the sentence reads
+best.
 
 ## Avoid these words
 
@@ -98,13 +121,42 @@ standard for tone and structure.
   it prints. The reader should be able to verify they got the same
   result.
 
+- **Examples model the habits you want the reader to copy.** Someone
+  will type in your code and keep the habits it teaches. Check every
+  allocation and every `fopen()`. Free what you allocate. Guard
+  pointer arguments at the top of a function. If an example leaves
+  something out on purpose, a comment says why.
+
+- **Don't generalize an example.** When it's about four things, write
+  `4`. A macro that makes it extensible only makes it harder to read.
+
 - **C style:**
   - Asterisk binds to variable name: `int *p`, not `int* p`
-  - NULL is explicitly cast: `(int *)NULL`
+  - NULL is explicitly cast: `(int *)NULL`. Pointer arrays start with
+    explicit NULLs even though the compiler would zero them
   - Typedefs end with `_t`: `options_t`, `point_t`
   - Constants and macros in ALL_CAPS
   - Block comments use `/* */`, not `//`
   - EXIT_SUCCESS and EXIT_FAILURE, not 0 and -1
+  - Bodies of one statement omit the braces and go on their own
+    indented line. Bodies of two or more statements keep them.
+  - Declare pointers as NULL and allocate in the body, inside the
+    test: `if (!(p = (int *)malloc(n * sizeof(*p))))`. Don't allocate
+    in the declaration
+  - Cast the return value of `malloc()`, `calloc()` and `realloc()` to
+    the pointer type, the same way NULL is cast. C doesn't require it.
+    It tells the reader what you meant. No cast is needed when the
+    destination is already a `void *`
+  - Size allocations with the variable: `sizeof(*p)`, not
+    `sizeof(int)`
+  - Report a failure with `perror("name")`, where name is the
+    variable that failed, and then bail. Use `fprintf(stderr, ...)`
+    when the message needs more, such as the count that was too big
+  - Guard pointer arguments at the top of a function. A function that
+    returns a status also sets `errno = EINVAL`. A function that
+    mirrors `free()` accepts NULL and returns
+  - Write to an explicit stream: `fputc(c, stdout)` rather than
+    `putchar(c)`. The output may go to a file one day
 
 - **Comments in code examples should explain what the reader needs
   to see**, not narrate every line. Use them to highlight the
@@ -129,8 +181,20 @@ standard for tone and structure.
 - **Use Unicode box-drawing characters** (┌ ┬ ┐ ├ ┼ ┤ └ ┴ ┘ │ ─),
   not ASCII approximations.
 
-- **Pointer arrows use dashed lines:** `─ ─ ┐` / `◄─ ─ ┘` /
-  `─ ─ ▸`
+- **Pointer arrows use dashed lines.** The arrowhead takes up a column,
+  so the other end of the arrow needs one more dash to keep both elbows
+  lined up with the vertical bar. With the pointer above its target:
+
+  ```
+  │ int *p │  0x4000  │ 0x4004 │─ ─ ─┐
+  ├────────┼──────────┼────────┤     │
+  │ int x  │  0x4004  │     42 │◄─ ──┘
+  ```
+
+  With the target above the pointer, swap the ends: `◄─ ──┐` on top and
+  `─ ─ ─┘` on the bottom. A straight arrow is `─ ─ ▸`. Check the
+  columns. A corner one character off is easy to miss in an editor and
+  obvious once the page is rendered.
 
 - **Declaration order matters.** If x is declared before p, x
   appears above p in the diagram. Top-to-bottom should match the
@@ -141,6 +205,23 @@ standard for tone and structure.
 - **Cross-reference other articles in the series.** Use relative
   paths: `../how-i-write-main/article.md`. This builds the web of
   knowledge and gives readers a trail to follow.
+
+- **Link a phrase that belongs in the sentence.** Readers won't consume
+  the series in the order it was written, so never write "the last
+  article" or "the next article". Link the words the sentence needs
+  instead: `[a map of memory][address-space] ended with a challenge`, or
+  `[memory layout][address-space]`. Use lowercase, with a capital only
+  at the start of a sentence, and skip the full playful title. The color
+  of the link already tells the reader there is more behind the phrase.
+
+- **Link big chunks, not every term.** Link to things a reader can chew
+  on: an article, a manual page, a standard. Don't link every term. If
+  they wonder what `sizeof` is, they can search for it. Raising the
+  question is enough.
+
+- **Put the link on the name of the thing.** Link `man man` or
+  a map of memory, not a generic label such as "here", "web version" or
+  "the article".
 
 - **Future article links are placeholders.** Use descriptive slugs
   (`XX-my-time-among-the-linker-aliens`, `signals-and-segfaults`)
@@ -173,6 +254,13 @@ standard for tone and structure.
 
 - **Inline code for identifiers:** `main()`, `argv`, `sizeof(int)`.
   Anything that would appear in source code gets backticks.
+
+- **Sizes use KB, MB and GB for the 1024-based units.** No KiB or MiB.
+  Say 128 KB, not 128 KiB.
+
+- **Region names are bold capitals in prose:** **TEXT**, **DATA**,
+  **BSS**, **HEAP**, **STACK**. In diagrams they are capitals without
+  bold, since a diagram can't carry it.
 
 - **Articles (a/an) before code identifiers** follow the spoken
   pronunciation. Python's dunder names use "a" not "an" because
@@ -234,6 +322,11 @@ Don't assume C literacy. Don't assume systems literacy (memory
 addresses, the stack, how linking works). Do assume programming
 literacy and the ability to follow a code example. Write for the
 person who will actually type in your examples and run them.
+
+Short tips a new programmer would need are welcome even when they wander
+a little off the topic: how to find a manual page, what a compiler flag
+does. Keep them brief, and don't send the reader off to read a whole
+other article for them.
 
 ## The Test
 
