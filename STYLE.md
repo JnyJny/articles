@@ -231,10 +231,13 @@ best.
   a map of memory, not a generic label such as "here", "web version" or
   "the article".
 
-- **Future article links are placeholders.** Use descriptive slugs
-  (`XX-my-time-among-the-linker-aliens`, `signals-and-segfaults`)
-  that make the intended topic obvious. These are commitments to
-  write, not decoration.
+- **Future article links are placeholders, and every placeholder has a
+  stub.** When you promise an article, create its directory with an
+  `article.md` (metadata block with `Status: stub`, a title, and a
+  comment recording where it was promised) and a `README.md` symlink to
+  it, add a Planned row to the README, and link it by relative path:
+  `../linker-aliens/article.md`. A bare slug is not a link, because
+  nothing resolves it. These are commitments to write, not decoration.
 
 - **External links go to authoritative sources.** Wikipedia for
   concepts and history, man7.org for man pages, cppreference for
@@ -353,5 +356,7 @@ Before pushing any article changes to GitHub:
 1. Run a style guide pass on touched articles
 2. Check heading levels (H1 for title, H2 for sections, H3 for subsections)
 3. Verify code examples are complete and correct
-4. Confirm link references at bottom are present and accounted for
+4. Confirm link references at bottom are present and accounted for, and
+   that every one resolves: a relative path to a file that exists, or an
+   external URL. A promised article gets a stub
 5. Spell-check (typos happen to the best of us)

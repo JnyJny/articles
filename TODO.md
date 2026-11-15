@@ -15,6 +15,24 @@ Ideas and loose ends that don't belong in the article being written.
   articles `memory-allocation` and `memory-allocation-brk` are done. Left
   to check: `address-space` (already lowercase, so probably fine),
   `pointers` (one title-cased link, `[How I Write Main]`), and the rest.
+- Dangling links, 2026-11-15: every placeholder slug in the older
+  articles now points at a real stub or at an existing article. Nine new
+  stubs were created: `c/data-types`, `c/structures-unions-enumerations`,
+  `c/mutable-vs-immutable`, `c/terse-c`, `c/goto`, `c/linker-aliens`,
+  `c/virtual-memory`, `unix/signals` and `unix/traditions`. Each records
+  the sentence that promised it, in a comment. Guesses worth checking:
+  - `signals-and-segfaults` and `oh-boy-this-is-a-doozie` were two
+    placeholders and now share `unix/signals`. Split if they outgrow one
+    article.
+  - The two "stack frame" and "stack" links (placeholder "names and
+    spaces") now go to `address-space`. The `namespaces` stub (symbol
+    tables, name to address) is no longer linked from anywhere.
+  - "NULL pointer" in `how-i-write-main` links to the NULL section of
+    `pointers` instead of getting its own stub.
+  - `[cpp-for-newbs]` links to `compiler-tool-chain#cpp`, a section that
+    doesn't exist yet. Link checks only test the file, not the anchor.
+  - `[4]: Down to Program` in `packaging-with-poetry` ("be DtP") is the
+    one dangler left. It is not an article, so no stub. Erik: what was it?
 - Style sweep of the older articles, 2026-11-15, and what is left:
   - The metadata blocks added to the eight older articles are best
     guesses. The dates are the month each file first landed in this repo
