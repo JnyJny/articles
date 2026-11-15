@@ -17,8 +17,8 @@ computer had a map, I didn't, and it was enforcing the borders anyway.
 **Me**: an old Unix hand who navigated by core dump before debuggers had
 colors.
 
-**You**: someone who knows what a pointer is and wants to know what it's
-pointing _into_.
+**You**: someone who knows [what a pointer is][pointers] and wants to
+know what it's pointing _into_.
 
 Let's draw the map.
 
@@ -383,9 +383,20 @@ void show(const char *region, const char *what, void *address) {
 
 int main(int argc, char *argv[]) {
     int local = 7;
-    int *heap_block = malloc(sizeof(*heap_block));
-    void *mapped = mmap((void *)NULL, 4096, PROT_READ | PROT_WRITE,
-                        MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    int *heap_block = (int *)NULL;
+    void *mapped = (void *)NULL;
+
+    if (!(heap_block = (int *)malloc(sizeof(*heap_block)))) {
+        perror("heap_block");
+        return EXIT_FAILURE;
+    }
+    mapped = mmap((void *)NULL, 4096, PROT_READ | PROT_WRITE,
+                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (mapped == MAP_FAILED) {
+        perror("mapped");
+        free(heap_block);
+        return EXIT_FAILURE;
+    }
 
     show("TEXT", "main()", (void *)main);
     show("TEXT", "string literal", (void *)"hello");
@@ -398,13 +409,20 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
         /* the kernel's own account of the map, Linux only */
         char line[256];
-        FILE *maps = fopen("/proc/self/maps", "r");
+        FILE *maps = (FILE *)NULL;
 
-        while (maps && fgets(line, sizeof(line), maps)) {
-            fputs(line, stdout);
+        if (!(maps = fopen("/proc/self/maps", "r"))) {
+            perror("maps");
+            munmap(mapped, 4096);
+            free(heap_block);
+            return EXIT_FAILURE;
         }
+        while (fgets(line, sizeof(line), maps))
+            fputs(line, stdout);
+        fclose(maps);
     }
 
+    munmap(mapped, 4096);
     free(heap_block);
     return EXIT_SUCCESS;
 }
@@ -413,30 +431,31 @@ int main(int argc, char *argv[]) {
 ```console
 $ gcc -Wall -o address_map address_map.c
 $ ./address_map maps
-TEXT   main()                 0x40083c
-TEXT   string literal         0x4009f0
-DATA   initialized_global     0x420060
-BSS    uninitialized_global   0x420074
-HEAP   malloc(4) block        0x2644f2a0
-MAP    mmap() page            0xffff8481f000
-STACK  local variable         0xfffff027e654
-00400000-00401000 r-xp 00000000 00:43 138531946    /tmp/address_map
-0041f000-00420000 r--p 0000f000 00:43 138531946    /tmp/address_map
-00420000-00421000 rw-p 00010000 00:43 138531946    /tmp/address_map
-2644f000-26470000 rw-p 00000000 00:00 0            [heap]
-ffff84620000-ffff847bc000 r-xp 00000000 00:43 130049501  .../libc.so.6
-ffff847bc000-ffff847cd000 ---p 0019c000 00:43 130049501  .../libc.so.6
-ffff847cd000-ffff847d0000 r--p 0019d000 00:43 130049501  .../libc.so.6
-ffff847d0000-ffff847d2000 rw-p 001a0000 00:43 130049501  .../libc.so.6
-ffff847d2000-ffff847df000 rw-p 00000000 00:00 0
-ffff847e8000-ffff84810000 r-xp 00000000 00:43 130049481  .../ld-linux-aarch64.so.1
-ffff84817000-ffff84819000 rw-p 00000000 00:00 0
-ffff8481f000-ffff84822000 rw-p 00000000 00:00 0
-ffff84822000-ffff84824000 r--p 00000000 00:00 0    [vvar]
-ffff84824000-ffff84826000 r-xp 00000000 00:00 0    [vdso]
-ffff84826000-ffff84828000 r--p 0002e000 00:43 130049481  .../ld-linux-aarch64.so.1
-ffff84828000-ffff84829000 rw-p 00000000 00:00 0
-fffff025e000-fffff027f000 rw-p 00000000 00:00 0    [stack]
+TEXT   main()                 0x40093c
+TEXT   string literal         0x400b98
+DATA   initialized_global     0x420078
+BSS    uninitialized_global   0x42008c
+HEAP   malloc(4) block        0xeb132a0
+MAP    mmap() page            0xffff84c60000
+STACK  local variable         0xffffd627cdf4
+00400000-00401000 r-xp 00000000 00:3c 159417024    /tmp/address_map
+0041f000-00420000 r--p 0000f000 00:3c 159417024    /tmp/address_map
+00420000-00421000 rw-p 00010000 00:3c 159417024    /tmp/address_map
+0eb13000-0eb34000 rw-p 00000000 00:00 0            [heap]
+ffff84a60000-ffff84bfc000 r-xp 00000000 00:3c 130049501  .../libc.so.6
+ffff84bfc000-ffff84c0d000 ---p 0019c000 00:3c 130049501  .../libc.so.6
+ffff84c0d000-ffff84c10000 r--p 0019d000 00:3c 130049501  .../libc.so.6
+ffff84c10000-ffff84c12000 rw-p 001a0000 00:3c 130049501  .../libc.so.6
+ffff84c12000-ffff84c1f000 rw-p 00000000 00:00 0
+ffff84c29000-ffff84c51000 r-xp 00000000 00:3c 130049481  .../ld-linux-aarch64.so.1
+ffff84c58000-ffff84c5a000 rw-p 00000000 00:00 0
+ffff84c60000-ffff84c63000 rw-p 00000000 00:00 0
+ffff84c63000-ffff84c65000 r--p 00000000 00:00 0            [vvar]
+ffff84c65000-ffff84c67000 r-xp 00000000 00:00 0            [vdso]
+ffff84c67000-ffff84c69000 r--p 0002e000 00:3c 130049481  .../ld-linux-aarch64.so.1
+ffff84c69000-ffff84c6a000 rw-p 00030000 00:3c 130049481  .../ld-linux-aarch64.so.1
+ffff84c6a000-ffff84c6b000 rw-p 00000000 00:00 0
+ffffd625d000-ffffd627e000 rw-p 00000000 00:00 0            [stack]
 ```
 
 I shortened the library paths and the spacing in the listing to fit the
@@ -447,16 +466,16 @@ against the ranges in the rest, and the map shows up:
 ```
     Region   Address          Found in /proc/self/maps
     ┌───────┬────────────────┬──────────────────────────────────────┐
-    │ STACK │ 0xfffff027e654 │ fffff025e000-fffff027f000  [stack]   │
+    │ STACK │ 0xffffd627cdf4 │ ffffd625d000-ffffd627e000  [stack]   │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ MAP   │ 0xffff8481f000 │ ffff8481f000-ffff84822000  anonymous │
+    │ MAP   │ 0xffff84c60000 │ ffff84c60000-ffff84c63000  anonymous │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ HEAP  │ 0x2644f2a0     │ 2644f000-26470000          [heap]    │
+    │ HEAP  │ 0xeb132a0      │ 0eb13000-0eb34000          [heap]    │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ BSS   │ 0x420074       │ 00420000-00421000          rw-p      │
-    │ DATA  │ 0x420060       │ (same mapping as BSS)                │
+    │ BSS   │ 0x42008c       │ 00420000-00421000          rw-p      │
+    │ DATA  │ 0x420078       │ (same mapping as BSS)                │
     ├───────┼────────────────┼──────────────────────────────────────┤
-    │ TEXT  │ 0x40083c       │ 00400000-00401000          r-xp      │
+    │ TEXT  │ 0x40093c       │ 00400000-00401000          r-xp      │
     └───────┴────────────────┴──────────────────────────────────────┘
 ```
 
