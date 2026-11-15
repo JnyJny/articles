@@ -101,7 +101,7 @@ The first statement describes a piece of memory that the program
 will use. In this case, the memory should be the size of an integer
 and it's name is "x". The second statement is the addition, although
 written "backwards". A C programmer would read that as "X is assigned
-the result of one plus two". 
+the result of one plus two".
 
 A new program, called a "compiler", would turn the program written in
 a high level language into an assembly language version and then finally
@@ -162,7 +162,7 @@ complete python expression of our addition problem would be:
 
 ```python
    x = 1 + 2
-```   
+```
 
 While it looks and acts much like the C version, it lacks the variable
 initialization statement. There are other differences which are beyond

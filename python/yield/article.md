@@ -61,7 +61,7 @@ from typing import Generator
 def powers_generator(exponent: int) -> Generator[int, None, None]:
     for n in range(0, 100):
         yield n**exponent
-		
+
 >>> powers_generator(2)
 <generator object powers_generator at 0x10496e960>
 >>> sum(powers_generator(2))
@@ -145,7 +145,7 @@ def manager():
 
 >>> with manager():
 ...     print("inside")
-... 
+...
 setup
 inside
 teardown

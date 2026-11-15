@@ -105,7 +105,7 @@ pick up afterward make more sense.
 A Python package is, at its simplest, a directory with a
 `__init__.py` file in it. That's the signal to Python that "this
 directory is importable." But a _distributable_ package -- one you
-can share with the world -- needs a bit more structure. 
+can share with the world -- needs a bit more structure.
 
 The turning point came with [PEP 518][pep-518], which introduced
 `pyproject.toml` as a standard way to declare build requirements.

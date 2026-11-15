@@ -192,7 +192,7 @@ Using a makefile is simple:
 ```console
 $ make
 cc -o my_sweet_program main.c
-$ ls 
+$ ls
 Makefile  main.c  my_sweet_program
 ```
 
@@ -300,7 +300,7 @@ int main(int argc, char **argv) {
   if strncmp(argv[0], "bar" 3) == 0) {
     return bar(argc, argv);
   }
-  
+
   return -1
 }
 ```
@@ -365,14 +365,14 @@ identical so I'll break down `mmencode.h`.
 
 ```C
 /* mmencode.h - MeowMeow, a stream encoder/decoder */
-    
+
 #ifndef _MMENCODE_H
 #define _MMENCODE_H
-    
+
 #include <stdio.h>
-    
+
 int mm_encode(FILE *src, FILE *dst);
-    
+
 #endif	/* _MMENCODE_H */
 ```
 
@@ -457,7 +457,7 @@ int mm_decode(FILE *src, FILE *dst)
   return stupid_decode(src, dst);
 }
 ```
-	
+
 Not what you were expecting?
 
 Here, I'm exposing the function `stupid_decode()` via the externally
@@ -545,12 +545,12 @@ This data structure makes it simple to access each bit in the byte by
 field name and then access the assembled value via the `value`
 field of the union. We depend on the compiler to generate the correct
 bit-shifting instructions to access the fields, which can save you a
-lot [heartburn][05] when you are debugging.
+lot [heartburn][5] when you are debugging.
 
 Lastly, `stupid_decode()` is *stupid* because it only reads eight
 bytes at time from the source `FILE` stream. Normally, we try to
 minimize the number of reads and writes to improve performance. I
-explain the cost of system calls in more detail [here][article-syscalls],
+explain [the cost of system calls][article-syscalls] in more detail,
 for now just remember reading or writing a bigger chunk less often
 is much better than reading/writing a lot of smaller chunks more
 frequently.

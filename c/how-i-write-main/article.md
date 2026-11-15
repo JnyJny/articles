@@ -31,7 +31,7 @@ This program compiles but doesn't do anything.
 
 ```console
 $ gcc main.c
-$ ./a.out -o foo -vv 
+$ ./a.out -o foo -vv
 $
 ```
 
@@ -41,7 +41,7 @@ Correct and boring. We can do better.
 
 The main() function is the first function in your program that is
 called when the program begins running, but it's not the first function
-executed. The first function is _start(), which is typically provided 
+executed. The first function is _start(), which is typically provided
 by the C runtime library, [linked][linker-aliens] in automatically
 when your program is compiled. The details are highly dependent on the
 operating system and [compiler toolchain][c-toolchain], so I'm going to
@@ -293,7 +293,7 @@ int main(int argc, char *argv[]) {
 
     opterr = 0;
 
-    while ((opt = getopt(argc, argv, OPTSTR)) != EOF) 
+    while ((opt = getopt(argc, argv, OPTSTR)) != EOF)
        switch(opt) {
            case 'i':
               if (!(options.input = fopen(optarg, "r")) ){
@@ -308,11 +308,11 @@ int main(int argc, char *argv[]) {
                  perror(ERR_FOPEN_OUTPUT);
                  exit(EXIT_FAILURE);
                  /* NOTREACHED */
-              }    
+              }
               break;
-              
+
            case 'f':
-              options.flags = (uint32_t )strtoul(optarg, NULL, 16);
+              options.flags = (uint32_t)strtoul(optarg, (char **)NULL, 16);
               break;
 
            case 'v':
@@ -416,7 +416,7 @@ int do_the_needful(options_t *options) {
 
 Finally, after all that, I write functions that aren't boilerplate. In
 this example, function `do_the_needful()` accepts a pointer to an
-`options_t` structure. I verify that the options pointer is not NULL
+`options_t` structure. I verify that the options pointer is not **NULL**
 and then go on to validate the input and output structure
 members. EXIT_FAILURE returns if either test fails and, by setting the
 external global variable errno to a conventional error code I signal
@@ -437,7 +437,7 @@ The big class of errors I am trying to avoid here is de-referencing a
 system to [send a special signal][unix-signals] to my process called
 SYSSEGV, which results in unavoidable program death. The last thing
 users want to see is a crash due to SYSSEGV. It's much better to catch
-a NULL pointer in order to emit better error messages and shut down
+a **NULL** pointer in order to emit better error messages and shut down
 the program gracefully.
 
 Some people complain about having multiple return statements in a
@@ -446,7 +446,7 @@ and other stuff. Honestly, if something goes wrong in the middle of a
 function, it's a good time to return an error condition. Writing a ton
 of nested if statements to just have one return is never a "good
 idea."™ Some people use `goto` to force the single return scenario,
-but it's been [considered harmful][goto-consider-harmful].
+but it's been [considered harmful][goto-considered-harmful].
 
 Finally, if you write a function that takes four or more arguments,
 consider bundling them in a structure and passing a pointer to the
@@ -455,7 +455,7 @@ easier to remember and not screw up when they're called later. It also
 makes calling the function slightly faster, since fewer things need to
 be copied into the function's [stack frame][names-and-their-spaces]. In
 practice, this will only become a consideration if the function is
-called millions or billions of times. 
+called millions or billions of times.
 
 
 ## Wait, you said no comments!?!!
@@ -523,7 +523,7 @@ int main(int argc, char *argv[]) {
 
     opterr = 0;
 
-    while ((opt = getopt(argc, argv, OPTSTR)) != EOF) 
+    while ((opt = getopt(argc, argv, OPTSTR)) != EOF)
        switch(opt) {
            case 'i':
               if (!(options.input = fopen(optarg, "r")) ){
@@ -538,11 +538,11 @@ int main(int argc, char *argv[]) {
                  perror(ERR_FOPEN_OUTPUT);
                  exit(EXIT_FAILURE);
                  /* NOTREACHED */
-              }    
+              }
               break;
-              
+
            case 'f':
-              options.flags = (uint32_t )strtoul(optarg, NULL, 16);
+              options.flags = (uint32_t)strtoul(optarg, (char **)NULL, 16);
               break;
 
            case 'v':

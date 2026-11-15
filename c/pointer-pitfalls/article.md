@@ -26,7 +26,7 @@ before they recognize you.
 ### Double Free
 
 - Why freeing the same memory twice corrupts the heap
-- How to defend against it (NULL after free)
+- How to defend against it (**NULL** after free)
 
 ### The sizeof Trap
 
@@ -48,8 +48,8 @@ before they recognize you.
 
 ### Common Patterns for Staying Alive
 
-- Always initialize pointers (NULL or valid address)
-- NULL after free
+- Always initialize pointers (**NULL** or valid address)
+- **NULL** after free
 - Validate at function boundaries
 - Const-correctness as self-documentation
 - Valgrind / AddressSanitizer as safety nets

@@ -75,9 +75,9 @@ name of the program. The rest of `argv` will contain the arguments:
    argv[2] == "bar"
    argv[3] == "-x"
    argv[4] == "baz"
-   
+
    /* Note: not valid C */
-``` 
+```
 
 In C, we have many choices to handle the strings in `argv`. We could
 loop over the array `argv` _manually_ and interpret each of the
@@ -92,7 +92,7 @@ include <stdio.h>
 
 int main(int argc, char **argv) {
     int i;
-    
+
     for(i=0; i<argc; i++)
       printf("%s\n", argv[i]);
 }
@@ -111,6 +111,7 @@ improves the user experience (UX).
 
 ```C
 #include <stdio.h>
+#include <stdlib.h>
 #include <getopt.h>
 
 #define OPTSTR "b:f:"
@@ -119,9 +120,9 @@ extern char *optarg;
 
 int main(int argc, char **argv) {
     int opt;
-    char *bar = NULL;
-    char *foo = NULL;
-    
+    char *bar = (char *)NULL;
+    char *foo = (char *)NULL;
+
     while((opt=getopt(argc, argv, OPTSTR)) != EOF)
        switch(opt) {
           case 'b':
@@ -131,9 +132,9 @@ int main(int argc, char **argv) {
               foo = optarg;
               break;
           case 'h':
-          default':
+          default:
               fprintf(stderr, "Huh? try again.");
-              exit(-1);
+              exit(EXIT_FAILURE);
               /* NOTREACHED */
        }
     printf("%s\n", foo ? foo : "Empty foo");
@@ -177,7 +178,7 @@ circumstances and needs.
 ### First, Do It Yourself
 
 We can get our program's arguments from the [`sys`][16]
-module. 
+module.
 
 ```python
 import sys
@@ -210,7 +211,7 @@ if __name__ == "__main__":
    argparser = ArgumentParser(description='My Cool Program')
    argparser.add_argument("--foo", "-f", help="A user supplied foo")
    argparser.add_argument("--bar", "-b", help="A user supplied bar")
-   
+
    results = argparser.parse_args()
    print(results.foo, results.bar)
 ```
@@ -242,11 +243,11 @@ import click
 @click.option("-b", "--bar", default="bar", help="User supplied bar.")
 def echo(foo, bar):
     """My Cool Program
-    
+
     It does stuff. Here is the documentation for it.
     """
     print(foo, bar)
-    
+
 if __name__ == "__main__":
     echo()
 ```
@@ -279,11 +280,11 @@ cli = typer.Typer()
 @cli.command()
 def echo(foo: str = "foo", bar: str = "bar"):
     """My Cool Program
-    
+
     It does stuff. Here is the documentation for it.
     """
     print(foo, bar)
-    
+
 if __name__ == "__main__":
     cli()
 ```

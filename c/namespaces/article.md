@@ -3,7 +3,7 @@
 <!-- Topics
 Name -> address translation
 Symbol tables
-Linking 
+Linking
 -->
 
 []

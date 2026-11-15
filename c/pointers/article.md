@@ -121,7 +121,7 @@ After this, `p` contains the address where `x` lives in memory:
 We say "p _points to_ x" because that's less tedious than saying "p
 contains the memory address at which the value of x is stored." Life
 is short. Notice how the types of `x` and `*p` are both `int`. C will
-let you mix and match types but it usually does not end well. 
+let you mix and match types but it usually does not end well.
 
 ### The Dereference Operator: *
 
@@ -211,7 +211,7 @@ copy that gets made is a copy of the _address_, not the value. Since
 the address still points to the same variable, the function can modify
 the caller's data.
 
-If you've read [How I Write Main][how-i-write-main], you saw this
+If you've read [how I write main][how-i-write-main], you saw this
 pattern in action:
 
 ```C
@@ -415,9 +415,9 @@ Let's take a quick look at the `qsort` function prototype:
 
 ```C
 void qsort(
-    void *base, 
-	size_t nel, 
-	size_t width, 
+    void *base,
+	size_t nel,
+	size_t width,
 	int (*compar)(const void *, const void *)
 );
 ```
@@ -536,7 +536,8 @@ Capital City    (10.0, 10.0) distance: 14.14
 Look at what's happening with pointers in this program:
 
 - `distance()` takes a pointer to a `point_t` so it doesn't copy the struct
-- `compare_points()` receives `void *` pointers from `qsort()` and casts them to `const point_t *` so it can access the actual data
+- `compare_points()` receives `void *` pointers from `qsort()` and casts
+  them to `const point_t *` so it can access the actual data
 - `qsort()` sorts the array in place using our comparison function
 - The `for` loop iterates with a pointer, stepping through the array
   until it hits the sentinel -- an entry with an empty name that marks
