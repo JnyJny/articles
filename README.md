@@ -34,6 +34,13 @@ I admire the conviction.
 | Learning C | Planned |
 | The C Runtime | Planned |
 | The C Standard Library | Planned |
+| What Is Data and Why Does It Need a Type? | Planned |
+| About Structures, Unions and Enumerations | Planned |
+| Data: Should It Change? | Planned |
+| Various C Constructions You Should Be Aware Of | Planned |
+| Gotos Considered Harmful | Planned |
+| My Time Among the Linker Aliens | Planned |
+| Virtual Memory: The Sacred Mystery | Planned |
 
 ### Suggested Reading Order
 
@@ -56,6 +63,8 @@ The rest can be read in any order once you have the fundamentals.
 | Processes and Threads | Planned |
 | POSIX | Planned |
 | The Unix Toolbox | Planned |
+| Oh Boy, This Is a Doozie: Unix Signals | Planned |
+| argc, argv, grep and the Metasyntactic Variables | Planned |
 
 ## Python
 
