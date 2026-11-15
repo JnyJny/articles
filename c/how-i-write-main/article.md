@@ -601,19 +601,19 @@ int do_the_needful(options_t *options) {
 That's how I like to structure my C main files and you should too.
 
 <!-- End Links -->
-[linker-aliens]: XX-my-time-among-the-linker-aliens
-[c-toolchain]: compiler-tool-chain
-[c-std-libs]: c-standard-libraries
-[cpp-for-newbs]: compiler-tool-chain#cpp
-[man-pages]: what-are-they-and-how-do-you-use-them
-[s-u-e]: about-structures-unions-and-enumerations
-[mutable-vs-immutable]: data-should-it-change
-[madness-and-chaos]: NULL-pointers
-[names-and-their-spaces]: more-tales-from-the-land-of-the-linker-aliens
-[unix-traditions]: argc-argv-grep-metasyntactic-variables
-[c-datatypes]: what-is-data-and-why-does-it-need-a-type
-[terse-c]: various-C-constructions-you-should-be-aware-of
-[unix-signals]: oh-boy-this-is-a-doozie
-[goto-considered-harmful]: gotos-considered-harmful
+[linker-aliens]: ../linker-aliens/article.md
+[c-toolchain]: ../compiler-tool-chain/article.md
+[c-std-libs]: ../standard-library/article.md
+[cpp-for-newbs]: ../compiler-tool-chain/article.md#cpp
+[man-pages]: ../../unix/man-pages/article.md
+[s-u-e]: ../structures-unions-enumerations/article.md
+[mutable-vs-immutable]: ../mutable-vs-immutable/article.md
+[madness-and-chaos]: ../pointers/article.md#null-the-billion-dollar-mistake
+[names-and-their-spaces]: ../address-space/article.md
+[unix-traditions]: ../../unix/traditions/article.md
+[c-datatypes]: ../data-types/article.md
+[terse-c]: ../terse-c/article.md
+[unix-signals]: ../../unix/signals/article.md
+[goto-considered-harmful]: ../goto/article.md
 [source]: main.c
 

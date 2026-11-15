@@ -580,12 +580,12 @@ better.
 Go write something cool (with pointers)!
 
 <!-- Links -->
-[segfault]: signals-and-segfaults
+[segfault]: ../../unix/signals/article.md
 [how-i-write-main]: ../how-i-write-main/article.md
-[names-and-spaces]: more-tales-from-the-land-of-the-linker-aliens
-[linker-aliens]: XX-my-time-among-the-linker-aliens
-[address-space]: process-address-space-and-memory-layout
+[names-and-spaces]: ../address-space/article.md
+[linker-aliens]: ../linker-aliens/article.md
+[address-space]: ../address-space/article.md
 [hoare]: https://en.wikipedia.org/wiki/Tony_Hoare#Apologies_and_retractions
-[signals]: oh-boy-this-is-a-doozie
+[signals]: ../../unix/signals/article.md
 [syntactic-sugar]: https://en.wikipedia.org/wiki/Syntactic_sugar
 [qsort-man-page]: https://man7.org/linux/man-pages/man3/qsort.3.html

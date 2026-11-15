@@ -506,6 +506,6 @@ Take the map and find out where the dragons live on your machine.
 [virtual-memory]: ../virtual-memory/article.md
 [memory-allocation]: ../memory-allocation/article.md
 [pointer-pitfalls]: ../pointer-pitfalls/article.md
-[linker-aliens]: XX-my-time-among-the-linker-aliens
+[linker-aliens]: ../linker-aliens/article.md
 [bss]: https://en.wikipedia.org/wiki/.bss
 [aslr]: https://en.wikipedia.org/wiki/Address_space_layout_randomization

@@ -77,14 +77,14 @@ too the test repo and it get's flushed eventually.
 
 
 
-[0]: poetry
-[1]: guest-exploring-python-clis
-[2]: guest-python-packaging
-[3]: pip
+[0]: https://python-poetry.org/
+[1]: ../command-line-interface/article.md
+[2]: ../packaging/article.md
+[3]: https://pip.pypa.io/
 [4]: Down to Program
 [5]: https://pypi.org
 [6]: https://pypi.org/account/register/
 [7]: https://packaging.python.org/tutorials/packaging-projects/
-[8]: minimum viable product
+[8]: https://en.wikipedia.org/wiki/Minimum_viable_product
 [9]: https://test/pypi.org
 [10]: https://packaging.python.org/overview/
