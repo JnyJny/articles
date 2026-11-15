@@ -7,7 +7,9 @@ Prerequisites: how-i-write-main, pointers
 Next: none
 -->
 
-### Introduction
+# Multi-File C Programs
+
+## Introduction
 
 It has often been said that the art of computer programming is part
 managing complexity and part naming things. I would argue that this is
@@ -22,7 +24,7 @@ compiler, crank up some tunes and let's write a mildly interesting C
 program together. For those waiting for the other shoe to drop, there
 won't be any boxes drawn ... yet.
 
-### Philosophy of A Good Unix Program
+## Philosophy of A Good Unix Program
 
 The first thing to know about this C program is that it's a [Unix][2]
 command-line tool. This means that it runs on, or can be ported to,
@@ -69,7 +71,7 @@ We want our program to play well in this ecosystem of equally flexible
 and awesome programs, so lets write a program that reads and writes
 files.
 
-### Concept: MeowMeow - A Stream Encoder/Decoder
+## Concept: MeowMeow - A Stream Encoder/Decoder
 
 When I was a dewy-eyed kid studying computer science in the late 80s
 and early 90s, there were an actual plethora of encoding schemes. Some
@@ -93,7 +95,7 @@ mEowmEowmEOwmEoWmEOwmeoWmEOWmeOwmeOwmeowmEOwmEowmEOwMeoWmEOwmeoWmEOWmeOwmEOWMeoW
 
 This is going to be _awesome_.
 
-### Implementation, Finally
+## Implementation, Finally
 
 The full source for this can be found on [GitHub][0] but I'm going to
 talk through my thought process while writing it. The object here is
@@ -159,7 +161,7 @@ directives. Header files should **not** have any functions in them
 application programming interface (API) offered by the `.c` flavored
 file that is used by other `.c` files.
 
-### But What The Heck is a Makefile?
+## But What The Heck is a Makefile?
 
 I know all you cool kids are using the **"Ultra CodeShredder 3000™
 V0.4-beta"** integrated development environment to write the next
@@ -212,7 +214,7 @@ only a little more sophisticated than this example, but the basic
 structure is the same. I'll break it down [Barney-style][article-makefile]
 for you, and you'll be writing cool makefiles in no time.
 
-### Form Follows Function
+## Form Follows Function
 
 My idea for this exercise is to write a program that reads a file,
 transforms it and then writes the transformed data to another
@@ -234,7 +236,7 @@ talking about writing one program but in the example above I invoke
 two commands; `meow` and `unmeow`? I know you are probably thinking
 that this is getting complex as heck.
 
-### Minor Side Track - `argv[0]` and the `ln` command
+## Minor Side Track - `argv[0]` and the `ln` command
 
 If you recall, the signature of a C main function is:
 
@@ -316,7 +318,7 @@ int main(int argc, char **argv) {
 
 Things are getting complex for sure, but it's managed.
 
-### Exploring `main.c`
+## Exploring `main.c`
 
 The structure of the [main.c][11] file for `meow`/`unmeow` should be
 familiar to my [long-time readers][1], and has the following general
@@ -344,7 +346,7 @@ int main(int argc, char *argv[])
 /* 11 ancillary functions if any */
 ```
 
-### Including Project Header Files
+## Including Project Header Files
 
 The second section, `/* 01 project includes /*` reads like this from
 the source:
@@ -407,7 +409,7 @@ Writing header files is complex and it can be tough to manage in
 larger projects. Use guards. I have more thoughts about [C header
 files][article-headers] if you've got some more time to kill.
 
-### MeowMeow Encoding, Finally
+## MeowMeow Encoding, Finally
 
 The meat and potatoes of this program, encoding and decoding bytes
 into/out of "MeowMeow" strings, is actually the fun part of writing
@@ -447,7 +449,7 @@ The table is initialized with a macro defined in [table.h][17]
 for no particular reason except to demonstrate including another project
 local header file and I like [initialization macros][13].
 
-### MeowMeow Decoding
+## MeowMeow Decoding
 
 Alright, I'll admit it took me a couple of runs at this before I got
 it working. The decode loop is similar; read a buffer full of **MeowMeow**
@@ -564,7 +566,7 @@ for now just remember reading or writing a bigger chunk less often
 is much better than reading/writing a lot of smaller chunks more
 frequently.
 
-### The Wrap Up
+## The Wrap Up
 
 Writing a multi-file program in C requires a little more planning on
 behalf of the programmer than just a single `main.c`. But just a
