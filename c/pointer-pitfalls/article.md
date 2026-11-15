@@ -1,6 +1,13 @@
-# Pointers II: Everything Is On Fire And It's Probably Your Fault
+<!--
+Author: Erik O'Shaughnessy
+Date: March 2026
+Status: stub
+Series: C Programming
+Prerequisites: pointers
+Next: none
+-->
 
-<!-- Prerequisite: ../pointers/article.md -->
+# Pointers II: Everything Is On Fire And It's Probably Your Fault
 
 You read the [pointers article][pointers]. You wrote some code. Things
 broke. Welcome to the second lesson.

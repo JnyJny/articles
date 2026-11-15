@@ -1,3 +1,12 @@
+<!--
+Author: Erik O'Shaughnessy
+Date: May 2025
+Status: published
+Series: C Programming
+Prerequisites: how-i-write-main, pointers
+Next: none
+-->
+
 ### Introduction
 
 It has often been said that the art of computer programming is part
@@ -297,11 +306,11 @@ int main(int argc, char **argv) {
     return foo(argc, argv);
   }
 
-  if strncmp(argv[0], "bar" 3) == 0) {
+  if (strncmp(argv[0], "bar", 3) == 0) {
     return bar(argc, argv);
   }
 
-  return -1
+  return EXIT_FAILURE;
 }
 ```
 
@@ -452,7 +461,7 @@ int mm_decode(FILE *src, FILE *dst)
 {
   if (!src || !dst) {
     errno = EINVAL;
-    return -1;
+    return EXIT_FAILURE;
   }
   return stupid_decode(src, dst);
 }
@@ -499,7 +508,7 @@ int stupid_decode(FILE *src, FILE *dst)
 
     fputc(byte.value, dst);
   }
-  return 0;
+  return EXIT_SUCCESS;
 }
 ```
 

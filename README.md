@@ -31,6 +31,7 @@ I admire the conviction.
 | Shared Objects | Stub |
 | Reading & Writing & (File Descriptor) Arithmetic | Stub |
 | Names and Namespaces in C | Stub |
+| Learning C | Planned |
 | The C Runtime | Planned |
 | The C Standard Library | Planned |
 

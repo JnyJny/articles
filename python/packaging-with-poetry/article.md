@@ -1,5 +1,11 @@
+<!--
 Author: Erik O'Shaughnessy
-Date: 30 Apr 2020
+Date: April 2020
+Status: draft
+Series: Python
+Prerequisites: packaging
+Next: none
+-->
 
 # Poetical Python Packaging Posthaste
 

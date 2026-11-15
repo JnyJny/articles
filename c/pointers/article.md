@@ -1,3 +1,12 @@
+<!--
+Author: Erik O'Shaughnessy
+Date: May 2025
+Status: published
+Series: C Programming
+Prerequisites: how-i-write-main
+Next: address-space
+-->
+
 # Pointers: Embrace the Dark Magic
 
 Pointers are the thing in C that everybody's afraid of. This is

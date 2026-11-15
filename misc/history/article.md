@@ -1,14 +1,23 @@
+<!--
+Author: Erik O'Shaughnessy
+Date: April 2020
+Status: published
+Series: Miscellaneous
+Prerequisites: none
+Next: none
+-->
 
-# A Short Primer on Assembers, Compilers and Interpreters
+
+# A Short Primer on Assemblers, Compilers and Interpreters
 
 
 ## Beginnings
 
 In the early days of computing, hardware was expensive and programmers
 were cheap. In fact, programmers were so cheap they weren't even
-called "programmers" and were in fact usually mathematicans or
+called "programmers" and were in fact usually mathematicians or
 electrical engineers. Early computers were used to solve complex
-mathematical problems quickly, so mathematicans were a natural fit for
+mathematical problems quickly, so mathematicians were a natural fit for
 the job of "programming".
 
 First a little background on what a program is.

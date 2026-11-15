@@ -1,6 +1,10 @@
 <!--
 Author: Erik O'Shaughnessy (erik.oshaughnessy@gmail.com)
-Date: 23 Apr 2020
+Date: April 2020
+Status: published
+Series: Python
+Prerequisites: none
+Next: none
 -->
 
 # An Exploration of the Modern Python Command-Line Interface

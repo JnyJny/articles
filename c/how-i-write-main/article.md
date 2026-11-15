@@ -1,3 +1,12 @@
+<!--
+Author: Erik O'Shaughnessy
+Date: May 2025
+Status: published
+Series: C Programming
+Prerequisites: none
+Next: pointers
+-->
+
 # How To Write a Good C Program, Like Me
 
 I know, Python and JavaScript are what the kids are writing all their

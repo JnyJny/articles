@@ -1,3 +1,12 @@
+<!--
+Author: Erik O'Shaughnessy
+Date: October 2023
+Status: published
+Series: Python
+Prerequisites: none
+Next: none
+-->
+
 # What The Heck Is Yield For?
 
 A question came up recently about the purpose of the Python `yield`
