@@ -303,7 +303,7 @@ best.
   Author: Erik O'Shaughnessy
   Editor: Johnny (Jny)
   Date: March 2026
-  Status: draft | review | published
+  Status: stub | draft | review | published
   Series: C Programming
   Prerequisites: how-i-write-main
   Next: pointer-pitfalls

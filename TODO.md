@@ -15,6 +15,22 @@ Ideas and loose ends that don't belong in the article being written.
   articles `memory-allocation` and `memory-allocation-brk` are done. Left
   to check: `address-space` (already lowercase, so probably fine),
   `pointers` (one title-cased link, `[How I Write Main]`), and the rest.
+- Style sweep of the older articles, 2026-11-15, and what is left:
+  - The metadata blocks added to the eight older articles are best
+    guesses. The dates are the month each file first landed in this repo
+    and may not be when it was written. Correct them as you remember.
+    `Status: stub` is now an allowed value.
+  - Leave "modern" as is, including the title of the command-line
+    interface article. Erik may revisit it. Erik will revisit "honest" in
+    `how-i-write-main` and `multi-file-c-program`, and "simply" in
+    `yield`.
+  - `multi-file-c-program` has no H1 title and uses H3 for every section.
+    It needs a title (the README calls it "Multi-File C Programs") and
+    its sections promoted to H2. Erik's call.
+  - `learning-c` now has a README row marked Planned. Nothing is written.
+  - Return codes should be `EXIT_SUCCESS` and `EXIT_FAILURE`, not bare
+    integers. Done in `multi-file-c-program`. `compare_points()` in
+    `pointers` returns -1, 0 or 1 because `qsort()` expects that.
 - Four pointer-arrow diagrams in the `pointers` article have the elbows
   one column apart (around lines 114/117, 160/163, 239/243 and 335/340).
   The fix is the aligned pattern in `STYLE.md`: `─ ─ ─┐` over

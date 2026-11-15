@@ -2,7 +2,7 @@
 Author: Erik O'Shaughnessy
 Editor: Johnny (Jny)
 Date: Month YYYY
-Status: draft | review | published
+Status: stub | draft | review | published
 Series: C Programming | Unix | Python
 Prerequisites: comma-separated directory names of prior articles
 Next: directory-name-of-next-article
