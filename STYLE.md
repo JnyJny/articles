@@ -353,10 +353,12 @@ If yes to all three, ship it.
 
 Before pushing any article changes to GitHub:
 
-1. Run a style guide pass on touched articles
+1. Run a style guide pass on touched articles (`uv run article-tools audit`
+   in `tools/` counts what a script can check)
 2. Check heading levels (H1 for title, H2 for sections, H3 for subsections)
 3. Verify code examples are complete and correct
 4. Confirm link references at bottom are present and accounted for, and
    that every one resolves: a relative path to a file that exists, or an
-   external URL. A promised article gets a stub
+   external URL. A promised article gets a stub. `uv run article-tools
+   check` tests links and diagrams and exits 1 on a problem
 5. Spell-check (typos happen to the best of us)

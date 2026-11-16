@@ -87,6 +87,7 @@ The rest can be read in any order once you have the fundamentals.
 
 - [STYLE.md](STYLE.md) -- Article style guide
 - [SKELETON.md](SKELETON.md) -- New article template
+- [tools/](tools/README.md) -- Link, diagram and style checks
 
 ## License
 

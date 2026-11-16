@@ -15,6 +15,25 @@ Ideas and loose ends that don't belong in the article being written.
   articles `memory-allocation` and `memory-allocation-brk` are done. Left
   to check: `address-space` (already lowercase, so probably fine),
   `pointers` (one title-cased link, `[How I Write Main]`), and the rest.
+- `tools/` (2026-11-15) holds `article-tools`, made from Erik's python
+  package cookiecutter, rendered with hooks off so nothing touched GitHub.
+  `article-tools check` is the pre-push gate (links and diagrams).
+  `article-tools audit` is the style sweep, 21 rules, advice only. Open
+  questions:
+  - The audit reports deliberate exceptions every time: "modern", the
+    `int* p` counterexamples in `pointers`, and proper-noun link text such
+    as "Sir Tony Hoare". Do you want a way to accept a finding, such as a
+    baseline file?
+  - Stale unused references the audit found: `multi-file-c-program` still
+    defines `[article-man]`, `[article-namespaces]`, `[article-files]` and
+    `[article-shared-object]` pointing at old `blob/master` paths, plus
+    unused `[7]` and `[8]`. Delete them or point them at the new stubs.
+  - Your cookiecutter's output fails its own ruff config on ruff 0.14 and
+    later: CPY001 (copyright notice) in every file, PT022 (fixtures that
+    `yield` and never tear down) and D401 (non-imperative docstring) in
+    the generated CLI. It also renders `test-python-versions` with
+    3.9 when the minimum is 3.11, and leaves `repository` and docs URLs
+    pointing at a repo that doesn't exist.
 - Dangling links, 2026-11-15: every placeholder slug in the older
   articles now points at a real stub or at an existing article. Nine new
   stubs were created: `c/data-types`, `c/structures-unions-enumerations`,
