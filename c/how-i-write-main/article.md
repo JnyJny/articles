@@ -218,7 +218,7 @@ extern int opterr, optind;
 
 An `extern` declaration brings that name into the namespace of the
 current compilation unit (aka "file") and allows the program to
-[access that variable][. Here we've brought in the definitions for
+access that variable. Here we've brought in the definitions for
 three integer variables and a character pointer. The variables
 starting with `opt` are used by the getopt() function, and errno is
 used as an out-of-band communication channel by the standard C library
