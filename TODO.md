@@ -55,8 +55,9 @@ Ideas and loose ends that don't belong in the article being written.
     tables, name to address) is no longer linked from anywhere.
   - "NULL pointer" in `how-i-write-main` links to the NULL section of
     `pointers` instead of getting its own stub.
-  - `[cpp-for-newbs]` links to `compiler-tool-chain#cpp`, a section that
-    doesn't exist yet. Link checks only test the file, not the anchor.
+  - `[cpp-for-newbs]` links to `compiler-tool-chain#cpp`. The stub now has
+    an empty `## cpp` heading so the anchor resolves; the preprocessor
+    section goes there (Erik's call, 2026-11-15).
   - `[4]: Down to Program` in `packaging-with-poetry` ("be DtP") is the
     one dangler left. It is not an article, so no stub. Erik: what was it?
 - Style sweep of the older articles, 2026-11-15, and what is left:
