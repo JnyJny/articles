@@ -361,5 +361,6 @@ Before pushing any article changes to GitHub:
 4. Confirm link references at bottom are present and accounted for, and
    that every one resolves: a relative path to a file that exists, or an
    external URL. A promised article gets a stub. `uv run article-tools
-   check` tests links and diagrams and exits 1 on a problem
+   check` tests links, diagrams and layout and exits 1 on a problem. The
+   pre-push hook runs it for you once you have run `pre-commit install`
 5. Spell-check (typos happen to the best of us)

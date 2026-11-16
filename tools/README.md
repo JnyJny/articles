@@ -71,6 +71,19 @@ of the line, so changing the line brings the finding back. When the finding is
 gone the entry is reported as stale, and you can delete it. `--strict` exits 1
 only for new findings, and `--no-baseline` shows everything.
 
+## Hooks
+
+The repo's `.pre-commit-config.yaml` runs `check` before every push, and this
+tool's own tests and lint when anything under `tools/` changes. Hooks are not
+versioned, so install them once in each clone:
+
+```console
+$ uvx pre-commit install --hook-type pre-commit --hook-type pre-push
+```
+
+`links --external` and `audit` are left out on purpose. The first needs the
+network, and the second is advice until its remaining findings are cleaned up.
+
 ## Development
 
 ```console

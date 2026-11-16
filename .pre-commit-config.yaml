@@ -1,0 +1,27 @@
+# Hooks for the articles repo. Install them once per clone, from tools/README.md:
+#
+#   uvx pre-commit install --hook-type pre-commit --hook-type pre-push
+#
+# `article-tools links --external` and `article-tools audit` are left out on
+# purpose: the first needs the network, and the second is advice until its
+# remaining findings are cleaned up.
+repos:
+  - repo: local
+    hooks:
+      # A push to main is the moment a commit is called solid, so the checks
+      # that must pass run here, not on every commit.
+      - id: article-check
+        name: article-tools check (links, diagrams, layout)
+        entry: uv run --quiet --project tools article-tools check
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+
+      # Only when the tool itself changes.
+      - id: tools-quality
+        name: article-tools tests and lint
+        entry: bash -c 'cd tools && uv run --quiet ruff check src tests && uv run --quiet pytest -q'
+        language: system
+        pass_filenames: false
+        files: ^tools/
