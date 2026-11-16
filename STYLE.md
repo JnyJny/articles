@@ -237,7 +237,8 @@ best.
   comment recording where it was promised) and a `README.md` symlink to
   it, add a Planned row to the README, and link it by relative path:
   `../linker-aliens/article.md`. A bare slug is not a link, because
-  nothing resolves it. These are commitments to write, not decoration.
+  nothing resolves it. `uv run article-tools stub c/slug` does all of
+  this. These are commitments to write, not decoration.
 
 - **External links go to authoritative sources.** Wikipedia for
   concepts and history, man7.org for man pages, cppreference for

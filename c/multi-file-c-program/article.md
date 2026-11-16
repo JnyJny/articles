@@ -591,7 +591,7 @@ comments to let me know.
 [0]: https://github.com/JnyJny/meowmeow.git
 [1]: https://github.com/JnyJny/articles/blob/master/c/how-i-write-main/article.md
 [2]: https://en.wikipedia.org/wiki/Unix
-[3]: http://www.jabberwocky.com/software/moomooencode.html
+[3]: https://web.archive.org/web/20150601234212/http://www.jabberwocky.com/software/moomooencode.html
 [4]: https://en.wikipedia.org/wiki/Cats_and_the_Internet
 [5]: https://en.wikipedia.org/wiki/Endianness
 [6]: https://git-scm.com
@@ -612,13 +612,13 @@ comments to let me know.
 
 <!-- Links to articles referenced by this article that remain to be written -->
 
-[article-man]: https://github.com/JnyJny/articles/blob/master/unix/05-Manpages.md
-[article-makefile]: https://github.com/JnyJny/articles/blob/master/unix/10-Makefiles.md
-[article-headers]: https://github.com/JnyJny/articles/blob/master/c/headers.md
-[article-unix-fs]: https://github.com/JnyJny/articles/blob/master/unix/30-Unix_Filesystem.md
-[article-syscalls]: https://github.com/JnyJny/articles/blob/master/unix/40-SystemCalls.md
-[article-namespaces]: https://github.com/JnyJny/articles/blob/master/c//c-namespaces.md
-[article-files]: https://github.com/JnyJny/articles/blob/master/c/working-with-files.md
-[article-compiling]: https://github.com/JnyJny/articles/blob/master/c/c-compiler-tool-chain.md
-[article-shared-object]: https://github.com/JnyJny/articles/blob/master/c/c-shared-objects.md
+[article-man]: ../../unix/man-pages/article.md
+[article-makefile]: ../../unix/makefiles/article.md
+[article-headers]: ../header-files/article.md
+[article-unix-fs]: ../../unix/filesystems/article.md
+[article-syscalls]: ../../unix/system-calls/article.md
+[article-namespaces]: ../namespaces/article.md
+[article-files]: ../working-with-files/article.md
+[article-compiling]: ../compiler-tool-chain/article.md
+[article-shared-object]: ../shared-objects/article.md
 

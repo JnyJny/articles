@@ -334,7 +334,7 @@ Go write something cool.
 [19]: https://en.wikipedia.org/wiki/Guido_van_Rossum
 [20]: https://en.wikipedia.org/wiki/Command-line_interface
 [21]: https://www.gnu.org/software/bash/
-[22]: https://www.radford.edu/ibarland/Manifestoes/whyC++isBad.shtml
+[22]: https://sites.radford.edu/~ibarland/Manifestoes/whyC++isBad.shtml
 [23]: https://www.toptal.com/c/after-all-these-years-the-world-is-still-powered-by-c-programming
 [24]: https://en.wikipedia.org/wiki/Dynamic_linker
 [25]: https://www.python.org/dev/peps/pep-0275/

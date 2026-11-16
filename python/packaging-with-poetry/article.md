@@ -86,5 +86,5 @@ too the test repo and it get's flushed eventually.
 [6]: https://pypi.org/account/register/
 [7]: https://packaging.python.org/tutorials/packaging-projects/
 [8]: https://en.wikipedia.org/wiki/Minimum_viable_product
-[9]: https://test/pypi.org
+[9]: https://test.pypi.org
 [10]: https://packaging.python.org/overview/

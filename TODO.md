@@ -27,10 +27,14 @@ Ideas and loose ends that don't belong in the article being written.
     "simply" (Erik will revisit), the `[this]` link in `packaging-with-poetry`
     (a pun? accept it if so) and 9 tab characters in table rows of
     `how-i-write-main`.
-  - Stale unused references the audit found: `multi-file-c-program` still
-    defines `[article-man]`, `[article-namespaces]`, `[article-files]` and
-    `[article-shared-object]` pointing at old `blob/master` paths, plus
-    unused `[7]` and `[8]`. Delete them or point them at the new stubs.
+  - `links --external` found ten dead links on its first run, all fixed:
+    nine `blob/master` paths in `multi-file-c-program` (now the current
+    stubs), `moomooencode.html` (now a Wayback snapshot from 2015), and the
+    Radford essay, which moved to `sites.radford.edu`. It also found a
+    `https://test/pypi.org` typo and a broken `unix/system-calls` stub.
+    Stack Overflow answers 403 to bots, so it shows as unreachable.
+  - Several of those references are defined and never cited. The audit
+    lists them as `unused-reference`. Cite or delete.
   - Your cookiecutter's output fails its own ruff config on ruff 0.14 and
     later: CPY001 (copyright notice) in every file, PT022 (fixtures that
     `yield` and never tear down) and D401 (non-imperative docstring) in
