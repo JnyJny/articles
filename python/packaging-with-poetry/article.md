@@ -11,7 +11,7 @@ Next: none
 
 No history lesson [this][1] [time][2], this will be a down-to-business
 article on how to package code using [poetry][0]. You'll need `poetry`
-installed, a working [`pip`][3] and be [DtP][4].
+installed, a working [`pip`][3] and be ready to write some code.
 
 ## Bring Forth Form Upon The Filesystem
 
@@ -81,7 +81,6 @@ too the test repo and it get's flushed eventually.
 [1]: ../command-line-interface/article.md
 [2]: ../packaging/article.md
 [3]: https://pip.pypa.io/
-[4]: Down to Program
 [5]: https://pypi.org
 [6]: https://pypi.org/account/register/
 [7]: https://packaging.python.org/tutorials/packaging-projects/
