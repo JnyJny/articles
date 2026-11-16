@@ -168,3 +168,72 @@ def test_debug_flag(repo: MakeRepo) -> None:
     root = repo({"c/a/article.md": GOOD_ARTICLE})
     result = runner.invoke(main_module.cli, ["--debug", "links", "--root", str(root)])
     assert result.exit_code == 0
+
+
+def test_accept_then_audit_skips_what_was_accepted(
+    repo: MakeRepo, tmp_path: Path
+) -> None:
+    """--accept writes tools/accepted.toml, and the next audit skips those findings."""
+    files = {"c/a/article.md": BAD_ARTICLE}
+    code, output = run(repo, files, "audit", "--accept", "--rule", "binary-units")
+    assert code == 0
+    assert "accepted 1 finding(s)" in output
+    assert (tmp_path / "tools" / "accepted.toml").is_file()
+    _, output = run(repo, files, "audit", "--rule", "binary-units")
+    assert "ok    binary-units" in output
+    assert "1 accepted finding(s) skipped" in output
+    _, output = run(repo, files, "audit", "--rule", "binary-units", "--no-baseline")
+    assert "1  binary-units" in output
+
+
+def test_accept_only_takes_the_rules_asked_for(repo: MakeRepo) -> None:
+    """Other rules still report after accepting one."""
+    files = {"c/a/article.md": BAD_ARTICLE}
+    run(repo, files, "audit", "--accept", "--rule", "binary-units")
+    _, output = run(repo, files, "audit")
+    assert "ok    binary-units" in output
+    assert "1  avoid-words" in output
+
+
+def test_strict_audit_ignores_accepted_findings(repo: MakeRepo) -> None:
+    """With everything accepted, --strict exits 0, and a new finding brings back 1."""
+    files = {"c/a/article.md": BAD_ARTICLE}
+    assert run(repo, files, "audit", "--strict")[0] == 1
+    run(repo, files, "audit", "--accept")
+    assert run(repo, files, "audit", "--strict")[0] == 0
+    worse = BAD_ARTICLE.replace("simply", "genuinely quietly")
+    assert run(repo, {"c/a/article.md": worse}, "audit", "--strict")[0] == 1
+
+
+def test_stale_entries_are_reported(repo: MakeRepo) -> None:
+    """An accepted entry whose line was fixed is reported as stale."""
+    files = {"c/a/article.md": BAD_ARTICLE}
+    run(repo, files, "audit", "--accept", "--rule", "binary-units")
+    fixed = {"c/a/article.md": BAD_ARTICLE.replace("128 KiB", "128 KB")}
+    _, output = run(repo, fixed, "audit", "--rule", "binary-units", "--details")
+    assert "1 stale accepted entr(ies)" in output
+    assert "c/a [binary-units]" in output
+    _, output = run(repo, fixed, "audit", "--rule", "avoid-words")
+    assert "stale" not in output
+
+
+def test_accept_rejects_no_baseline(repo: MakeRepo) -> None:
+    """Accepting while ignoring the file would lose its entries."""
+    code, output = run(
+        repo, {"c/a/article.md": GOOD_ARTICLE}, "audit", "--accept", "--no-baseline"
+    )
+    assert code == 2
+    assert "cannot be used together" in output
+
+
+def test_baseline_path_option_and_a_broken_file(repo: MakeRepo, tmp_path: Path) -> None:
+    """--baseline picks the file, and a malformed one is a usage error."""
+    files = {"c/a/article.md": BAD_ARTICLE}
+    custom = tmp_path / "mine.toml"
+    code, _ = run(repo, files, "audit", "--accept", "--baseline", str(custom))
+    assert code == 0
+    assert custom.is_file()
+    custom.write_text("not [valid toml", encoding="utf-8")
+    code, output = run(repo, files, "audit", "--baseline", str(custom))
+    assert code == 2
+    assert "mine.toml" in output

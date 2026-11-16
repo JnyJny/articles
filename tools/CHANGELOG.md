@@ -14,6 +14,9 @@ project adheres to [Semantic Versioning][semver].
   references and unclosed reference labels.
 - Diagram checks for misaligned cell dividers and arrow elbows.
 - Twenty-one style rules from `STYLE.md`.
+- `tools/accepted.toml`, `audit --accept`, `--baseline` and `--no-baseline`:
+  findings that have been looked at and accepted are skipped, and entries
+  that no longer match anything are reported as stale.
 
 <!-- Links -->
 [keep-a-changelog]: https://keepachangelog.com/en/1.1.0/

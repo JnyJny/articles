@@ -24,9 +24,24 @@ $ uv run article-tools audit --details --rule avoid-words
 | `diagrams` | Box dividers line up, and arrow elbows share a column.          |
 | `audit`    | Counts findings per style rule. `--details` lists them.         |
 
-`audit` is advice, not a gate. It exits 0 unless you pass `--strict`, and
-some of what it reports is deliberate, such as the `int* p` counterexamples
-in the pointers article.
+`audit` is advice, not a gate. It exits 0 unless you pass `--strict`.
+
+## Accepting findings
+
+Some findings are deliberate, such as the `int* p` counterexamples in the
+pointers article. `tools/accepted.toml` lists the ones that have been looked
+at and accepted, each with a reason, and `audit` skips them and says how many.
+
+```console
+$ uv run article-tools audit --accept --rule link-text
+$ git diff tools/accepted.toml
+```
+
+`--accept` adds every new finding for the rules you name, so read the diff
+before you commit it. An entry matches on article, rule, message and the text
+of the line, so changing the line brings the finding back. When the finding is
+gone the entry is reported as stale, and you can delete it. `--strict` exits 1
+only for new findings, and `--no-baseline` shows everything.
 
 ## Development
 

@@ -12,6 +12,7 @@ from pathlib import Path
 import typer
 from loguru import logger
 
+from . import baseline
 from .diagrams import check_diagrams
 from .links import check_links
 from .model import Article, Finding, find_articles, find_root
@@ -33,14 +34,23 @@ RootOption = typer.Option(
 )
 
 
+def fail(message: str) -> typer.Exit:
+    """Print an error and return the exit that ends the command."""
+    typer.secho(message, fg=typer.colors.RED, err=True)
+    return typer.Exit(code=2)
+
+
+def repo_root(root: Path | None) -> Path:
+    """Find the articles repo, or exit with a message."""
+    try:
+        return root.resolve() if root else find_root(Path.cwd())
+    except FileNotFoundError as error:
+        raise fail(str(error)) from None
+
+
 def load(root: Path | None, *, stubs: bool) -> list[Article]:
     """Find the repo and load its articles, or exit with a message."""
-    try:
-        base = root.resolve() if root else find_root(Path.cwd())
-    except FileNotFoundError as error:
-        typer.secho(str(error), fg=typer.colors.RED, err=True)
-        raise typer.Exit(code=2) from None
-    return find_articles(base, include_stubs=stubs)
+    return find_articles(repo_root(root), include_stubs=stubs)
 
 
 def show(findings: list[Finding]) -> None:
@@ -81,7 +91,7 @@ def global_callback(
 
 
 @cli.command()
-def audit(
+def audit(  # noqa: PLR0913, PLR0917
     root: Path | None = RootOption,
     rule: list[str] | None = typer.Option(
         None, "--rule", "-r", help="Only run this rule."
@@ -90,21 +100,75 @@ def audit(
     stubs: bool = typer.Option(
         False, "--stubs", help="Include stubs and empty articles."
     ),
-    strict: bool = typer.Option(False, "--strict", help="Exit 1 if anything is found."),
+    strict: bool = typer.Option(
+        False, "--strict", help="Exit 1 if there are new findings."
+    ),
+    baseline_path: Path | None = typer.Option(
+        None,
+        "--baseline",
+        help="File of accepted findings. Default: tools/accepted.toml in the repo.",
+    ),
+    no_baseline: bool = typer.Option(
+        False, "--no-baseline", help="Report accepted findings too."
+    ),
+    accept: bool = typer.Option(
+        False,
+        "--accept",
+        help="Add the new findings to the accepted file. Review the diff.",
+    ),
 ) -> None:
-    """Count the style findings for each rule, or list them with --details."""
-    articles = load(root, stubs=stubs)
+    """Count the style findings for each rule, or list them with --details.
+
+    Findings listed in the accepted file are skipped and counted at the end.
+    """
+    if accept and no_baseline:
+        message = "--accept and --no-baseline cannot be used together"
+        raise fail(message)
+    base = repo_root(root)
+    articles = find_articles(base, include_stubs=stubs)
     try:
         findings = run_rules(articles, rule)
-    except KeyError as error:
-        typer.secho(error.args[0], fg=typer.colors.RED, err=True)
-        raise typer.Exit(code=2) from None
+        path = baseline_path or base / "tools" / baseline.DEFAULT_NAME
+        accepted = [] if no_baseline else baseline.read(path)
+    except (KeyError, ValueError) as error:
+        raise fail(str(error.args[0])) from None
+    names = rule or list(RULES)
+    applied = baseline.apply(
+        findings,
+        accepted,
+        rules=set(names),
+        articles={article.name for article in articles},
+    )
+    if accept:
+        baseline.write(path, baseline.accept(applied.new, accepted))
+        typer.echo(f"accepted {len(applied.new)} finding(s) into {path}")
+        return
     if details:
-        show(findings)
+        show(applied.new)
     else:
-        summarize(findings, rule or list(RULES))
-    if strict and findings:
+        summarize(applied.new, names)
+    shown = path.relative_to(base) if path.is_relative_to(base) else path
+    report_baseline(shown, applied, details=details)
+    if strict and applied.new:
         raise typer.Exit(code=1)
+
+
+def report_baseline(
+    path: Path,
+    applied: baseline.Applied,
+    *,
+    details: bool,
+) -> None:
+    """Say what the accepted file skipped and which entries have gone stale."""
+    if applied.skipped:
+        typer.echo(f"{len(applied.skipped)} accepted finding(s) skipped ({path})")
+    if applied.stale:
+        typer.echo(
+            f"{len(applied.stale)} stale accepted entr(ies): the finding is gone"
+        )
+        if details:
+            for entry in applied.stale:
+                typer.echo(f"  {entry.article} [{entry.rule}] {entry.context[:60]}")
 
 
 @cli.command()

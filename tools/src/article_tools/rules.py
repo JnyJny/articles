@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import re
 from collections.abc import Callable
 
@@ -89,6 +90,13 @@ def rule(name: str) -> Callable[[Rule], Rule]:
 def snippet(text: str) -> str:
     """Trim a line down to something that fits in a report."""
     return text.strip()[:SNIPPET]
+
+
+def line_text(article: Article, number: int) -> str:
+    """Return the stripped text of a numbered line, or nothing."""
+    if 1 <= number <= len(article.lines):
+        return article.lines[number - 1].text.strip()
+    return ""
 
 
 def prose_lines(article: Article) -> list[tuple[int, str]]:
@@ -382,7 +390,10 @@ def run_rules(
         raise KeyError(message)
     chosen = {name: RULES[name] for name in (only or RULES)}
     return [
-        article.finding(name, number, message)
+        dataclasses.replace(
+            article.finding(name, number, message),
+            context=line_text(article, number),
+        )
         for article in articles
         for name, function in chosen.items()
         for number, message in function(article)

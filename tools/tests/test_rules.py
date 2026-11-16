@@ -8,6 +8,7 @@ from article_tools.model import Article, classify
 from article_tools.rules import (
     RULES,
     definitions,
+    line_text,
     run_rules,
     used_references,
 )
@@ -185,3 +186,11 @@ def test_comparators_may_return_bare_integers() -> None:
     )
     found = hits("c-status-codes", "# T\n" + c_block(code))
     assert [line for line, _ in found] == [7]
+
+
+def test_line_text_outside_the_article_is_empty() -> None:
+    """A finding with no real line has no context."""
+    parsed = article("# T\n")
+    assert line_text(parsed, 1) == "# T"
+    assert not line_text(parsed, 0)
+    assert not line_text(parsed, 99)

@@ -20,10 +20,13 @@ Ideas and loose ends that don't belong in the article being written.
   `article-tools check` is the pre-push gate (links and diagrams).
   `article-tools audit` is the style sweep, 21 rules, advice only. Open
   questions:
-  - The audit reports deliberate exceptions every time: "modern", the
-    `int* p` counterexamples in `pointers`, and proper-noun link text such
-    as "Sir Tony Hoare". Do you want a way to accept a finding, such as a
-    baseline file?
+  - `tools/accepted.toml` holds the findings Erik has accepted, 17 of
+    them so far: "modern", "just looking, not touching", the `int* p`
+    counterexamples, and proper-noun link text. What the audit still
+    reports is real work: 11 unused references, "honest", "honestly" and
+    "simply" (Erik will revisit), the `[this]` link in `packaging-with-poetry`
+    (a pun? accept it if so) and 9 tab characters in table rows of
+    `how-i-write-main`.
   - Stale unused references the audit found: `multi-file-c-program` still
     defines `[article-man]`, `[article-namespaces]`, `[article-files]` and
     `[article-shared-object]` pointing at old `blob/master` paths, plus

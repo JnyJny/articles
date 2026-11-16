@@ -1,0 +1,123 @@
+# Findings from `article-tools audit` that have been looked at and accepted.
+#
+# An entry matches on article, rule, message and the text of the line, so
+# editing the line brings the finding back. Say why in `reason`.
+
+[[accepted]]
+article = "c/how-i-write-main"
+rule = "avoid-words"
+message = "Modern"
+context = "used it. Modern compilers are nearly all multi-pass compilers that"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "c/multi-file-c-program"
+rule = "avoid-words"
+message = "modern"
+context = "To give our program a purpose, I'll update this concept for the modern"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "c/multi-file-c-program"
+rule = "avoid-words"
+message = "Modern"
+context = "for `fields_t` might look a little unfamiliar. Modern C compilers"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "c/pointers"
+rule = "c-star-on-type"
+message = "int* p, q;     /* one pointer and one int, surprise! */"
+context = "int* p, q;     /* one pointer and one int, surprise! */"
+reason = "deliberate counterexample, shown before the recommended style"
+
+[[accepted]]
+article = "c/pointers"
+rule = "c-star-on-type"
+message = "int* p;     /* some people do this */"
+context = "int* p;     /* some people do this */"
+reason = "deliberate counterexample, shown before the recommended style"
+
+[[accepted]]
+article = "c/pointers"
+rule = "link-text"
+message = "title-cased link text [Sir Tony Hoare]"
+context = "[Sir Tony Hoare][hoare] called null references his \"billion-dollar"
+reason = "proper noun"
+
+[[accepted]]
+article = "c/pointers"
+rule = "not-y"
+message = "it's X, not Y: it's just looking, not touching."
+context = "it's just looking, not touching."
+reason = "Erik: good judgement, keep 'just looking, not touching' (2026-11-15)"
+
+[[accepted]]
+article = "c/pointers"
+rule = "not-y"
+message = "it's X, not Y: pointer's destination type. This is not strictly required, b"
+context = "pointer's destination type. This is not strictly required, but it"
+reason = "false positive: ordinary 'not X, but Y' hedging"
+
+[[accepted]]
+article = "misc/history"
+rule = "avoid-words"
+message = "Modern"
+context = "that is the main source of the perceived lack of performance. Modern"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/command-line-interface"
+rule = "avoid-words"
+message = "Modern"
+context = "# An Exploration of the Modern Python Command-Line Interface"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/command-line-interface"
+rule = "avoid-words"
+message = "Modern"
+context = "### A Modern Approach to CLIs"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/command-line-interface"
+rule = "avoid-words"
+message = "modern"
+context = "framework which combines the functionality of `Click` with modern"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/packaging"
+rule = "avoid-words"
+message = "modern"
+context = "have separate articles for the two modern approaches:"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/packaging"
+rule = "avoid-words"
+message = "modern"
+context = "where we once had just `pip` and `setuptools`, we now have modern"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/packaging"
+rule = "link-text"
+message = "title-cased link text [Hyper-Text Transfer Protocol]"
+context = "weird [Hyper-Text Transfer Protocol][http]. These \"websites\" soon"
+reason = "proper noun"
+
+[[accepted]]
+article = "python/packaging-with-poetry"
+rule = "avoid-words"
+message = "modern"
+context = "As you can see, the prospective modern Python package programmer must"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"
+
+[[accepted]]
+article = "python/packaging-with-poetry"
+rule = "avoid-words"
+message = "modern"
+context = "communicate in the dulcet tones of a more modern mode. Ok with you dog?"
+reason = "Erik: leave 'modern' as it is (2026-11-15)"

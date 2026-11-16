@@ -39,6 +39,7 @@ class Finding:
     rule: str
     line: int
     message: str
+    context: str = ""
 
     def __str__(self) -> str:
         """Format the finding like a compiler diagnostic."""
