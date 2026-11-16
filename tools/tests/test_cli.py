@@ -6,6 +6,8 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
+from article_tools.model import Finding
+
 from .conftest import META, MakeRepo
 
 main_module_name = "article_tools.__main__"
@@ -237,3 +239,103 @@ def test_baseline_path_option_and_a_broken_file(repo: MakeRepo, tmp_path: Path) 
     code, output = run(repo, files, "audit", "--baseline", str(custom))
     assert code == 2
     assert "mine.toml" in output
+
+
+def test_stub_command_creates_the_stub(repo: MakeRepo, tmp_path: Path) -> None:
+    """The stub command makes the directory, the symlink and the README row."""
+    files = {
+        "c/a/article.md": GOOD_ARTICLE,
+        "README.md": "## C Programming\n\n| A | B |\n|---|---|\n",
+    }
+    code, output = run(
+        repo,
+        files,
+        "stub",
+        "c/data-types",
+        "--title",
+        "What Is Data?",
+        "--note",
+        "one",
+        "--note",
+        "two",
+        "--date",
+        "May 2026",
+    )
+    assert code == 0
+    assert "created c/data-types" in output
+    assert "added a Planned row" in output
+    text = (tmp_path / "c" / "data-types" / "article.md").read_text(encoding="utf-8")
+    assert "- one\n- two" in text
+    assert "Date: May 2026" in text
+    assert "| What Is Data? | Planned |" in (tmp_path / "README.md").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_stub_command_without_a_readme_table(repo: MakeRepo) -> None:
+    """No table to add to is said, not hidden."""
+    code, output = run(repo, {"c/a/article.md": GOOD_ARTICLE}, "stub", "c/new")
+    assert code == 0
+    assert "README.md not changed" in output
+
+
+def test_stub_command_refuses_a_bad_request(repo: MakeRepo) -> None:
+    """An existing article and a bad slug are usage errors."""
+    files = {"c/a/article.md": GOOD_ARTICLE}
+    assert run(repo, files, "stub", "c/a")[0] == 2
+    code, output = run(repo, files, "stub", "c/Bad_Slug")
+    assert code == 2
+    assert "kebab-case" in output
+
+
+def test_links_suggest_the_stub_command(repo: MakeRepo) -> None:
+    """A bare slug with no stub says how to make one."""
+    _, output = run(repo, {"c/a/article.md": BAD_ARTICLE}, "links")
+    assert "article-tools stub c/nowhere" in output
+
+
+def test_links_external_fails_only_on_dead_links(
+    repo: MakeRepo,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A dead URL fails the command. An unreachable one is only reported."""
+    files = {"c/a/article.md": GOOD_ARTICLE}
+    seen: list[float] = []
+
+    def fake(_articles: list, *, timeout: float) -> list:
+        seen.append(timeout)
+        return [Finding("c/a", rule, 3, "[x] http://x.test: bad") for rule in answers]
+
+    answers = ["unreachable-link"]
+    monkeypatch.setattr(main_module, "check_external", fake)
+    code, output = run(repo, files, "links", "--external", "--timeout", "3")
+    assert code == 0
+    assert "1 unreachable" in output
+    assert seen == [3.0]
+    answers.append("dead-link")
+    code, output = run(repo, files, "links", "--external")
+    assert code == 1
+    assert "dead-link" in output
+
+
+def test_layout_command_and_check_report_a_broken_stub(
+    repo: MakeRepo, tmp_path: Path
+) -> None:
+    """The layout command and check both fail on a dangling README symlink."""
+    files = {"c/a/article.md": GOOD_ARTICLE, "unix/sc/sc.md": "### T\n"}
+    run(repo, files, "layout")
+    (tmp_path / "unix" / "sc" / "README.md").symlink_to("article.md")
+    code, output = run(repo, files, "layout")
+    assert code == 1
+    assert "unix/sc" in output
+    code, output = run(repo, files, "check")
+    assert code == 1
+    assert "[layout]" in output
+    assert (
+        run(
+            repo,
+            {"c/a/article.md": GOOD_ARTICLE, "unix/sc/article.md": "# T\n"},
+            "layout",
+        )[0]
+        == 0
+    )

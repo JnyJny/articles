@@ -14,10 +14,13 @@ from loguru import logger
 
 from . import baseline
 from .diagrams import check_diagrams
+from .external import UNREACHABLE, check_external
+from .layout import check_layout
 from .links import check_links
 from .model import Article, Finding, find_articles, find_root
 from .rules import RULES, run_rules
 from .self_subcommand import cli as self_cli
+from .stubs import StubError, create_stub
 
 cli = typer.Typer()
 
@@ -172,9 +175,33 @@ def report_baseline(
 
 
 @cli.command()
-def links(root: Path | None = RootOption) -> None:
+def links(
+    root: Path | None = RootOption,
+    external: bool = typer.Option(
+        False, "--external", help="Also fetch every external URL (needs the network)."
+    ),
+    timeout: float = typer.Option(10.0, "--timeout", help="Seconds to wait per URL."),
+) -> None:
     """Check that every link reference resolves, anchors included."""
-    findings = check_links(load(root, stubs=True))
+    articles = load(root, stubs=True)
+    findings = check_links(articles)
+    if external:
+        findings += check_external(articles, timeout=timeout)
+    show(findings)
+    failures = [finding for finding in findings if finding.rule != UNREACHABLE]
+    if len(failures) != len(findings):
+        typer.echo(
+            f"{len(findings) - len(failures)} unreachable (the site may be down or "
+            "may refuse automated checks): not counted as failures"
+        )
+    if failures:
+        raise typer.Exit(code=1)
+
+
+@cli.command()
+def layout(root: Path | None = RootOption) -> None:
+    """Check article directories: a working README symlink, no stray .md files."""
+    findings = check_layout(repo_root(root))
     show(findings)
     if findings:
         raise typer.Exit(code=1)
@@ -190,10 +217,41 @@ def diagrams(root: Path | None = RootOption) -> None:
 
 
 @cli.command()
+def stub(  # noqa: PLR0913, PLR0917
+    path: str = typer.Argument(..., help="CATEGORY/SLUG, like c/data-types."),
+    title: str | None = typer.Option(None, "--title", help="Default: from the slug."),
+    series: str | None = typer.Option(
+        None, "--series", help="Default: from the category."
+    ),
+    note: list[str] | None = typer.Option(
+        None, "--note", help="Where it was promised. Repeat for more than one."
+    ),
+    date: str | None = typer.Option(None, "--date", help="Default: this month."),
+    root: Path | None = RootOption,
+) -> None:
+    """Create the stub for a promised article, and a Planned row in the README."""
+    base = repo_root(root)
+    try:
+        made = create_stub(
+            base, path, title=title, series=series, notes=note or (), date=date
+        )
+    except StubError as error:
+        raise fail(str(error)) from None
+    typer.echo(f"created {made.directory.relative_to(base)} (article.md, README.md)")
+    typer.echo(
+        "added a Planned row to README.md"
+        if made.row_added
+        else "README.md not changed: no table for this category, or already listed"
+    )
+
+
+@cli.command()
 def check(root: Path | None = RootOption) -> None:
-    """Run the checks that must pass before a push: links and diagrams."""
-    findings = check_links(load(root, stubs=True)) + check_diagrams(
-        load(root, stubs=False)
+    """Run the checks that must pass before a push: links, diagrams and layout."""
+    findings = (
+        check_links(load(root, stubs=True))
+        + check_diagrams(load(root, stubs=False))
+        + check_layout(repo_root(root))
     )
     show(findings)
     typer.echo(

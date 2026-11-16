@@ -116,10 +116,12 @@ def reference_findings(article: Article, slugs: dict[str, Article]) -> list[Find
         resolution = resolve(article, target, slugs)
         if resolution.kind == BARE_SLUG:
             slug = target.split()[0]
+            category = article.name.split("/")[0]
             advice = (
                 f"use {resolution.detail}"
                 if resolution.detail
-                else "no article or stub has that name"
+                else "no article or stub has that name; "
+                f"create one with: article-tools stub {category}/{slug}"
             )
             message = f"[{reference}] is the bare slug '{slug}'; {advice}"
             findings.append(article.finding(BARE_SLUG, number, message))

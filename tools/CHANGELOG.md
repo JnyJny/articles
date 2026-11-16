@@ -13,6 +13,12 @@ project adheres to [Semantic Versioning][semver].
 - Link checks for bare slugs, missing files, broken anchors, undefined
   references and unclosed reference labels.
 - Diagram checks for misaligned cell dividers and arrow elbows.
+- `layout` check for README symlinks that point nowhere and articles stuck in
+  a misnamed file.
+- `stub` command that creates the stub for a promised article, and a hint
+  from `links` when a bare slug has none.
+- `links --external` for dead URLs, which finds 404s and 410s and reports
+  everything else as unreachable.
 - Twenty-one style rules from `STYLE.md`.
 - `tools/accepted.toml`, `audit --accept`, `--baseline` and `--no-baseline`:
   findings that have been looked at and accepted are skipped, and entries

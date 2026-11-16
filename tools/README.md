@@ -19,12 +19,40 @@ $ uv run article-tools audit --details --rule avoid-words
 
 | Command    | What it does                                                    |
 |------------|-----------------------------------------------------------------|
-| `check`    | Runs `links` and `diagrams`. Exits 1 on any problem.            |
+| `check`    | Runs `links`, `diagrams` and `layout`. Exits 1 on any problem.  |
 | `links`    | Every link reference resolves: paths exist, anchors name headings. |
+| `links --external` | Also fetches every external URL and reports the dead ones. |
 | `diagrams` | Box dividers line up, and arrow elbows share a column.          |
+| `layout`   | README symlinks work, and no article hides in a misnamed file.  |
 | `audit`    | Counts findings per style rule. `--details` lists them.         |
+| `stub`     | Creates the stub for a promised article.                        |
 
 `audit` is advice, not a gate. It exits 0 unless you pass `--strict`.
+
+## Promised articles
+
+A link to an article that does not exist yet needs a stub, and a bare slug is
+not a link. `stub` makes one: the directory, an `article.md` with a metadata
+block marked `Status: stub`, a `README.md` symlink to it, and a Planned row in
+the README.
+
+```console
+$ uv run article-tools stub c/data-types --title "What Is Data and Why Does It Need a Type?" \
+      --note "how-i-write-main: main() returns a [signed integer]"
+```
+
+`--note` records where the article was promised, in a hidden comment, and can be
+repeated. The slug must be kebab-case, the category one of `c`, `unix`, `python`
+or `misc`, and an existing article is never overwritten. When `links` finds a
+bare slug with no stub it prints this command.
+
+## External links
+
+`links --external` asks each external URL once, with HEAD and then GET. A 404 or
+410 is a dead link and fails the command. Anything else that goes wrong, such as
+a timeout or a 403 from a site that refuses bots, is reported as unreachable and
+does not fail it. If a certificate cannot be verified the check asks again
+without verifying and says so, because it only reads a status code.
 
 ## Accepting findings
 
