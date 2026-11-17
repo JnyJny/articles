@@ -35,14 +35,14 @@ Let's start breaking things.
 
 Eight bits make a byte, and a byte has 256 possible patterns. Which
 numbers those patterns stand for is up to the type of the variable that
-holds them. A word on notation before we go on. I write binary with a
-`0b` prefix and hex with `0x`, the way C does. A number with no prefix
-is decimal. As an unsigned integer, the patterns `0b00000000` through
-`0b11111111` mean 0 through 255. As a signed integer, nearly every
-machine you will meet uses [two's complement][twos-complement], where
-the top bit counts as -128 instead of +128. This program prints each
-pattern in binary and in hex, followed by the signed and unsigned
-readings:
+holds them. A word on notation before we go on. I write hex with a `0x`
+prefix, the way C does, and binary with `0b`, which gcc accepts and C23
+made standard. A number with no prefix is decimal. As an unsigned
+integer, the patterns `0b00000000` through `0b11111111` mean 0 through
+255. As a signed integer, nearly every machine you will meet uses [two's
+complement][twos-complement], where the top bit counts as -128 instead
+of +128. This program prints each pattern in binary and in hex, followed
+by the signed and unsigned readings:
 
 ```C
 /* bits.c - the same bits, written and read several ways */
