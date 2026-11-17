@@ -161,8 +161,9 @@ Ideas and loose ends that don't belong in the article being written.
   being assignable, `sizeof` of an array versus a pointer, the `[10]` in a
   function parameter being a pointer, and the `greeting` pair under
   pointer pitfalls, which fits here too.
-- `integers` already shows the `sizeof` and parameter cases and links to
-  `pointers`. Add a link to this article when it is written.
+- `c/sizeof` already shows the `sizeof` and parameter cases and links to
+  `pointers` and to this stub. Link back from `sizeof` and `pointers`
+  when this article is written.
 
 ## Pointer pitfalls
 
@@ -227,11 +228,11 @@ Ideas and loose ends that don't belong in the article being written.
   - `sizeof` as an operator, `sizeof(*p)` working with `p` unset,
     padding in structures: the `data-types` stub. Erik's call,
     2026-11-14. No link from `memory-allocation`. On 2026-11-17 Erik
-    asked for a small `sizeof` section in `integers` anyway, because
-    `sizeof` is important and often misunderstood. It covers what makes
-    `sizeof` an integer topic: the unsigned `size_t` result, the
-    element-count idiom, and the array that turns into a pointer when
-    it is passed to a function. `data-types` keeps the rest.
+    asked for `sizeof` coverage in `integers`, because it is important
+    and often misunderstood, then agreed to split it out when the
+    section grew past 900 words. It is now `c/sizeof/`, "Sizing Things
+    Up: sizeof". `integers` keeps a two-paragraph breadcrumb about the
+    unsigned result. `data-types` keeps padding.
   - Floating point and rounding: not integers. A separate article if
     Erik wants one.
   - Integer promotion in `printf()` varargs and format mismatches
@@ -249,6 +250,20 @@ Ideas and loose ends that don't belong in the article being written.
   ten years. The existing 2038 example stays as is.
 - `memory-allocation` could link its "wrapped around to zero" sentence
   to `c/integers`. Left alone, since Erik is editing that article.
+
+## sizeof
+
+- Drafted 2026-11-17 as `c/sizeof/`, "Sizing Things Up: sizeof", split
+  from `integers`. Covers sizeof as an operator (operand not evaluated,
+  parentheses only for types), the unsigned `size_t` result, the
+  element-count idiom, the array that decays to a pointer in a
+  parameter, why sizeof can't be a macro and can't appear in an `#if`,
+  and the macro-wrapped idiom with `-Wsizeof-pointer-div`. Waiting for
+  Erik's edit pass. Padding in structures goes to `data-types`. VLAs
+  (where sizeof does evaluate its operand) were left out; check the
+  standard before saying anything about them.
+- The operator article claims "the compiler works out for itself"
+  and never says "at compile time" on purpose, because of VLAs.
 
 ## C standards
 
