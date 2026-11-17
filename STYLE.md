@@ -292,7 +292,10 @@ best.
   digits and eight bits, a 32-bit value is eight hex digits, and a
   `size_t` is sixteen. Print it that way too (`0x%08x`, `0x%016zx`). When
   a table has values of different types, pad them all to the widest one
-  and say so. `%p` output is whatever printf gives you.
+  and say so. Padding is a minimum. When the values are small counters,
+  pad to a byte (`0x%02zx`) and let a value that overflows the pad print
+  longer, since that jump is what the example is showing. `%p` output is
+  whatever printf gives you.
 
 - **Region names are bold capitals in prose:** **TEXT**, **DATA**,
   **BSS**, **HEAP**, **STACK**. In diagrams they are capitals without

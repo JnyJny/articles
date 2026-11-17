@@ -482,7 +482,7 @@ int main(int argc, char *argv[])
     size_t n = 3;
 
     for (size_t i = n - 1; i >= 0; i--) {
-        printf("%zu  0x%016zx\n", i, i);
+        printf("%zu  0x%02zx\n", i, i);
         if (i > 5) {
             printf("...and it never stops\n");
             break;
@@ -499,9 +499,9 @@ countdown.c:9:30: warning: comparison of unsigned expression in '>= 0' is always
     9 |     for (size_t i = n - 1; i >= 0; i--) {
       |                              ^~
 $ ./countdown
-2  0x0000000000000002
-1  0x0000000000000001
-0  0x0000000000000000
+2  0x02
+1  0x01
+0  0x00
 18446744073709551615  0xffffffffffffffff
 ...and it never stops
 ```
