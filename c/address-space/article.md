@@ -211,7 +211,7 @@ with a function that calls itself forever:
 
 void descend(int depth);
 
-int main(void) {
+int main(int argc, char *argv[]) {
     descend(1);
     return EXIT_SUCCESS;
 }
@@ -266,7 +266,7 @@ that spot, and what you read through it is a matter of luck:
 
 int *answer(void);
 
-int main(void) {
+int main(int argc, char *argv[]) {
     int *p = answer();
 
     printf("answer() gave us %p\n", (void *)p);
@@ -309,7 +309,7 @@ process receives a `SIGSEGV`:
 /* gap.c - touch an address nobody mapped */
 #include <stdlib.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
     int *in_the_gap = (int *)0x10000000;
 
     *in_the_gap = 1;

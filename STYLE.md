@@ -148,6 +148,11 @@ best.
   - EXIT_SUCCESS and EXIT_FAILURE, not 0 and -1
   - In a demo program, `main()` comes first. Every other function is
     defined after it and declared with a prototype above it
+  - `main()` is `int main(int argc, char *argv[])` even when the program
+    doesn't use the arguments, because programs grow and usually end up
+    taking some. `-Wall` stays quiet about unused parameters. `-Wextra`
+    doesn't, so name the `-Wextra` warnings you want (`-Wsign-compare`)
+    instead of turning them all on
   - Bodies of one statement omit the braces and go on their own
     indented line. Bodies of two or more statements keep them.
   - Declare pointers as NULL and allocate in the body, inside the

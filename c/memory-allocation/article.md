@@ -212,7 +212,7 @@ it, and asked for another one the same size:
 #include <stdlib.h>
 #include <string.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
     char *first = (char *)NULL;
     char *second = (char *)NULL;
 
@@ -285,7 +285,7 @@ did it. Here is what happens when the multiplication goes wrong:
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
     size_t count = (SIZE_MAX / sizeof(int)) + 1;    /* more ints than C can represent */
     int *by_malloc = (int *)NULL;
     int *by_calloc = (int *)NULL;
@@ -343,7 +343,7 @@ sizes, prints where they landed, and then prints the range of the
 #include <stdlib.h>
 #include <string.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
     size_t sizes[4] = { 100, 100000, 200000, 1000000 };
     void *blocks[4] = {
         (void *)NULL, (void *)NULL, (void *)NULL, (void *)NULL
@@ -413,7 +413,7 @@ anything you plan to port:
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
     size_t asked[] = { 1, 4, 24, 25, 100, 1000 };
 
     for (size_t i = 0; i < sizeof(asked) / sizeof(asked[0]); i++) {

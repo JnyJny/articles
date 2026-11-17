@@ -62,6 +62,8 @@ BAD = [
         "c-main-first",
         "# T\n" + c_block("void help(void) {\n}\nint main(void) {\n    return 0;\n}"),
     ),
+    ("c-main-arguments", "# T\n" + c_block("int main(void) {\n}")),
+    ("c-main-arguments", "# T\n" + c_block("int main()\n{\n}")),
     ("c-uncast-null", "# T\n" + c_block("char *p = NULL;")),
     ("c-typedef-name", "# T\n" + c_block("typedef struct { int a; } point;")),
     ("c-typedef-name", "# T\n" + c_block("typedef unsigned int uint;")),
@@ -103,6 +105,10 @@ GOOD = [
         ),
     ),
     ("c-main-first", "# T\n" + c_block("void help(void) {\n}")),
+    (
+        "c-main-arguments",
+        "# T\n" + c_block("int main(int argc, char *argv[]) {\n}\nint f(void);"),
+    ),
     ("c-uncast-null", "# T\n" + c_block("char *p = (char *)NULL;\n#define NULL 0")),
     (
         "c-typedef-name",

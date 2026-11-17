@@ -18,7 +18,7 @@ Ideas and loose ends that don't belong in the article being written.
 - `tools/` (2026-11-15) holds `article-tools`, made from Erik's python
   package cookiecutter, rendered with hooks off so nothing touched GitHub.
   `article-tools check` is the pre-push gate (links and diagrams).
-  `article-tools audit` is the style sweep, 22 rules, advice only. Open
+  `article-tools audit` is the style sweep, 23 rules, advice only. Open
   questions:
   - `tools/accepted.toml` holds the findings Erik has accepted, 17 of
     them so far: "modern", "just looking, not touching", the `int* p`

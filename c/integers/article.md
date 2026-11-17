@@ -51,7 +51,7 @@ each pattern both ways:
 
 void show(int8_t value);
 
-int main(void)
+int main(int argc, char *argv[])
 {
     int8_t values[] = {0, 1, 2, 126, 127, -128, -127, -2, -1};
 
@@ -72,7 +72,7 @@ void show(int8_t value)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o bits bits.c
+$ gcc -Wall -o bits bits.c
 $ ./bits
 0b00000000     0    0
 0b00000001     1    1
@@ -119,7 +119,7 @@ business. Ask it:
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
     printf("char      %zu\n", sizeof(char));
     printf("short     %zu\n", sizeof(short));
@@ -136,7 +136,7 @@ int main(void)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o sizes sizes.c
+$ gcc -Wall -o sizes sizes.c
 $ ./sizes
 char      1
 short     2
@@ -177,7 +177,7 @@ numbers depend on it.
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
     unsigned int u = UINT_MAX;
     unsigned char c = 255;
@@ -195,7 +195,7 @@ int main(void)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o wrap wrap.c
+$ gcc -Wall -o wrap wrap.c
 $ ./wrap
 u + 1  = 0
 c++    = 0
@@ -236,7 +236,7 @@ adding one wrapped around:
 
 int will_wrap(int x);
 
-int main(void)
+int main(int argc, char *argv[])
 {
     int x = INT_MAX;
 
@@ -251,7 +251,7 @@ int will_wrap(int x)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o ub ub.c
+$ gcc -Wall -o ub ub.c
 $ ./ub
 will_wrap(2147483647) = 0
 ```
@@ -266,7 +266,7 @@ You have three ways to catch this, and I use all of them. The first is
 to ask the compiler to check at run time:
 
 ```console
-$ gcc -Wall -Wextra -fsanitize=undefined -o ub ub.c
+$ gcc -Wall -fsanitize=undefined -o ub ub.c
 $ ./ub
 ub.c:18:14: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
 will_wrap(2147483647) = 1
@@ -304,7 +304,7 @@ meets an `unsigned int`, the `int` is converted to unsigned.
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
     int a = -1;
     unsigned int b = 1;
@@ -325,7 +325,7 @@ int main(void)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o compare compare.c
+$ gcc -Wall -Wsign-compare -o compare compare.c
 compare.c: In function 'main':
 compare.c:14:11: warning: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Wsign-compare]
    14 |     if (a < b)
@@ -338,10 +338,11 @@ c     = 200
 ```
 
 Minus one is not less than one. The `int` -1 was converted to unsigned,
-where its all-ones pattern is 4294967295, and that is a long way from
-1. Fortunately `-Wextra` knows about this one and says so. Read the
-warnings on the first compile, because the next time you meet this bug
-it will be in a loop condition in somebody else's code.
+where its all-ones pattern is 4294967295, and that is a long way from 1.
+Fortunately gcc knows about this one and says so, if you ask:
+`-Wsign-compare` is one of the warnings that `-Wextra` turns on. Read
+the warnings on the first compile, because the next time you meet this
+bug it will be in a loop condition in somebody else's code.
 
 The promotion shows in the next two lines. The sum of two `unsigned
 char`s is computed as an `int`, so `x + y` is 300, but storing it back
@@ -364,7 +365,7 @@ a classic. Here it is, with an escape hatch added so that it stops:
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
     size_t n = 3;
 
@@ -380,7 +381,7 @@ int main(void)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o countdown countdown.c
+$ gcc -Wall -Wtype-limits -o countdown countdown.c
 countdown.c: In function 'main':
 countdown.c:9:30: warning: comparison of unsigned expression in '>= 0' is always true [-Wtype-limits]
     9 |     for (size_t i = n - 1; i >= 0; i--) {
@@ -396,7 +397,8 @@ $ ./countdown
 An unsigned number is always at least zero, so `i >= 0` can't fail. When
 `i` reaches 0 and gets decremented, it rolls around to the largest
 `size_t`, and the loop carries on into whatever memory `i` indexes. The
-compiler warned, again. This is the same bug as `strlen(a) - strlen(b)`
+compiler warned again, this time with `-Wtype-limits`, which `-Wextra`
+also turns on. This is the same bug as `strlen(a) - strlen(b)`
 when `b` is the longer string: the subtraction can't go negative, so
 it produces a huge positive number instead.
 
@@ -438,7 +440,7 @@ int main(int argc, char *argv[])
 ```
 
 ```console
-$ gcc -Wall -Wextra -o shifts shifts.c
+$ gcc -Wall -o shifts shifts.c
 $ ./shifts
 1u << 32 = 1
 -16 >> 2 = -4
@@ -500,7 +502,7 @@ int main(int argc, char *argv[])
 ```
 
 ```console
-$ gcc -Wall -Wextra -o divide divide.c
+$ gcc -Wall -o divide divide.c
 $ ./divide
 -7 / 2  = -3  -7 % 2  = -1
  7 / -2 = -3   7 % -2 = 1
@@ -549,7 +551,7 @@ that, and this program puts them to work:
 int checked_add(int a, int b, int *sum);
 int checked_mul(size_t count, size_t size, size_t *bytes);
 
-int main(void)
+int main(int argc, char *argv[])
 {
     int sum = 0;
     size_t bytes = 0;
@@ -593,7 +595,7 @@ int checked_mul(size_t count, size_t size, size_t *bytes)
 ```
 
 ```console
-$ gcc -Wall -Wextra -o checked checked.c
+$ gcc -Wall -o checked checked.c
 $ ./checked
 checked_add: Numerical result out of range
 1000 ints need 4000 bytes

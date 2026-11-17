@@ -58,7 +58,7 @@ Here is the whole thing in C:
 #include <string.h>
 #include <unistd.h>
 
-int main(void) {
+int main(int argc, char *argv[]) {
     void *start = (void *)NULL;
     char *block = (char *)NULL;
     void *end = (void *)NULL;
@@ -150,7 +150,7 @@ moving the edge and never takes any of it back:
 
 void *bump(size_t size);
 
-int main(void) {
+int main(int argc, char *argv[]) {
     size_t sizes[3] = { 10, 100, 1 };
     void *blocks[3] = { (void *)NULL, (void *)NULL, (void *)NULL };
 

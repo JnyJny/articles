@@ -72,6 +72,7 @@ ASSIGNED_ALLOCATION = re.compile(
 FUNCTION_DEFINITION = re.compile(r"^[A-Za-z_][\w\s*]*?\b(\w+)\s*\(.*\)\s*\{?\s*$")
 COMPARATOR = re.compile(r"^(?:compare|cmp)", re.IGNORECASE)
 MAIN_DEFINITION = re.compile(r"^(?:int|void)\s+main\s*\(")
+MAIN_WITHOUT_ARGUMENTS = re.compile(r"^int\s+main\s*\(\s*(?:void)?\s*\)")
 STRUCT_TYPEDEF = re.compile(
     r"typedef\s+(?:struct|union|enum)\b[^;{]*\{[^}]*\}\s*(\w+)\s*;",
 )
@@ -356,6 +357,16 @@ def c_main_first(article: Article) -> Hits:
             and not line.text.startswith((" ", "\t", "#"))
         )
     return hits
+
+
+@rule("c-main-arguments")
+def c_main_arguments(article: Article) -> Hits:
+    """Give main() argc and argv even when the program ignores them."""
+    return [
+        (line.number, snippet(line.text))
+        for line in article.c_code()
+        if MAIN_WITHOUT_ARGUMENTS.match(line.text)
+    ]
 
 
 @rule("c-uncast-null")
