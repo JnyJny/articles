@@ -49,15 +49,7 @@ each pattern both ways:
 #include <stdio.h>
 #include <stdlib.h>
 
-void show(int8_t value)
-{
-    uint8_t bits = (uint8_t)value;
-
-    fputs("0b", stdout);
-    for (int i = 7; i >= 0; i--)
-        fputc((bits >> i) & 1 ? '1' : '0', stdout);
-    printf("  %4d  %3u\n", value, bits);
-}
+void show(int8_t value);
 
 int main(void)
 {
@@ -66,6 +58,16 @@ int main(void)
     for (size_t i = 0; i < sizeof(values) / sizeof(*values); i++)
         show(values[i]);
     return EXIT_SUCCESS;
+}
+
+void show(int8_t value)
+{
+    uint8_t bits = (uint8_t)value;
+
+    fputs("0b", stdout);
+    for (int i = 7; i >= 0; i--)
+        fputc((bits >> i) & 1 ? '1' : '0', stdout);
+    printf("  %4d  %3u\n", value, bits);
 }
 ```
 
@@ -232,10 +234,7 @@ adding one wrapped around:
 #include <stdio.h>
 #include <stdlib.h>
 
-int will_wrap(int x)
-{
-    return x + 1 < x;
-}
+int will_wrap(int x);
 
 int main(void)
 {
@@ -243,6 +242,11 @@ int main(void)
 
     printf("will_wrap(%d) = %d\n", x, will_wrap(x));
     return EXIT_SUCCESS;
+}
+
+int will_wrap(int x)
+{
+    return x + 1 < x;
 }
 ```
 
@@ -264,7 +268,7 @@ to ask the compiler to check at run time:
 ```console
 $ gcc -Wall -Wextra -fsanitize=undefined -o ub ub.c
 $ ./ub
-ub.c:8:14: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
+ub.c:18:14: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
 will_wrap(2147483647) = 1
 ```
 
@@ -542,6 +546,25 @@ that, and this program puts them to work:
 #include <stdio.h>
 #include <stdlib.h>
 
+int checked_add(int a, int b, int *sum);
+int checked_mul(size_t count, size_t size, size_t *bytes);
+
+int main(void)
+{
+    int sum = 0;
+    size_t bytes = 0;
+
+    if (checked_add(INT_MAX, 1, &sum))
+        perror("checked_add");
+    if (checked_mul(1000, sizeof(int), &bytes))
+        perror("checked_mul");
+    else
+        printf("1000 ints need %zu bytes\n", bytes);
+    if (checked_mul(SIZE_MAX / 2, sizeof(int), &bytes))
+        perror("checked_mul");
+    return EXIT_SUCCESS;
+}
+
 int checked_add(int a, int b, int *sum)
 {
     if (!sum) {
@@ -565,22 +588,6 @@ int checked_mul(size_t count, size_t size, size_t *bytes)
         errno = ERANGE;
         return EXIT_FAILURE;
     }
-    return EXIT_SUCCESS;
-}
-
-int main(void)
-{
-    int sum = 0;
-    size_t bytes = 0;
-
-    if (checked_add(INT_MAX, 1, &sum))
-        perror("checked_add");
-    if (checked_mul(1000, sizeof(int), &bytes))
-        perror("checked_mul");
-    else
-        printf("1000 ints need %zu bytes\n", bytes);
-    if (checked_mul(SIZE_MAX / 2, sizeof(int), &bytes))
-        perror("checked_mul");
     return EXIT_SUCCESS;
 }
 ```

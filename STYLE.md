@@ -146,6 +146,8 @@ best.
   - Constants and macros in ALL_CAPS
   - Block comments use `/* */`, not `//`
   - EXIT_SUCCESS and EXIT_FAILURE, not 0 and -1
+  - In a demo program, `main()` comes first. Every other function is
+    defined after it and declared with a prototype above it
   - Bodies of one statement omit the braces and go on their own
     indented line. Bodies of two or more statements keep them.
   - Declare pointers as NULL and allocate in the body, inside the

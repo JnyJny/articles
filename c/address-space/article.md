@@ -209,6 +209,13 @@ with a function that calls itself forever:
 #include <stdio.h>
 #include <stdlib.h>
 
+void descend(int depth);
+
+int main(void) {
+    descend(1);
+    return EXIT_SUCCESS;
+}
+
 void descend(int depth) {
     char frame[1024];
 
@@ -219,21 +226,16 @@ void descend(int depth) {
     descend(depth + 1);
     frame[1] = frame[0];    /* keeps the compiler from turning this into a loop */
 }
-
-int main(void) {
-    descend(1);
-    return EXIT_SUCCESS;
-}
 ```
 
 ```console
 $ gcc -Wall -o recurse recurse.c
 recurse.c: In function 'descend':
-recurse.c:5:6: warning: infinite recursion detected [-Winfinite-recursion]
-    5 | void descend(int depth) {
+recurse.c:12:6: warning: infinite recursion detected [-Winfinite-recursion]
+   12 | void descend(int depth) {
       |      ^~~~~~~
-recurse.c:12:5: note: recursive call
-   12 |     descend(depth + 1);
+recurse.c:19:5: note: recursive call
+   19 |     descend(depth + 1);
       |     ^~~~~~~~~~~~~~~~~
 $ ./recurse
 depth 1000, frame at 0xffffe545cf30
@@ -262,11 +264,7 @@ that spot, and what you read through it is a matter of luck:
 #include <stdio.h>
 #include <stdlib.h>
 
-int *answer(void) {
-    int result = 42;
-
-    return &result;
-}
+int *answer(void);
 
 int main(void) {
     int *p = answer();
@@ -275,13 +273,19 @@ int main(void) {
     printf("%d\n", *p);
     return EXIT_SUCCESS;
 }
+
+int *answer(void) {
+    int result = 42;
+
+    return &result;
+}
 ```
 
 ```console
 $ gcc -Wall -o dangling dangling.c
 dangling.c: In function 'answer':
-dangling.c:8:12: warning: function returns address of local variable [-Wreturn-local-addr]
-    8 |     return &result;
+dangling.c:18:12: warning: function returns address of local variable [-Wreturn-local-addr]
+   18 |     return &result;
       |            ^~~~~~~
 $ ./dangling
 answer() gave us (nil)
@@ -377,9 +381,7 @@ you give it any argument, prints the kernel's own record of the map from
 int initialized_global = 42;    /* DATA */
 int uninitialized_global;       /* BSS  */
 
-void show(const char *region, const char *what, void *address) {
-    printf("%-6s %-22s %p\n", region, what, address);
-}
+void show(const char *region, const char *what, void *address);
 
 int main(int argc, char *argv[]) {
     int local = 7;
@@ -425,6 +427,10 @@ int main(int argc, char *argv[]) {
     munmap(mapped, 4096);
     free(heap_block);
     return EXIT_SUCCESS;
+}
+
+void show(const char *region, const char *what, void *address) {
+    printf("%-6s %-22s %p\n", region, what, address);
 }
 ```
 

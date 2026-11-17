@@ -148,18 +148,7 @@ moving the edge and never takes any of it back:
 #include <stdlib.h>
 #include <unistd.h>
 
-void *bump(size_t size) {
-    void *block = (void *)NULL;
-
-    if (size == 0) {
-        errno = EINVAL;
-        return (void *)NULL;
-    }
-    size = (size + 15) & ~(size_t)15;
-    if ((block = sbrk((intptr_t)size)) == (void *)-1)
-        return (void *)NULL;
-    return block;
-}
+void *bump(size_t size);
 
 int main(void) {
     size_t sizes[3] = { 10, 100, 1 };
@@ -174,6 +163,19 @@ int main(void) {
     for (size_t i = 0; i < 3; i++)
         printf("bump(%3zu) -> %p\n", sizes[i], blocks[i]);
     return EXIT_SUCCESS;
+}
+
+void *bump(size_t size) {
+    void *block = (void *)NULL;
+
+    if (size == 0) {
+        errno = EINVAL;
+        return (void *)NULL;
+    }
+    size = (size + 15) & ~(size_t)15;
+    if ((block = sbrk((intptr_t)size)) == (void *)-1)
+        return (void *)NULL;
+    return block;
 }
 ```
 
