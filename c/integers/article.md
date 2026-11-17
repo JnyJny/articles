@@ -736,6 +736,11 @@ the header.
 
 ## Where To Go From Here
 
+The numbers you grew up with never ran out, never wrapped around and
+never changed sign by surprise. The ones in your computer do all three.
+Every time you add, subtract, shift or compare, ask what happens at the
+edges.
+
 Compile every program in this article with `-fsanitize=undefined` and
 see what the sanitizer has to say that the compiler didn't. Then run
 `shifts` and `divide` on a second kind of machine. Borrow a Raspberry
