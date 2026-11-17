@@ -35,13 +35,13 @@ Let's start breaking things.
 
 Eight bits make a byte, and a byte has 256 possible patterns. Which
 numbers those patterns stand for is up to the type of the variable that
-holds them. A word on notation before we go on: I write binary with a
-`0b` prefix and hex with `0x`, the way C does, and a number with no
-prefix is decimal. As an unsigned integer, the patterns `0b00000000`
-through `0b11111111` mean 0 through 255. As a signed integer, nearly
-every machine you will meet uses [two's complement][twos-complement],
-where the top bit counts as -128 instead of +128. This program prints
-each pattern in binary and in hex, followed by the signed and unsigned
+holds them. A word on notation before we go on. I write binary with a
+`0b` prefix and hex with `0x`, the way C does. A number with no prefix
+is decimal. As an unsigned integer, the patterns `0b00000000` through
+`0b11111111` mean 0 through 255. As a signed integer, nearly every
+machine you will meet uses [two's complement][twos-complement], where
+the top bit counts as -128 instead of +128. This program prints each
+pattern in binary and in hex, followed by the signed and unsigned
 readings:
 
 ```C
@@ -160,12 +160,12 @@ UINT_MAX  4294967295
 
 The `%zu` format is the one for a `sizeof` result, which has the type
 `size_t`. On this machine an `int` has 4 bytes and a `long` has 8. When
-the width matters, such as in a file format, a network packet or a
-hardware register, stop asking the compiler what `int` means and say
-what you mean with the types in `<stdint.h>`: `uint8_t`, `int32_t`,
-`uint64_t` and friends. Their names carry their widths. Use plain `int`
-for a small counter that will never be small enough to worry about, and
-`size_t` for sizes and counts of things in memory.
+the width matters, as in a file format, a network packet or a hardware
+register, don't ask the compiler what `int` means. Say what you mean
+with the types in `<stdint.h>`: `uint8_t`, `int32_t`, `uint64_t` and
+friends. Their names carry their widths. Use plain `int` for a small
+counter that will never be small enough to worry about, and `size_t` for
+sizes and counts of things in memory.
 
 Now look at the `CHAR_MIN` line. On this machine, plain `char` is
 unsigned. We'll come back to that.
@@ -232,7 +232,7 @@ wide   = 4294967296
 
 The first three lines are the clock at work. Going one below zero lands
 on the biggest number the type can hold, the same way a minute before
-00:00 is 23:59, which is how an innocent `0u - 1` becomes 4294967295.
+00:00 is 23:59. An innocent `0u - 1` becomes 4294967295 that way.
 
 The last two lines are the one that bites. A billion `int`s need 4
 billion bytes, which doesn't fit in 32 bits, so the 32-bit product
@@ -247,10 +247,10 @@ and the numbers were bigger, but the mechanism is the same.
 Signed integers look like they should wrap the same way. On this machine
 `INT_MAX + 1` does print -2147483648, which is what two's complement
 predicts, and the same jump as 3 to -4 in the diagram above. The
-standard, however, doesn't promise it. When signed
-arithmetic overflows, the behavior is _undefined_, which means the
-compiler is allowed to assume it never happens, and then to generate
-code that is only right for programs where it doesn't.
+standard, however, doesn't promise it. When signed arithmetic overflows,
+the behavior is _undefined_. The compiler is allowed to assume overflow
+never happens, and then to generate code that is only right for programs
+that never overflow.
 
 Here's a test that looks reasonable. If `x + 1` is less than `x`, then
 adding one wrapped around:
@@ -285,7 +285,7 @@ will_wrap(2147483647) = 0
 
 Zero. The function says that `INT_MAX + 1` does not wrap around, which
 is wrong. The compiler reasoned that for any `int`, `x + 1` can't be
-smaller than `x` unless overflow happened, overflow can't happen, so the
+smaller than `x` unless overflow happened. Overflow can't happen. So the
 test is always false and doesn't need to be computed. I got the same
 answer with `-O2`. Neither run printed a warning.
 
@@ -313,9 +313,9 @@ int will_wrap(int x)
 ```
 
 Check against the limit before the arithmetic, not after. There is also
-`-fwrapv`, which tells gcc to define signed overflow as wrapping. It
-makes this program print 1, and I'd use it only to buy time while
-fixing the code, because it changes the language for every file you
+`-fwrapv`, which tells gcc to define signed overflow as wrapping. With
+`-fwrapv`, this program prints 1. I'd use the flag only to buy time
+while fixing the code. The flag changes the language for every file you
 compile with it, whether or not that file's author knew.
 
 The most famous signed overflow hasn't happened yet. Unix keeps time as
@@ -428,7 +428,7 @@ the warnings on the first compile, because the next time you meet this
 bug it will be in a loop condition in somebody else's code.
 
 The promotion shows in the next two lines. The sum of two `unsigned
-char`s is computed as an `int`, so `x + y` is 300, but storing it back
+char`s is computed as an `int`, so `x + y` is 300. Storing the sum back
 into an `unsigned char` keeps only the low 8 bits, and 300 becomes 44.
 Here are the numbers in hex and binary:
 
@@ -563,8 +563,8 @@ so it fits on the page:
                             ^^ zeros
 ```
 
-In 32 bits the unsigned result is `0x3ffffffc`, which is the 1073741820 the
-program printed.
+In 32 bits the unsigned result is `0x3ffffffc`, which is the 1073741820
+the program printed.
 
 Shifting 1 left by 31 puts a one in the sign bit of an `int`. The
 standard calls that undefined, even though the answer it printed here
@@ -573,12 +573,12 @@ shift of 1 by 31 places cannot be represented in type 'int'`. Write it
 as `1U << 31` when you want the top bit.
 
 The first line is the strangest. Shifting a 32-bit value left by 32
-places should give 0, since every bit gets shoved off the end. It gave
-1. Run `./shifts 33` and the first line prints 2. The CPU, on both
-aarch64 and x86-64, only looks at the low five bits of the shift count,
-so 32 acts like 0 and 33 acts like 1. That's the hardware's habit. The
-standard says that shifting by the width of the type or more is
-undefined, and a compiler that knows the count ahead of time is free to
+places should give 0, since every bit gets shoved off the end. The
+program printed 1. Run `./shifts 33` and the first line prints 2. The
+CPU, on both aarch64 and x86-64, only looks at the low five bits of the
+shift count, so 32 acts like 0 and 33 acts like 1. That's the hardware's
+habit. The standard says that shifting by the width of the type or more
+is undefined. A compiler that knows the count ahead of time is free to
 give a different answer. Keep the count between 0 and one less than the
 width.
 
@@ -658,10 +658,10 @@ for 0 and -1 before you divide.
 ## Ask The Compiler
 
 Checking an operation before doing it works, but you have to get the
-check right for each operation and each type. There is an easier way
-for addition, subtraction and multiplication: ask the compiler to do the
+check right for each operation and each type. There is an easier way for
+addition, subtraction and multiplication: ask the compiler to do the
 arithmetic and tell you if it wrapped. gcc and clang have built-ins for
-that, and this program puts them to work:
+that. This program puts them to work:
 
 ```C
 /* checked.c - find out whether the arithmetic wrapped */
@@ -738,10 +738,10 @@ the header.
 
 Compile every program in this article with `-fsanitize=undefined` and
 see what the sanitizer has to say that the compiler didn't. Then run
-`shifts` and `divide` on a second kind of machine, if you can borrow
-one, a Raspberry Pi, a cloud server or your friend's laptop, and see
-which of my results survive the trip. Write `checked_sub()` and give it
-a test that fails when it should.
+`shifts` and `divide` on a second kind of machine. Borrow a Raspberry
+Pi, a cloud server or your friend's laptop, and see which of my results
+survive the trip. Write `checked_sub()` and give it a test that fails
+when it should.
 
 Then go looking for the bug in a program you already wrote. The most
 likely hiding place is a `for` loop with an unsigned counter, a size
