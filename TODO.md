@@ -228,9 +228,9 @@ Ideas and loose ends that don't belong in the article being written.
   implementation-defined versus unspecified behavior, what `-std=` and
   `-pedantic` do, which features are gcc extensions that a later standard
   adopted (`0b` in C23), and where to read the actual text. Check the
-  facts against the standard before writing; no stub for this one until Erik says go.
-  The sibling stub `c/compiler-evolution` (the history of C compilers,
-  2026-11-17) pairs with it and with `c/compiler-tool-chain`.
+  facts against the standard before writing; no stub for this one until
+  Erik says go. The sibling stub `c/compiler-evolution` (the history of C
+  compilers, 2026-11-17) pairs with it and with `c/compiler-tool-chain`.
 
 ## Virtual memory
 
