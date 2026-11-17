@@ -217,12 +217,12 @@ int main(int argc, char *argv[])
     uint32_t count = 1U << 30;
     uint32_t bytes = count * (uint32_t)sizeof(int);
 
-    printf("u + 1  = %u  0x%x\n", u + 1, u + 1);
+    printf("u + 1  = %u  0x%08x\n", u + 1, u + 1);
     c++;
-    printf("c++    = %u  0x%x\n", c, c);
-    printf("0u - 1 = %u  0x%x\n", 0U - 1, 0U - 1);
-    printf("bytes  = %u  0x%x\n", bytes, bytes);
-    printf("wide   = %zu  0x%zx\n", (size_t)count * sizeof(int),
+    printf("c++    = %u  0x%02x\n", c, c);
+    printf("0u - 1 = %u  0x%08x\n", 0U - 1, 0U - 1);
+    printf("bytes  = %u  0x%08x\n", bytes, bytes);
+    printf("wide   = %zu  0x%016zx\n", (size_t)count * sizeof(int),
            (size_t)count * sizeof(int));
     return EXIT_SUCCESS;
 }
@@ -231,11 +231,11 @@ int main(int argc, char *argv[])
 ```console
 $ gcc -Wall -o wrap wrap.c
 $ ./wrap
-u + 1  = 0  0x0
-c++    = 0  0x0
+u + 1  = 0  0x00000000
+c++    = 0  0x00
 0u - 1 = 4294967295  0xffffffff
-bytes  = 0  0x0
-wide   = 4294967296  0x100000000
+bytes  = 0  0x00000000
+wide   = 4294967296  0x0000000100000000
 ```
 
 The first three lines are the clock at work. Going one below zero lands
@@ -245,13 +245,14 @@ on the biggest number the type can hold, the same way a minute before
 
 The last two lines are the one that bites. A billion `int`s need 4
 billion bytes, which doesn't fit in 32 bits, so the 32-bit product wraps
-to zero. In hex it's easy to see what went missing: `0x100000000` is a
-one with 32 zero bits behind it, and the 32-bit product kept only the
-zeros. Hand that size to `malloc()` and you get a valid pointer to a
-block far too small, and then a loop that writes a billion integers into
-it. That's the trap that `calloc()` caught in [borrowing
-memory][memory-allocation]. The arithmetic there was done in 64 bits,
-and the numbers were bigger, but the mechanism is the same.
+to zero. In hex it's easy to see what went missing: the wide result,
+`0x0000000100000000`, is a one with 32 zero bits behind it, and the
+32-bit product kept only the zeros. Hand that size to `malloc()` and you
+get a valid pointer to a block far too small, and then a loop that
+writes a billion integers into it. That's the trap that `calloc()`
+caught in [borrowing memory][memory-allocation]. The arithmetic there
+was done in 64 bits, and the numbers were bigger, but the mechanism is
+the same.
 
 ## Signed Overflow Is Undefined
 
@@ -442,14 +443,16 @@ bug it will be in a loop condition in somebody else's code.
 The promotion shows in the next two lines. The sum of two `unsigned
 char`s is computed as an `int`, so `x + y` is 300. Storing the sum back
 into an `unsigned char` keeps only the low 8 bits, and 300 becomes 44.
-Here are the numbers in hex and binary:
+Here are the numbers in hex and binary, padded to 16 bits so the columns
+line up. (An `int` has 32 bits, but 16 are enough to show what happens.)
 
 ```
                          decimal  hex                 binary
-    x, an unsigned char      200  0xc8            0b11001000
-    y, an unsigned char      100  0x64            0b01100100
+    x, an unsigned char      200  0x00c8  0b0000000011001000
+    y, an unsigned char      100  0x0064  0b0000000001100100
     x + y, an int            300  0x012c  0b0000000100101100
-    z, an unsigned char       44  0x2c            0b00101100  ◄ the low 8 bits
+                                                    ^^^^^^^^ z keeps these
+    z, an unsigned char       44  0x002c  0b0000000000101100
 ```
 
 The sum needs nine bits and an `unsigned char` has eight, so the top bit
@@ -479,7 +482,7 @@ int main(int argc, char *argv[])
     size_t n = 3;
 
     for (size_t i = n - 1; i >= 0; i--) {
-        printf("%zu  0x%zx\n", i, i);
+        printf("%zu  0x%016zx\n", i, i);
         if (i > 5) {
             printf("...and it never stops\n");
             break;
@@ -496,9 +499,9 @@ countdown.c:9:30: warning: comparison of unsigned expression in '>= 0' is always
     9 |     for (size_t i = n - 1; i >= 0; i--) {
       |                              ^~
 $ ./countdown
-2  0x2
-1  0x1
-0  0x0
+2  0x0000000000000002
+1  0x0000000000000001
+0  0x0000000000000000
 18446744073709551615  0xffffffffffffffff
 ...and it never stops
 ```
@@ -545,7 +548,7 @@ int main(int argc, char *argv[])
         printf("-1 < sizeof(int)\n");
     else
         printf("-1 >= sizeof(int)\n");
-    printf("sizeof(int) - 5 = %zu  0x%zx\n", difference, difference);
+    printf("sizeof(int) - 5 = %zu  0x%016zx\n", difference, difference);
     printf("bytes    = %zu\n", sizeof(values));
     printf("elements = %zu\n", sizeof(values) / sizeof(*values));
     return EXIT_SUCCESS;

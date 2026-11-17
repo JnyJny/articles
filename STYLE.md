@@ -286,6 +286,14 @@ best.
   binary. gcc 14 accepts `0b` at any `-std` and warns under `-pedantic`
   before C23.
 
+  Zero-pad hex and binary to the width of the type, so columns line up
+  and the width shows: `0x00c8` and `0b0000000011001000`, never `0xc8`
+  and `0b11001000` in a column of 16-bit values. A byte is two hex
+  digits and eight bits, a 32-bit value is eight hex digits, and a
+  `size_t` is sixteen. Print it that way too (`0x%08x`, `0x%016zx`). When
+  a table has values of different types, pad them all to the widest one
+  and say so. `%p` output is whatever printf gives you.
+
 - **Region names are bold capitals in prose:** **TEXT**, **DATA**,
   **BSS**, **HEAP**, **STACK**. In diagrams they are capitals without
   bold, since a diagram can't carry it.
