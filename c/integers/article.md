@@ -11,7 +11,7 @@ Next: none
 # Fold, Spindle, and Mutilate: C Integers
 
 [Punch cards][punched-card] used to carry a warning: do not fold,
-spindle or mutilate. The card was the data, and a damaged card meant a
+spindle or mutilate. The holes were the data, and a damaged card meant a
 wrong answer, handed back with total confidence. Integers in C are like
 that. The `int` looks like the safest thing in the language. You learned
 to count with it. Then C hands you a whole set of ways to get the wrong
