@@ -10,15 +10,15 @@ Next: none
 
 # Do Not Fold, Spindle, or Mutilate: C Integers
 
-[Punch cards][punched-card] used to carry a warning: do not fold, spindle
-or mutilate.
-The card was the data, and a damaged card meant a wrong answer, handed
-back with total confidence. Integers in C are like that. The `int` looks
-like the safest thing in the language, since you learned to count with
-it, and it comes with a whole set of ways to get the wrong answer
-without a word of complaint from the compiler. In this article we're
-going to fold, spindle and mutilate some integers on purpose, so that
-you can recognize the damage when it shows up in your own programs.
+[Punch cards][punched-card] used to carry a warning: do not fold,
+spindle or mutilate. The card was the data, and a damaged card meant a
+wrong answer, handed back with total confidence. Integers in C are like
+that. The `int` looks like the safest thing in the language, since you
+learned to count with it, and it comes with a whole set of ways to get
+the wrong answer without a word of complaint from the compiler. In this
+article we're going to fold, spindle and mutilate some integers on
+purpose, so that you can recognize the damage when it shows up in your
+own programs.
 
 **Me**: a crusty Unix system programmer who has been surprised by
 arithmetic more often than I'd like.
