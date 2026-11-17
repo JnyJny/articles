@@ -6,7 +6,7 @@ import dataclasses
 import re
 from collections.abc import Callable
 
-from .model import CODE, LINKS, META, PROSE, Article, Finding
+from .model import CODE, LINKS, META, PROSE, Article, Finding, Line
 
 Hits = list[tuple[int, str]]
 Rule = Callable[[Article], Hits]
@@ -71,6 +71,7 @@ ASSIGNED_ALLOCATION = re.compile(
 )
 FUNCTION_DEFINITION = re.compile(r"^[A-Za-z_][\w\s*]*?\b(\w+)\s*\(.*\)\s*\{?\s*$")
 COMPARATOR = re.compile(r"^(?:compare|cmp)", re.IGNORECASE)
+MAIN_DEFINITION = re.compile(r"^(?:int|void)\s+main\s*\(")
 STRUCT_TYPEDEF = re.compile(
     r"typedef\s+(?:struct|union|enum)\b[^;{]*\{[^}]*\}\s*(\w+)\s*;",
 )
@@ -323,6 +324,37 @@ def c_status_codes(article: Article) -> Hits:
             function = defined.group(1)
         if BARE_STATUS.search(line.text) and not COMPARATOR.match(function):
             hits.append((line.number, snippet(line.text)))
+    return hits
+
+
+def c_blocks(article: Article) -> list[list[Line]]:
+    """Group the lines of C code into the blocks they were written in."""
+    blocks: list[list[Line]] = []
+    for line in article.c_code():
+        if blocks and line.number == blocks[-1][-1].number + 1:
+            blocks[-1].append(line)
+        else:
+            blocks.append([line])
+    return blocks
+
+
+@rule("c-main-first")
+def c_main_first(article: Article) -> Hits:
+    """In a demo program main() comes first and helpers follow it."""
+    hits: Hits = []
+    for block in c_blocks(article):
+        main_at = next(
+            (i for i, line in enumerate(block) if MAIN_DEFINITION.match(line.text)),
+            None,
+        )
+        if main_at is None:
+            continue
+        hits.extend(
+            (line.number, snippet(line.text))
+            for line in block[:main_at]
+            if FUNCTION_DEFINITION.match(line.text)
+            and not line.text.startswith((" ", "\t", "#"))
+        )
     return hits
 
 

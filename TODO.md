@@ -18,7 +18,7 @@ Ideas and loose ends that don't belong in the article being written.
 - `tools/` (2026-11-15) holds `article-tools`, made from Erik's python
   package cookiecutter, rendered with hooks off so nothing touched GitHub.
   `article-tools check` is the pre-push gate (links and diagrams).
-  `article-tools audit` is the style sweep, 21 rules, advice only. Open
+  `article-tools audit` is the style sweep, 22 rules, advice only. Open
   questions:
   - `tools/accepted.toml` holds the findings Erik has accepted, 17 of
     them so far: "modern", "just looking, not touching", the `int* p`
@@ -27,6 +27,9 @@ Ideas and loose ends that don't belong in the article being written.
     "simply" (Erik will revisit), the `[this]` link in `packaging-with-poetry`
     (a pun? accept it if so) and 9 tab characters in table rows of
     `how-i-write-main`.
+  - `c-main-first` (2026-11-17) flags the two `birthday()` programs in
+    `pointers`, which define the helper above `main()`. It is Erik's
+    published text, so reordering them is his call.
   - `links --external` found ten dead links on its first run, all fixed:
     nine `blob/master` paths in `multi-file-c-program` (now the current
     stubs), `moomooencode.html` (now a Wayback snapshot from 2015), and the

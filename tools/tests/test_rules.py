@@ -58,6 +58,10 @@ BAD = [
     ("c-line-comments", "# T\n" + c_block("int x; // note")),
     ("c-status-codes", "# T\n" + c_block("return 0;")),
     ("c-status-codes", "# T\n" + c_block("exit(1);")),
+    (
+        "c-main-first",
+        "# T\n" + c_block("void help(void) {\n}\nint main(void) {\n    return 0;\n}"),
+    ),
     ("c-uncast-null", "# T\n" + c_block("char *p = NULL;")),
     ("c-typedef-name", "# T\n" + c_block("typedef struct { int a; } point;")),
     ("c-typedef-name", "# T\n" + c_block("typedef unsigned int uint;")),
@@ -90,6 +94,15 @@ GOOD = [
         "# T\n" + c_block('int x; /* note */\nputs("http://x"); // see'),
     ),
     ("c-status-codes", "# T\n" + c_block("return EXIT_SUCCESS;")),
+    (
+        "c-main-first",
+        "# T\n"
+        + c_block(
+            "void help(void);\nint main(void) {\n    return 0;\n}\n"
+            "void help(void) {\n}",
+        ),
+    ),
+    ("c-main-first", "# T\n" + c_block("void help(void) {\n}")),
     ("c-uncast-null", "# T\n" + c_block("char *p = (char *)NULL;\n#define NULL 0")),
     (
         "c-typedef-name",
@@ -194,3 +207,20 @@ def test_line_text_outside_the_article_is_empty() -> None:
     assert line_text(parsed, 1) == "# T"
     assert not line_text(parsed, 0)
     assert not line_text(parsed, 99)
+
+
+def test_main_first_judges_each_block_on_its_own() -> None:
+    """A helper in one block is fine when main() is in another block."""
+    helper = c_block("void help(void) {\n}")
+    program = c_block("int main(void) {\n    return 0;\n}")
+    assert not hits("c-main-first", "# T\n" + helper + program)
+
+
+def test_main_first_names_the_helper_line() -> None:
+    """The finding points at the helper defined above main(), not at main()."""
+    code = (
+        "#include <stdio.h>\nint twice(int x)\n{\n    return x * 2;\n}\n"
+        "int main(void) {\n}"
+    )
+    found = hits("c-main-first", "# T\n" + c_block(code))
+    assert [line for line, _ in found] == [4]
