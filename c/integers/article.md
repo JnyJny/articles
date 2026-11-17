@@ -10,7 +10,8 @@ Next: none
 
 # Do Not Fold, Spindle, or Mutilate: C Integers
 
-Punch cards used to carry a warning: do not fold, spindle or mutilate.
+[Punch cards][punched-card] used to carry a warning: do not fold, spindle
+or mutilate.
 The card was the data, and a damaged card meant a wrong answer, handed
 back with total confidence. Integers in C are like that. The `int` looks
 like the safest thing in the language, since you learned to count with
@@ -758,6 +759,7 @@ When you're ready for the larger question of why every piece of data
 needs a type to begin with, [that story is waiting][data-types].
 
 <!-- Links -->
+[punched-card]: https://en.wikipedia.org/wiki/Punched_card
 [twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement
 [memory-allocation]: ../memory-allocation/article.md
 [gcc-instrumentation]: https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
