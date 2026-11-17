@@ -13,12 +13,11 @@ Next: none
 [Punch cards][punched-card] used to carry a warning: do not fold,
 spindle or mutilate. The card was the data, and a damaged card meant a
 wrong answer, handed back with total confidence. Integers in C are like
-that. The `int` looks like the safest thing in the language, since you
-learned to count with it, and it comes with a whole set of ways to get
-the wrong answer without a word of complaint from the compiler. In this
-article we're going to fold, spindle and mutilate some integers on
-purpose, so that you can recognize the damage when it shows up in your
-own programs.
+that. The `int` looks like the safest thing in the language. You learned
+to count with it. Then C hands you a whole set of ways to get the wrong
+answer, and the compiler won't say a word. In this article we're going
+to fold, spindle and mutilate some integers on purpose, so that you can
+recognize the damage when it shows up in your own programs.
 
 **Me**: a crusty Unix system programmer who has been surprised by
 arithmetic more often than I'd like.
