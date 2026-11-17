@@ -35,11 +35,13 @@ Let's start breaking things.
 
 Eight bits make a byte, and a byte has 256 possible patterns. Which
 numbers those patterns stand for is up to the type of the variable that
-holds them. As an unsigned integer, the patterns `00000000` through
-`11111111` mean 0 through 255. As a signed integer, nearly every
-machine you will meet uses [two's complement][twos-complement], where
-the top bit counts as -128 instead of +128. This program prints each
-pattern both ways:
+holds them. A word on notation before we go on: I write binary with a
+`0b` prefix and hex with `0x`, the way C does, and a number with no
+prefix is decimal. As an unsigned integer, the patterns `0b00000000`
+through `0b11111111` mean 0 through 255. As a signed integer, nearly
+every machine you will meet uses [two's complement][twos-complement],
+where the top bit counts as -128 instead of +128. This program prints
+each pattern both ways:
 
 ```C
 /* bits.c - the same bits, read two ways */
@@ -51,6 +53,7 @@ void show(int8_t value)
 {
     uint8_t bits = (uint8_t)value;
 
+    fputs("0b", stdout);
     for (int i = 7; i >= 0; i--)
         fputc((bits >> i) & 1 ? '1' : '0', stdout);
     printf("  %4d  %3u\n", value, bits);
@@ -69,37 +72,37 @@ int main(void)
 ```console
 $ gcc -Wall -Wextra -o bits bits.c
 $ ./bits
-00000000     0    0
-00000001     1    1
-00000010     2    2
-01111110   126  126
-01111111   127  127
-10000000  -128  128
-10000001  -127  129
-11111110    -2  254
-11111111    -1  255
+0b00000000     0    0
+0b00000001     1    1
+0b00000010     2    2
+0b01111110   126  126
+0b01111111   127  127
+0b10000000  -128  128
+0b10000001  -127  129
+0b11111110    -2  254
+0b11111111    -1  255
 ```
 
-Read the last row. `11111111` is 255 as an unsigned integer and -1 as a
-signed one. The bits are identical. Nothing in memory records which
+Read the last row. `0b11111111` is 255 as an unsigned integer and -1 as
+a signed one. The bits are identical. Nothing in memory records which
 reading is right. The type on the variable decides, and the compiler
 picks machine instructions to match.
 
 Two facts from that table will matter for the rest of this article.
 First, -1 is all ones, in every width. Second, look at the jump from
-`01111111` to `10000000`, where 127 turns into -128 with one more step.
-The negative side has one more value than the positive side, so there is
-no +128 to be the mirror image of -128. We'll fall off that cliff more
-than once.
+`0b01111111` to `0b10000000`, where 127 turns into -128 with one more
+step. The negative side has one more value than the positive side, so
+there is no +128 to be the mirror image of -128. We'll fall off that
+cliff more than once.
 
 To negate a number in two's complement, flip every bit and add one. Try
-it on 1: flip `00000001` to `11111110`, add one, and you get `11111111`,
-which is -1. The reason machines work this way is that the adder doesn't
-need to know about signs. Add one to `11111111` and the carry falls off
-the end, leaving `00000000`, which is the right answer for both
-readings. One circuit serves signed and unsigned arithmetic, and the
-side effects of that economy are the subject of the rest of this
-article.
+it on 1: flip `0b00000001` to `0b11111110`, add one, and you get
+`0b11111111`, which is -1. The reason machines work this way is that the
+adder doesn't need to know about signs. Add one to `0b11111111` and the
+carry falls off the end, leaving `0b00000000`, which is the right answer
+for both readings. One circuit serves signed and unsigned arithmetic,
+and the side effects of that economy are the subject of the rest of
+this article.
 
 ## How Big Is an int?
 
@@ -451,8 +454,8 @@ from the left, which gives 1073741820.
 Shifting 1 left by 31 puts a one in the sign bit of an `int`. The
 standard calls that undefined, even though the answer it printed here
 looks reasonable. Run it under `-fsanitize=undefined` and you get `left
-shift of 1 by 31 places cannot be represented in type 'int'`. Write it as
-`1U << 31` when you want the top bit.
+shift of 1 by 31 places cannot be represented in type 'int'`. Write it
+as `1U << 31` when you want the top bit.
 
 The first line is the strangest. Shifting a 32-bit value left by 32
 places should give 0, since every bit gets shoved off the end. It gave

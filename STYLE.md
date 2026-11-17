@@ -270,6 +270,13 @@ best.
 - **Sizes use KB, MB and GB for the 1024-based units.** No KiB or MiB.
   Say 128 KB, not 128 KiB.
 
+- **Number bases.** Binary gets a `0b` prefix and hex gets `0x`, as in C,
+  every time, in prose and in output: `0b01111111`, never bare
+  `01111111`. Every other number is decimal. Don't acknowledge octal if
+  it can be avoided, and don't write a leading zero, which C would read
+  as octal. The `0b` prefix is standard in C23 and a gcc extension
+  before that.
+
 - **Region names are bold capitals in prose:** **TEXT**, **DATA**,
   **BSS**, **HEAP**, **STACK**. In diagrams they are capitals without
   bold, since a diagram can't carry it.
