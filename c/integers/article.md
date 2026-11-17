@@ -41,10 +41,11 @@ prefix is decimal. As an unsigned integer, the patterns `0b00000000`
 through `0b11111111` mean 0 through 255. As a signed integer, nearly
 every machine you will meet uses [two's complement][twos-complement],
 where the top bit counts as -128 instead of +128. This program prints
-each pattern both ways:
+each pattern in binary and in hex, followed by the signed and unsigned
+readings:
 
 ```C
-/* bits.c - the same bits, read two ways */
+/* bits.c - the same bits, written and read several ways */
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,28 +68,35 @@ void show(int8_t value)
     fputs("0b", stdout);
     for (int i = 7; i >= 0; i--)
         fputc((bits >> i) & 1 ? '1' : '0', stdout);
-    printf("  %4d  %3u\n", value, bits);
+    printf("  0x%02x  %4d  %3u\n", bits, value, bits);
 }
 ```
 
 ```console
 $ gcc -Wall -o bits bits.c
 $ ./bits
-0b00000000     0    0
-0b00000001     1    1
-0b00000010     2    2
-0b01111110   126  126
-0b01111111   127  127
-0b10000000  -128  128
-0b10000001  -127  129
-0b11111110    -2  254
-0b11111111    -1  255
+0b00000000  0x00     0    0
+0b00000001  0x01     1    1
+0b00000010  0x02     2    2
+0b01111110  0x7e   126  126
+0b01111111  0x7f   127  127
+0b10000000  0x80  -128  128
+0b10000001  0x81  -127  129
+0b11111110  0xfe    -2  254
+0b11111111  0xff    -1  255
 ```
 
 Read the last row. `0b11111111` is 255 as an unsigned integer and -1 as
 a signed one. The bits are identical. Nothing in memory records which
 reading is right. The type on the variable decides, and the compiler
 picks machine instructions to match.
+
+The hex column is there to build your intuition for it. Hex is binary
+written more compactly: each hex digit stands for four bits, so a byte
+is always two digits. `0b0111` is `7`, `0b1000` is `8` and `0b1111` is
+`f`, which makes `0b01111111` into `0x7f`, `0b10000000` into `0x80` and
+`0b11111111` into `0xff`. Those three turn up everywhere, and they're
+worth recognizing on sight.
 
 Two facts from that table will matter for the rest of this article.
 First, -1 is all ones, in every width. Second, look at the jump from
