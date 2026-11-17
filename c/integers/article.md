@@ -136,9 +136,9 @@ int main(int argc, char *argv[])
     printf("long long %zu\n", sizeof(long long));
     printf("size_t    %zu\n", sizeof(size_t));
     printf("CHAR_MIN  %d\n", CHAR_MIN);
-    printf("INT_MIN   %d\n", INT_MIN);
-    printf("INT_MAX   %d\n", INT_MAX);
-    printf("UINT_MAX  %u\n", UINT_MAX);
+    printf("INT_MIN   %d  0x%08x\n", INT_MIN, (unsigned int)INT_MIN);
+    printf("INT_MAX   %d  0x%08x\n", INT_MAX, (unsigned int)INT_MAX);
+    printf("UINT_MAX  %u  0x%08x\n", UINT_MAX, UINT_MAX);
     return EXIT_SUCCESS;
 }
 ```
@@ -153,9 +153,9 @@ long      8
 long long 8
 size_t    8
 CHAR_MIN  0
-INT_MIN   -2147483648
-INT_MAX   2147483647
-UINT_MAX  4294967295
+INT_MIN   -2147483648  0x80000000
+INT_MAX   2147483647  0x7fffffff
+UINT_MAX  4294967295  0xffffffff
 ```
 
 The `%zu` format is the one for a `sizeof` result, which has the type
@@ -166,6 +166,12 @@ with the types in `<stdint.h>`: `uint8_t`, `int32_t`, `uint64_t` and
 friends. Their names carry their widths. Use plain `int` for a small
 counter that will never be small enough to worry about, and `size_t` for
 sizes and counts of things in memory.
+
+The hex column shows the shape of those limits. `INT_MAX` is
+`0x7fffffff`, a zero bit followed by 31 ones. `INT_MIN` is `0x80000000`,
+a one bit followed by 31 zeros. `UINT_MAX` is `0xffffffff`, eight hex
+digits and every one of them f, because the type has 32 bits and each
+hex digit covers four.
 
 Now look at the `CHAR_MIN` line. On this machine, plain `char` is
 unsigned. We'll come back to that.
@@ -210,12 +216,13 @@ int main(int argc, char *argv[])
     uint32_t count = 1U << 30;
     uint32_t bytes = count * (uint32_t)sizeof(int);
 
-    printf("u + 1  = %u\n", u + 1);
+    printf("u + 1  = %u  0x%x\n", u + 1, u + 1);
     c++;
-    printf("c++    = %u\n", c);
-    printf("0u - 1 = %u\n", 0U - 1);
-    printf("bytes  = %u\n", bytes);
-    printf("wide   = %zu\n", (size_t)count * sizeof(int));
+    printf("c++    = %u  0x%x\n", c, c);
+    printf("0u - 1 = %u  0x%x\n", 0U - 1, 0U - 1);
+    printf("bytes  = %u  0x%x\n", bytes, bytes);
+    printf("wide   = %zu  0x%zx\n", (size_t)count * sizeof(int),
+           (size_t)count * sizeof(int));
     return EXIT_SUCCESS;
 }
 ```
@@ -223,22 +230,25 @@ int main(int argc, char *argv[])
 ```console
 $ gcc -Wall -o wrap wrap.c
 $ ./wrap
-u + 1  = 0
-c++    = 0
-0u - 1 = 4294967295
-bytes  = 0
-wide   = 4294967296
+u + 1  = 0  0x0
+c++    = 0  0x0
+0u - 1 = 4294967295  0xffffffff
+bytes  = 0  0x0
+wide   = 4294967296  0x100000000
 ```
 
 The first three lines are the clock at work. Going one below zero lands
 on the biggest number the type can hold, the same way a minute before
-00:00 is 23:59. An innocent `0u - 1` becomes 4294967295 that way.
+00:00 is 23:59. An innocent `0u - 1` becomes 4294967295, or
+`0xffffffff`, that way.
 
 The last two lines are the one that bites. A billion `int`s need 4
-billion bytes, which doesn't fit in 32 bits, so the 32-bit product
-wraps to zero. Hand that size to `malloc()` and you get a valid pointer
-to a block far too small, and then a loop that writes a billion integers
-into it. That's the trap that `calloc()` caught in [borrowing
+billion bytes, which doesn't fit in 32 bits, so the 32-bit product wraps
+to zero. In hex it's easy to see what went missing: `0x100000000` is a
+one with 32 zero bits behind it, and the 32-bit product kept only the
+zeros. Hand that size to `malloc()` and you get a valid pointer to a
+block far too small, and then a loop that writes a billion integers into
+it. That's the trap that `calloc()` caught in [borrowing
 memory][memory-allocation]. The arithmetic there was done in 64 bits,
 and the numbers were bigger, but the mechanism is the same.
 
@@ -246,7 +256,8 @@ and the numbers were bigger, but the mechanism is the same.
 
 Signed integers look like they should wrap the same way. On this machine
 `INT_MAX + 1` does print -2147483648, which is what two's complement
-predicts, and the same jump as 3 to -4 in the diagram above. The
+predicts: `0x7fffffff` plus one carries into the sign bit and gives
+`0x80000000`, the same jump as 3 to -4 in the diagram above. The
 standard, however, doesn't promise it. When signed arithmetic overflows,
 the behavior is _undefined_. The compiler is allowed to assume overflow
 never happens, and then to generate code that is only right for programs
@@ -348,15 +359,15 @@ void show(int32_t seconds)
     char text[32];
 
     strftime(text, sizeof(text), "%Y-%m-%d %H:%M:%S", gmtime(&when));
-    printf("%11d  %s UTC\n", seconds, text);
+    printf("%11d  0x%08x  %s UTC\n", seconds, (uint32_t)seconds, text);
 }
 ```
 
 ```console
 $ gcc -Wall -o y2038 y2038.c
 $ ./y2038
- 2147483647  2038-01-19 03:14:07 UTC
--2147483648  1901-12-13 20:45:52 UTC
+ 2147483647  0x7fffffff  2038-01-19 03:14:07 UTC
+-2147483648  0x80000000  1901-12-13 20:45:52 UTC
 ```
 
 One second after 03:14:07 UTC on 19 January 2038, a 32-bit signed
@@ -465,7 +476,7 @@ int main(int argc, char *argv[])
     size_t n = 3;
 
     for (size_t i = n - 1; i >= 0; i--) {
-        printf("%zu\n", i);
+        printf("%zu  0x%zx\n", i, i);
         if (i > 5) {
             printf("...and it never stops\n");
             break;
@@ -482,20 +493,20 @@ countdown.c:9:30: warning: comparison of unsigned expression in '>= 0' is always
     9 |     for (size_t i = n - 1; i >= 0; i--) {
       |                              ^~
 $ ./countdown
-2
-1
-0
-18446744073709551615
+2  0x2
+1  0x1
+0  0x0
+18446744073709551615  0xffffffffffffffff
 ...and it never stops
 ```
 
 An unsigned number is always at least zero, so `i >= 0` can't fail. When
 `i` reaches 0 and gets decremented, it rolls around to the largest
-`size_t`, and the loop carries on into whatever memory `i` indexes. The
-compiler warned again, this time with `-Wtype-limits`, which `-Wextra`
-also turns on. This is the same bug as `strlen(a) - strlen(b)`
-when `b` is the longer string: the subtraction can't go negative, so
-it produces a huge positive number instead.
+`size_t`, sixteen f's in hex, and the loop carries on into whatever
+memory `i` indexes. The compiler warned again, this time with
+`-Wtype-limits`, which `-Wextra` also turns on. This is the same bug as
+`strlen(a) - strlen(b)` when `b` is the longer string: the subtraction
+can't go negative, so it produces a huge positive number instead.
 
 One fix is to test the old value and decrement afterward:
 
@@ -642,11 +653,13 @@ counts backward.
 
 The last two lines are the missing mirror image from the first section.
 The negative side has one more value, so `abs(INT_MIN)` is `INT_MIN`,
-still negative. Negation of `INT_MIN` does the same. Dividing `INT_MIN`
-by -1 should give 2147483648, which doesn't fit in an `int`, and what
-happens next depends on your CPU. This machine returns `INT_MIN` and
-carries on without a word. Run `./divide 0` and it prints
-`INT_MIN / 0 = 0`: the hardware here defines division by zero as zero.
+still negative. Negation of `INT_MIN` does the same: flip every bit of
+`0x80000000` to get `0x7fffffff`, add one, and you are back at
+`0x80000000`. Dividing `INT_MIN` by -1 should give 2147483648, which
+doesn't fit in an `int`, and what happens next depends on your CPU. This
+machine returns `INT_MIN` and carries on without a word. Run `./divide
+0` and it prints `INT_MIN / 0 = 0`: the hardware here defines division
+by zero as zero.
 
 On x86-64, both of those die. `INT_MIN / -1` and `INT_MIN / 0` kill the
 program with SIGFPE, which is a [signal][unix-signals] with a misleading
