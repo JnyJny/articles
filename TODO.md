@@ -217,6 +217,19 @@ Ideas and loose ends that don't belong in the article being written.
 - `memory-allocation` could link its "wrapped around to zero" sentence
   to `c/integers`. Left alone, since Erik is editing that article.
 
+## C standards
+
+- Seed (2026-11-17), from the `0b` correction in `integers`: an article
+  about the C standard from a user's side of the table. Erik stayed out
+  of the standards process and had friends on C++ bodies who made it
+  sound like a nightmare, so the angle is how a working programmer lives
+  with a standard they didn't write, not how it is made. Things the
+  articles already lean on and could point here: undefined versus
+  implementation-defined versus unspecified behavior, what `-std=` and
+  `-pedantic` do, which features are gcc extensions that a later standard
+  adopted (`0b` in C23), and where to read the actual text. Check the
+  facts against the standard before writing; no stub until Erik says go.
+
 ## Virtual memory
 
 - The article is promised by the [address space][address-space]
