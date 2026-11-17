@@ -34,9 +34,9 @@ Let's start breaking things.
 ## Bits Don't Know What They Mean
 
 Eight bits make a byte. Each bit has two possible values, so eight of
-them have 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2 = 256 possible patterns, which
-is 2 to the 8th power. The largest unsigned value is 255, one less than
-the count of patterns, because zero is a pattern too.
+them have 2 to the 8th power possible patterns. Work out how many. The
+largest unsigned value is one less than that count, because zero is a
+pattern too.
 
 Which numbers those patterns stand for is up to the type of the variable
 that holds them. A word on notation before we go on. I write binary with
