@@ -42,6 +42,7 @@ I admire the conviction.
 | Gotos Considered Harmful | Planned |
 | My Time Among the Linker Aliens | Planned |
 | Virtual Memory: The Sacred Mystery | Planned |
+| The Evolution of C Compilers | Planned |
 
 ### Suggested Reading Order
 
