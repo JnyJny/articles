@@ -687,6 +687,13 @@ a test that fails when it should.
 Then go looking for the bug in a program you already wrote. The most
 likely hiding place is a `for` loop with an unsigned counter, a size
 multiplied by a count, or a comparison between an `int` and a `size_t`.
+
+If the shifts left you wanting more, get a copy of [Hacker's
+Delight][hackers-delight] by Henry S. Warren, Jr. It's a book of
+bit-level and arithmetic tricks, such as counting bits and dividing by
+multiplying, and it will bend your brain. I haven't made it to the end
+yet. Read it with a compiler open and run what it shows you.
+
 When you're ready for the larger question of why every piece of data
 needs a type to begin with, [that story is waiting][data-types].
 
@@ -696,3 +703,4 @@ needs a type to begin with, [that story is waiting][data-types].
 [gcc-instrumentation]: https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
 [unix-signals]: ../../unix/signals/article.md
 [data-types]: ../data-types/article.md
+[hackers-delight]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
