@@ -178,6 +178,24 @@ a clock does its arithmetic modulo 24, and unsigned integers do theirs
 modulo 2 to the power of the width. That is a feature. Hash functions,
 ring buffers and sequence numbers depend on it.
 
+Here is a 3-bit counter, small enough to show every value, with the
+unsigned and signed readings of each pattern:
+
+```
+    ┌──────────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┐
+    │ bits     │ 0b000 │ 0b001 │ 0b010 │ 0b011 │ 0b100 │ 0b101 │ 0b110 │ 0b111 │
+    ├──────────┼───────┼───────┼───────┼───────┼───────┼───────┼───────┼───────┤
+    │ unsigned │   0   │   1   │   2   │   3   │   4   │   5   │   6   │   7   │
+    │ signed   │   0   │   1   │   2   │   3   │   -4  │   -3  │   -2  │   -1  │
+    └──────────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┘
+                   ▲                                                       │
+                   └─ ─ ─ ─ ─ ─ ─ ─ ─  7 + 1 wraps to 0 ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘
+```
+
+On the unsigned row, 7 + 1 wraps around to 0, like the clock. The signed
+row wraps at a different place, because the same bits mean something
+else there: 3 + 1 lands on -4. We'll get to that one in a moment.
+
 ```C
 /* wrap.c - unsigned integers roll over */
 #include <limits.h>
@@ -228,7 +246,8 @@ and the numbers were bigger, but the mechanism is the same.
 
 Signed integers look like they should wrap the same way. On this machine
 `INT_MAX + 1` does print -2147483648, which is what two's complement
-predicts. The standard, however, doesn't promise it. When signed
+predicts, and the same jump as 3 to -4 in the diagram above. The
+standard, however, doesn't promise it. When signed
 arithmetic overflows, the behavior is _undefined_, which means the
 compiler is allowed to assume it never happens, and then to generate
 code that is only right for programs where it doesn't.
@@ -411,6 +430,18 @@ bug it will be in a loop condition in somebody else's code.
 The promotion shows in the next two lines. The sum of two `unsigned
 char`s is computed as an `int`, so `x + y` is 300, but storing it back
 into an `unsigned char` keeps only the low 8 bits, and 300 becomes 44.
+Here are the numbers in hex and binary:
+
+```
+                         decimal  hex                 binary
+    x, an unsigned char      200  0xc8            0b11001000
+    y, an unsigned char      100  0x64            0b01100100
+    x + y, an int            300  0x012c  0b0000000100101100
+    z, an unsigned char       44  0x2c            0b00101100  ◄ the low 8 bits
+```
+
+The sum needs nine bits and an `unsigned char` has eight, so the top bit
+of 300 has nowhere to go. What's left, `0x2c`, is 44.
 
 The last line is the `char` we left hanging. Plain `char` can be signed
 or unsigned, and the standard leaves the choice to the compiler. On this
@@ -519,7 +550,21 @@ positions, so -16 >> 2 is -4. That is what gcc does, and it documents
 that it does. The standard calls the result implementation-defined,
 which means a compiler is required to pick something and write down what
 it picked. Shift the same bits as an unsigned integer and zeros come in
-from the left, which gives 1073741820.
+from the left, which gives 1073741820. Here is the same thing in 8 bits,
+so it fits on the page:
+
+```
+                          binary      hex   decimal
+    -16, in 8 bits        0b11110000  0xf0  -16
+    >> 2, sign copied     0b11111100  0xfc  -4
+                            ^^ copies of the sign bit
+    240, in 8 bits        0b11110000  0xf0  240
+    >> 2, zeros in        0b00111100  0x3c  60
+                            ^^ zeros
+```
+
+In 32 bits the unsigned result is `0x3ffffffc`, which is the 1073741820 the
+program printed.
 
 Shifting 1 left by 31 puts a one in the sign bit of an `int`. The
 standard calls that undefined, even though the answer it printed here
@@ -577,9 +622,23 @@ INT_MIN / -1 = -2147483648
 
 If you came from Python, where `-7 // 2` is -4 and `-7 % 2` is 1, this
 is a trap. Python rounds toward negative infinity, and C rounds toward
-zero. The one that gets people is `-1 % 8`, which is -1 in C. Code that
-uses `%` to wrap an index around a ring of 8 slots gets a negative index
-the first time it counts backward.
+zero. Here is -7 / 2, which is -3.5 before the fraction gets thrown
+away:
+
+```
+                          -3.5
+                           ▼
+        ───────┬───────────┼───────────┬───────────►
+              -4                      -3         toward 0
+               ▲                       ▲
+            Python                    C
+         rounds down             rounds toward zero
+```
+
+Python steps left to -4. C steps right to -3, toward zero. The one that
+gets people is `-1 % 8`, which is -1 in C. Code that uses `%` to wrap an
+index around a ring of 8 slots gets a negative index the first time it
+counts backward.
 
 The last two lines are the missing mirror image from the first section.
 The negative side has one more value, so `abs(INT_MIN)` is `INT_MIN`,
