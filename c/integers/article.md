@@ -630,9 +630,70 @@ pointers][pointers-arrays], and [the ways C spells an array][arrays] has
 the rest. When a function needs to know how many elements an array has,
 pass the count as another argument.
 
-There is more to `sizeof` than its type. It's an operator, which makes
-it different from a function, and padding can make a structure larger
-than the sum of its members. Those belong with [what a type
+`sizeof` looks like a function call, and it isn't one. A function runs
+while the program runs, receives the values you pass it and can't be
+handed a type. `sizeof` is an _operator_, like `+` or `*`, a piece of
+the language that the compiler works out for itself. A short program
+shows what that means:
+
+```C
+/* operator.c - sizeof looks like a function call and isn't one */
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+    int counter = 5;
+    size_t first = sizeof(counter++);
+    size_t second = sizeof counter;
+    size_t third = sizeof(long);
+
+    printf("counter = %d\n", counter);
+    printf("%zu %zu %zu\n", first, second, third);
+    return EXIT_SUCCESS;
+}
+```
+
+```console
+$ gcc -Wall -o operator operator.c
+$ ./operator
+counter = 5
+4 4 8
+```
+
+Three things happened. First, `sizeof(counter++)` never ran its operand,
+so `counter` is still 5. The compiler only needed the type of the
+expression to know its size, and a function would have run the
+increment. Second, `sizeof counter` works without parentheses, because
+an expression doesn't need them. Third, `sizeof(long)` took a type. A
+type does need the parentheses, and `sizeof long` is a compile error. A
+function can't take a type at all.
+
+A macro is a third kind of thing. The [preprocessor][cpp] replaces macro
+text before the compiler sees any C, and it knows nothing about types.
+That's why `sizeof` can't be a macro, and why the preprocessor can't use
+it. Ask it a question in an `#if` and you get an error:
+
+```console
+$ cat iftest.c
+#if sizeof(int) == 4
+int four = 1;
+#endif
+$ gcc -c iftest.c
+iftest.c:1:11: error: missing binary operator before token "("
+    1 | #if sizeof(int) == 4
+      |           ^
+```
+
+What a macro can do is give a name to an idiom. You will often see the
+element-count line wrapped up like this: `#define COUNT(a) (sizeof(a) /
+sizeof(*(a)))`. The macro expands to the same text, so it has the same
+blind spot. Hand it a pointer and, on this machine, it divides 8 by 4
+and says 2. gcc catches that one with `-Wsizeof-pointer-div`, which
+`-Wall` turns on.
+
+There is more to say about `sizeof`. Padding can make a structure larger
+than the sum of its members, for one. That belongs with [what a type
 is][data-types].
 
 ## Shifts
@@ -902,5 +963,6 @@ needs a type to begin with, [that story is waiting][data-types].
 [data-types]: ../data-types/article.md
 [pointers-arrays]: ../pointers/article.md#pointers-and-arrays
 [arrays]: ../arrays/article.md
+[cpp]: ../compiler-tool-chain/article.md#cpp
 [portable-assembler]: ../portable-assembler/article.md
 [hackers-delight]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
