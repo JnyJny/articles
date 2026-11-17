@@ -26,6 +26,7 @@ I admire the conviction.
 | [Moving the Edge: brk, sbrk, and the Simplest Allocator](c/memory-allocation-brk/article.md) | Draft |
 | [Borrowing Memory: malloc, free, and the Rest of the Family](c/memory-allocation/article.md) | Draft |
 | [Fold, Spindle, and Mutilate: C Integers](c/integers/article.md) | Draft |
+| [The Portable Assembler: How C Types Pick Instructions](c/portable-assembler/article.md) | Draft |
 | [Pointers II: Everything Is On Fire](c/pointer-pitfalls/article.md) | Stub |
 | Anatomy of C Header Files | Stub |
 | The Compiler Tool Chain | Stub |

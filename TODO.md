@@ -195,6 +195,14 @@ Ideas and loose ends that don't belong in the article being written.
 - The x86-64 results (signed `char`, SIGFPE on `INT_MIN / -1` and on
   division by zero) came from qemu user-mode emulation. Worth a rerun on
   real x86-64 hardware before calling the article published.
+- Split on 2026-11-17: the section that showed how signed and unsigned
+  types compile to different machine instructions (and how width picks
+  the load and store forms) became its own article,
+  `c/portable-assembler/`, because `integers` passed 5,000 words. Erik's
+  framing: C was called the portable assembler, and here the types carry
+  the instruction species in a portable way that each compiler has to map
+  onto its CPU. Checked on aarch64 and x86-64 (qemu); every table row was
+  matched against the assembly gcc 14 generated from the article's code.
 - Left out on purpose, and where each goes:
   - `sizeof` as an operator, `sizeof(*p)` working with `p` unset, arrays
     decaying to pointers, padding in structures: the `data-types` stub.
