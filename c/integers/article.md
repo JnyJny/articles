@@ -692,8 +692,8 @@ If the shifts left you wanting more, get a copy of [Hacker's
 Delight][hackers-delight] by Henry S. Warren, Jr. It's a book of
 bit-level and arithmetic tricks, such as counting bits and dividing by
 multiplying, and it will bend your brain. I skim it for the operations
-relevant to whatever I'm hacking on, and it is very good work. Read it
-with a compiler open and run what it shows you.
+relevant to whatever I'm hacking on, and it is very good work. Keep a
+compiler handy and an editor open, and run what it shows you.
 
 When you're ready for the larger question of why every piece of data
 needs a type to begin with, [that story is waiting][data-types].
