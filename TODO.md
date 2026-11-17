@@ -209,6 +209,11 @@ Ideas and loose ends that don't belong in the article being written.
 - Story seed for the Year 2038 paragraph in `integers`: Erik has done
   real work to avoid the 2038 problem (2026-11-17). Details unknown; ask
   Erik. Also a possible Y2K contrast, since he lived through it.
+  His summary (2026-11-17): mitigation is generally making `time_t` a
+  64-bit integer and recompiling, which is "not very sexy". Firmware is
+  the bigger problem because it is rarely updated after it is burned in.
+  He expects the important things to break and be replaced within about
+  ten years. The existing 2038 example stays as is.
 - `memory-allocation` could link its "wrapped around to zero" sentence
   to `c/integers`. Left alone, since Erik is editing that article.
 
