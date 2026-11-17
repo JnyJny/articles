@@ -89,7 +89,7 @@ $ ./bits
 Read the last row. `0b11111111` is 255 as an unsigned integer and -1 as
 a signed one. The bits are identical. Nothing in memory records which
 reading is right. The type on the variable decides, and the compiler
-picks machine instructions to match.
+picks machine instructions to match. We'll look at some of them shortly.
 
 The hex column is there to build your intuition for it. Hex is binary
 written more compactly: each hex digit stands for four bits, so a byte
@@ -461,6 +461,149 @@ prints `c     = -56`, because there `char` is signed and 200 wraps to
 -56. If you keep numbers in a variable, say `signed char` or `unsigned
 char` (or `int8_t` or `uint8_t`), and leave plain `char` for text.
 
+## Types Choose the Instructions
+
+Back in the first section I said the type tells the compiler how to read
+the bits. That can sound abstract until you see what the compiler does
+with the information. A type turns into a choice of machine instruction.
+Change `int32_t` to `uint32_t` in a function and the compiler hands the
+CPU a different instruction. Here is a file of tiny function pairs that
+differ only in their types:
+
+```C
+/* kinds.c - the same source with different types: compile it, don't run it */
+#include <stdint.h>
+
+int32_t add_signed(int32_t a, int32_t b)
+{
+    return a + b;
+}
+
+uint32_t add_unsigned(uint32_t a, uint32_t b)
+{
+    return a + b;
+}
+
+int32_t shift_signed(int32_t x)
+{
+    return x >> 2;
+}
+
+uint32_t shift_unsigned(uint32_t x)
+{
+    return x >> 2;
+}
+
+int32_t divide_signed(int32_t a, int32_t b)
+{
+    return a / b;
+}
+
+uint32_t divide_unsigned(uint32_t a, uint32_t b)
+{
+    return a / b;
+}
+
+int less_signed(int32_t a, int32_t b)
+{
+    return a < b;
+}
+
+int less_unsigned(uint32_t a, uint32_t b)
+{
+    return a < b;
+}
+
+int32_t load_int8(const int8_t *p)
+{
+    return *p;
+}
+
+int32_t load_uint8(const uint8_t *p)
+{
+    return *p;
+}
+
+int32_t load_char(const char *p)
+{
+    return *p;
+}
+
+void store_byte(uint8_t *p, int32_t value)
+{
+    *p = (uint8_t)value;
+}
+```
+
+Compile it to assembly and look at the result. The `-S` flag stops the
+compiler after it writes the assembly, and `-O2` keeps the output short.
+On x86-64 I also used `-masm=intel`, which puts the destination first
+the way the aarch64 assembler does.
+
+```console
+$ gcc -O2 -S -o kinds.s kinds.c
+$ grep -v '^\s*\.' kinds.s
+```
+
+Here are the instructions that matter, from gcc 14 on aarch64 and on
+x86-64. Your registers and your compiler version may differ, but each
+pair should differ the same way.
+
+| The C | aarch64 | x86-64 |
+|-------|---------|--------|
+| `a + b`, signed | `add w0, w0, w1` | `lea eax, [rdi+rsi]` |
+| `a + b`, unsigned | `add w0, w0, w1` | `lea eax, [rdi+rsi]` |
+| `x >> 2`, signed | `asr w0, w0, 2` | `sar eax, 2` |
+| `x >> 2`, unsigned | `lsr w0, w0, 2` | `shr eax, 2` |
+| `a / b`, signed | `sdiv w0, w0, w1` | `idiv esi` |
+| `a / b`, unsigned | `udiv w0, w0, w1` | `div esi` |
+| `a < b`, signed | `cmp`, then `cset w0, lt` | `cmp`, then `setl al` |
+| `a < b`, unsigned | `cmp`, then `cset w0, cc` | `cmp`, then `setb al` |
+| load an `int8_t` | `ldrsb w0, [x0]` | `movsx eax, BYTE PTR [rdi]` |
+| load a `uint8_t` | `ldrb w0, [x0]` | `movzx eax, BYTE PTR [rdi]` |
+| load a `char` | `ldrb w0, [x0]` | `movsx eax, BYTE PTR [rdi]` |
+| store a byte | `strb w1, [x0]` | `mov BYTE PTR [rdi], sil` |
+
+Read the table a pair at a time. Addition is the one place where the
+type makes no difference. Signed and unsigned `a + b` compile to the
+same instruction, which is the economy from the first section: one
+circuit serves both readings. (gcc spells the addition `lea` on x86-64.
+Both functions get the same one.)
+
+Everything else splits. Right shifts get two instructions. The signed
+shift is an _arithmetic_ shift, `asr` or `sar`, which copies the sign
+bit into the vacated positions. The unsigned shift is a _logical_ shift,
+`lsr` or `shr`, which brings in zeros. We'll see what that does to
+numbers in the section on shifts. Division gets two instructions as
+well, and x86-64 has to prepare for each: a `cdq` that sign-extends
+`eax` into `edx` before the signed `idiv`, and an `xor edx, edx` that
+zeroes `edx` before the unsigned `div`.
+
+Comparisons use the same `cmp` and test different conditions after it:
+`lt` or `setl` for signed, and `cc` or `setb` for unsigned, which is how
+the CPU spells "below". That's why `-1 < 1u` came out false. Once the -1
+was converted to unsigned, the compiler picked the unsigned condition,
+and `0xffffffff` is not below 1.
+
+The loads are where the `char` surprise comes from. `ldrsb` and `movsx`
+_sign-extend_ a byte, copying its top bit up through the register, and
+`ldrb` and `movzx` _zero-extend_ it. The byte `0xc8` becomes -56 when it
+is loaded with one and 200 when it's loaded with the other. Look at the
+`char` row. On aarch64, gcc loads a plain `char` with `ldrb`, so it's
+unsigned. On x86-64, it uses `movsx`, so it's signed. The source code is
+the same and the instruction is different.
+
+The store at the bottom explains the 300 that became 44. A byte store
+writes the low 8 bits of a register and nothing else. Nothing in the
+program computes 300 modulo 256. The `strb` instruction only has room
+for eight bits.
+
+None of this changes how you write C. It does explain why the same bits
+behave differently depending on the type you declared, and why a cast is
+more than a label: a cast can change the instruction. The next time a
+result surprises you, compile the function with `-S` and look at which
+instruction the type picked.
+
 ## Counting Down With size_t
 
 A `size_t` is unsigned, and a loop that counts down to zero with it is
@@ -663,10 +806,11 @@ by zero as zero.
 
 On x86-64, both of those die. `INT_MIN / -1` and `INT_MIN / 0` kill the
 program with SIGFPE, which is a [signal][unix-signals] with a misleading
-name, since there is no floating point involved. Both cases are
-undefined in C. The CPUs just answer differently. If the divisor comes
-from outside your program, a file, a socket or a command line, check
-for 0 and -1 before you divide.
+name, since there is no floating point involved. The culprit is the
+`idiv` instruction from the section on types, and aarch64's `sdiv`
+doesn't trap. Both cases are undefined in C. The CPUs just answer
+differently. If the divisor comes from outside your program, a file, a
+socket or a command line, check for 0 and -1 before you divide.
 
 ## Ask The Compiler
 
