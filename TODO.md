@@ -184,7 +184,7 @@ Ideas and loose ends that don't belong in the article being written.
 
 ## Integers
 
-- Drafted 2026-11-17 as `c/integers/` ("Do Not Fold, Spindle, or Mutilate:
+- Drafted 2026-11-17 as `c/integers/` ("Fold, Spindle, and Mutilate:
   C Integers"), waiting for Erik's edit pass. Erik's pick over pointer
   pitfalls. Covers two's complement, type sizes and `<stdint.h>`, unsigned
   wraparound (with the `count * sizeof(int)` tie to `memory-allocation`),

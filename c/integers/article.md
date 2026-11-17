@@ -8,7 +8,7 @@ Prerequisites: memory-allocation
 Next: none
 -->
 
-# Do Not Fold, Spindle, or Mutilate: C Integers
+# Fold, Spindle, and Mutilate: C Integers
 
 [Punch cards][punched-card] used to carry a warning: do not fold,
 spindle or mutilate. The card was the data, and a damaged card meant a
