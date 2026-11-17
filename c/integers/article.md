@@ -170,13 +170,13 @@ for a small counter that will never be small enough to worry about, and
 Now look at the `CHAR_MIN` line. On this machine, plain `char` is
 unsigned. We'll come back to that.
 
-## The Odometer
+## The Clock
 
-An unsigned integer that runs off the top comes back around to zero,
-like a car odometer rolling over from 99999 to 00000. The standard
-defines this: unsigned arithmetic is done modulo 2 to the power of the
-width. That is a feature. Hash functions, ring buffers and sequence
-numbers depend on it.
+An unsigned integer that runs off the top comes back around to zero, the
+way a 24-hour clock goes from 23:59 to 00:00. The standard defines this:
+a clock does its arithmetic modulo 24, and unsigned integers do theirs
+modulo 2 to the power of the width. That is a feature. Hash functions,
+ring buffers and sequence numbers depend on it.
 
 ```C
 /* wrap.c - unsigned integers roll over */
@@ -212,9 +212,9 @@ bytes  = 0
 wide   = 4294967296
 ```
 
-The first three lines are the odometer at work. Going one below zero
-lands on the biggest number the type can hold, which is how an innocent
-`0u - 1` becomes 4294967295.
+The first three lines are the clock at work. Going one below zero lands
+on the biggest number the type can hold, the same way a minute before
+00:00 is 23:59, which is how an innocent `0u - 1` becomes 4294967295.
 
 The last two lines are the one that bites. A billion `int`s need 4
 billion bytes, which doesn't fit in 32 bits, so the 32-bit product
@@ -298,6 +298,56 @@ Check against the limit before the arithmetic, not after. There is also
 makes this program print 1, and I'd use it only to buy time while
 fixing the code, because it changes the language for every file you
 compile with it, whether or not that file's author knew.
+
+The most famous signed overflow hasn't happened yet. Unix keeps time as
+a count of seconds since 1 January 1970, and for a long time that count
+was a signed 32-bit integer on many systems. This program shows the last
+second such a counter can hold and the second after it:
+
+```C
+/* y2038.c - a 32-bit signed count of seconds since 1970 */
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void show(int32_t seconds);
+
+int main(int argc, char *argv[])
+{
+    int32_t last = INT32_MAX;
+    int32_t next = (int32_t)((uint32_t)last + 1);   /* wrap in unsigned */
+
+    show(last);
+    show(next);
+    return EXIT_SUCCESS;
+}
+
+void show(int32_t seconds)
+{
+    time_t when = seconds;
+    char text[32];
+
+    strftime(text, sizeof(text), "%Y-%m-%d %H:%M:%S", gmtime(&when));
+    printf("%11d  %s UTC\n", seconds, text);
+}
+```
+
+```console
+$ gcc -Wall -o y2038 y2038.c
+$ ./y2038
+ 2147483647  2038-01-19 03:14:07 UTC
+-2147483648  1901-12-13 20:45:52 UTC
+```
+
+One second after 03:14:07 UTC on 19 January 2038, a 32-bit signed
+counter wraps to its most negative value, which the calendar reads as
+December 1901. The clock jumps back about 136 years. The 64-bit
+`time_t` on this machine is fine, and the program squeezes the count
+through an `int32_t` to show what a narrower counter does. I did the
+addition in unsigned, where wrapping is defined, and converted the
+result back, which gcc defines as wrapping. Doing it in `int32_t` would
+be the undefined behavior this section is about.
 
 ## When Signed Meets Unsigned
 
