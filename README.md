@@ -25,6 +25,7 @@ I admire the conviction.
 | [A Map of Memory: The Process Address Space](c/address-space/article.md) | Draft |
 | [Moving the Edge: brk, sbrk, and the Simplest Allocator](c/memory-allocation-brk/article.md) | Draft |
 | [Borrowing Memory: malloc, free, and the Rest of the Family](c/memory-allocation/article.md) | Draft |
+| [Do Not Fold, Spindle, or Mutilate: C Integers](c/integers/article.md) | Draft |
 | [Pointers II: Everything Is On Fire](c/pointer-pitfalls/article.md) | Stub |
 | Anatomy of C Header Files | Stub |
 | The Compiler Tool Chain | Stub |

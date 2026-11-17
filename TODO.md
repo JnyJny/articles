@@ -181,17 +181,30 @@ Ideas and loose ends that don't belong in the article being written.
 
 ## Integers
 
-- Seed from the memory allocation article, where `count * sizeof(int)`
-  wraps around to zero: an article on how integers are stored and how
-  they misbehave. Two's complement, wraparound, shifts, rounding, and
-  the difference between signed and unsigned overflow.
-- `sizeof` goes with this note, as a piece of a discussion of C data
-  types where `sizeof` is incidental. Erik's call, 2026-11-14. Things
-  that discussion could cover: `sizeof` is an operator evaluated at
-  compile time, not a function; it takes a type or an expression, which
-  is why `sizeof(*p)` works with `p` unset; its result is a `size_t`;
-  arrays decay to pointers and lose their size; padding in structures.
-  No link from `memory-allocation`.
+- Drafted 2026-11-17 as `c/integers/` ("Do Not Fold, Spindle, or Mutilate:
+  C Integers"), waiting for Erik's edit pass. Erik's pick over pointer
+  pitfalls. Covers two's complement, type sizes and `<stdint.h>`, unsigned
+  wraparound (with the `count * sizeof(int)` tie to `memory-allocation`),
+  signed overflow as undefined behavior, signed versus unsigned
+  comparison and `char` signedness, the `size_t` countdown loop, shifts,
+  division and `INT_MIN`, and checked arithmetic. Every program was run on
+  aarch64 and x86-64 (qemu) in gcc 14 containers.
+- The x86-64 results (signed `char`, SIGFPE on `INT_MIN / -1` and on
+  division by zero) came from qemu user-mode emulation. Worth a rerun on
+  real x86-64 hardware before calling the article published.
+- Left out on purpose, and where each goes:
+  - `sizeof` as an operator, `sizeof(*p)` working with `p` unset, arrays
+    decaying to pointers, padding in structures: the `data-types` stub.
+    Erik's call, 2026-11-14. No link from `memory-allocation`.
+  - Floating point and rounding: not integers. A separate article if
+    Erik wants one.
+  - Integer promotion in `printf()` varargs and format mismatches
+    (`%d` with a `long`): a candidate sidebar or a short article.
+  - Erik's own stories of integers gone wrong. The draft has no anecdotes
+    because they are his to tell. Good slots: the opener, and the
+    signed overflow section.
+- `memory-allocation` could link its "wrapped around to zero" sentence
+  to `c/integers`. Left alone, since Erik is editing that article.
 
 ## Virtual memory
 
