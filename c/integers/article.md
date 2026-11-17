@@ -522,6 +522,115 @@ That prints 2, 1 and 0, and stops. Read `i-- > 0` as "while `i` is
 greater than zero, and then take one off". It looks odd the first time.
 It's worth memorizing anyway.
 
+## sizeof Is an Unsigned Number
+
+You have been reading `sizeof` since the section on sizes, and it's time
+to say what it is. The `sizeof` operator gives you the size of a type or
+a variable, in bytes, as a `size_t`. That's an unsigned integer, so
+`sizeof` inherits every trap that unsigned integers have. Here are two
+of them, and an idiom:
+
+```C
+/* sizeof.c - sizeof is an unsigned number of bytes */
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+    int values[10];
+    int count = -1;
+    size_t difference = sizeof(int) - 5;
+
+    if (count < sizeof(int))
+        printf("-1 < sizeof(int)\n");
+    else
+        printf("-1 >= sizeof(int)\n");
+    printf("sizeof(int) - 5 = %zu  0x%zx\n", difference, difference);
+    printf("bytes    = %zu\n", sizeof(values));
+    printf("elements = %zu\n", sizeof(values) / sizeof(*values));
+    return EXIT_SUCCESS;
+}
+```
+
+```console
+$ gcc -Wall -Wsign-compare -o sizeof sizeof.c
+sizeof.c: In function 'main':
+sizeof.c:11:15: warning: comparison of integer expressions of different signedness: 'int' and 'long unsigned int' [-Wsign-compare]
+   11 |     if (count < sizeof(int))
+      |               ^
+$ ./sizeof
+-1 >= sizeof(int)
+sizeof(int) - 5 = 18446744073709551615  0xffffffffffffffff
+bytes    = 40
+elements = 10
+```
+
+The comparison is false. The -1 was converted to unsigned, the same
+thing that made `-1 < 1u` false earlier. The subtraction wrapped around
+like the `strlen(a) - strlen(b)` example. When you compare a count with
+a `sizeof`, make the count a `size_t`, and read the warning when the
+compiler offers one.
+
+The last two lines are an idiom you have been reading since `bits.c`.
+`sizeof(values)` is the size of the whole array in bytes: ten `int`s of
+4 bytes each is 40. Divide by the size of one element and you have the
+number of elements. I divide by `sizeof(*values)`, the size of whatever
+`values` holds, so that the line stays right when somebody changes the
+array to `long`. Divide by `sizeof(int)` and the line is wrong the
+moment the type changes.
+
+The idiom has a limit. It works where the compiler still knows that
+`values` is an array, which is in the function that declared it. Pass
+the array to another function and look again:
+
+```C
+/* parameter.c - an array that is passed along turns into a pointer */
+#include <stdio.h>
+#include <stdlib.h>
+
+void inner(int values[10]);
+
+int main(int argc, char *argv[])
+{
+    int values[10];
+
+    printf("in main:  %zu\n", sizeof(values));
+    inner(values);
+    return EXIT_SUCCESS;
+}
+
+void inner(int values[10])
+{
+    printf("in inner: %zu\n", sizeof(values));
+}
+```
+
+```console
+$ gcc -Wall -o parameter parameter.c
+parameter.c: In function 'inner':
+parameter.c:18:37: warning: 'sizeof' on array function parameter 'values' will return size of 'int *' [-Wsizeof-array-argument]
+   18 |     printf("in inner: %zu\n", sizeof(values));
+      |                                     ^
+parameter.c:16:16: note: declared here
+   16 | void inner(int values[10])
+      |            ~~~~^~~~~~~~~~
+$ ./parameter
+in main:  40
+in inner: 8
+```
+
+Inside `inner()`, `values` is an `int *`, and `sizeof` reports the size
+of a pointer, which is 8 bytes on this machine. The `[10]` in the
+parameter is a comment the compiler ignores. gcc warns about it, and gcc
+is right. The pointers article explains how [arrays decay to
+pointers][pointers-arrays]. When a function needs to know how many
+elements an array has, pass the count as another argument.
+
+There is more to `sizeof` than its type. It's an operator, which makes
+it different from a function, and padding can make a structure larger
+than the sum of its members. Those belong with [what a type
+is][data-types].
+
 ## Shifts
 
 Shifting moves bits left or right. For an unsigned integer, shifting
@@ -787,5 +896,6 @@ needs a type to begin with, [that story is waiting][data-types].
 [gcc-instrumentation]: https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
 [unix-signals]: ../../unix/signals/article.md
 [data-types]: ../data-types/article.md
+[pointers-arrays]: ../pointers/article.md#pointers-and-arrays
 [portable-assembler]: ../portable-assembler/article.md
 [hackers-delight]: https://en.wikipedia.org/wiki/Hacker%27s_Delight

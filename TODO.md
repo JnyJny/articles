@@ -157,6 +157,14 @@ Ideas and loose ends that don't belong in the article being written.
   (4611686018427387904 * 4) cannot be represented in type size_t"
   instead of letting `calloc()` return NULL. Verified on gcc 14, aarch64
   Linux.
+- Arrays versus pointers (Erik, 2026-11-17: does `pointers` describe the
+  equivalence?). It describes the equivalence: an array name decays to a
+  pointer to its first element, and `p[n]` is `*(p + n)`. It never shows
+  the difference. Candidates for this article: `sizeof` of an array and
+  of a pointer, `&numbers` having a different type from `numbers`, an
+  array name not being assignable, the `[10]` in a function parameter
+  being a pointer, and the `greeting` pair below. `integers` shows the
+  `sizeof` and parameter cases and links to `pointers`.
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
   alike and behave differently. The pointer refers to read-only
   characters in `.rodata`, and writing through it segfaults. The array
@@ -204,9 +212,14 @@ Ideas and loose ends that don't belong in the article being written.
   onto its CPU. Checked on aarch64 and x86-64 (qemu); every table row was
   matched against the assembly gcc 14 generated from the article's code.
 - Left out on purpose, and where each goes:
-  - `sizeof` as an operator, `sizeof(*p)` working with `p` unset, arrays
-    decaying to pointers, padding in structures: the `data-types` stub.
-    Erik's call, 2026-11-14. No link from `memory-allocation`.
+  - `sizeof` as an operator, `sizeof(*p)` working with `p` unset,
+    padding in structures: the `data-types` stub. Erik's call,
+    2026-11-14. No link from `memory-allocation`. On 2026-11-17 Erik
+    asked for a small `sizeof` section in `integers` anyway, because
+    `sizeof` is important and often misunderstood. It covers what makes
+    `sizeof` an integer topic: the unsigned `size_t` result, the
+    element-count idiom, and the array that turns into a pointer when
+    it is passed to a function. `data-types` keeps the rest.
   - Floating point and rounding: not integers. A separate article if
     Erik wants one.
   - Integer promotion in `printf()` varargs and format mismatches
