@@ -144,6 +144,26 @@ Ideas and loose ends that don't belong in the article being written.
   idea: the simplest and oldest allocators help a person evaluate modern
   ones.
 
+## Arrays
+
+- Stub created 2026-11-17: `c/arrays/`, "Many Ways to Say Array". Erik's
+  idea, and a short article. It establishes the pointer and array
+  relationship and teaches the reader to recognize the spellings of "a
+  bunch of things" in C: an array object, a pointer plus a count, a
+  `malloc()` block indexed like an array, a sentinel-terminated array
+  (strings, `argv`, `POINT_SENTINEL`), and the parameter spellings that
+  all mean a pointer. Other articles point here. It is also the home for
+  `sizeof` of an array versus a pointer.
+- Does `pointers` describe the equivalence? Erik asked on 2026-11-17. It
+  does: an array name decays to a pointer to its first element, and
+  `p[n]` is `*(p + n)`. It never shows the difference. Things to cover:
+  `&numbers` having a different type from `numbers`, an array name not
+  being assignable, `sizeof` of an array versus a pointer, the `[10]` in a
+  function parameter being a pointer, and the `greeting` pair under
+  pointer pitfalls, which fits here too.
+- `integers` already shows the `sizeof` and parameter cases and links to
+  `pointers`. Add a link to this article when it is written.
+
 ## Pointer pitfalls
 
 - The memory allocation article promises a proper introduction to
@@ -157,14 +177,6 @@ Ideas and loose ends that don't belong in the article being written.
   (4611686018427387904 * 4) cannot be represented in type size_t"
   instead of letting `calloc()` return NULL. Verified on gcc 14, aarch64
   Linux.
-- Arrays versus pointers (Erik, 2026-11-17: does `pointers` describe the
-  equivalence?). It describes the equivalence: an array name decays to a
-  pointer to its first element, and `p[n]` is `*(p + n)`. It never shows
-  the difference. Candidates for this article: `sizeof` of an array and
-  of a pointer, `&numbers` having a different type from `numbers`, an
-  array name not being assignable, the `[10]` in a function parameter
-  being a pointer, and the `greeting` pair below. `integers` shows the
-  `sizeof` and parameter cases and links to `pointers`.
 - `char *greeting = "hello";` and `char greeting[] = "hello";` look
   alike and behave differently. The pointer refers to read-only
   characters in `.rodata`, and writing through it segfaults. The array

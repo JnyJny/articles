@@ -44,6 +44,7 @@ I admire the conviction.
 | My Time Among the Linker Aliens | Planned |
 | Virtual Memory: The Sacred Mystery | Planned |
 | The Evolution of C Compilers | Planned |
+| Many Ways to Say Array | Planned |
 
 ### Suggested Reading Order
 

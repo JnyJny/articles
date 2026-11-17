@@ -623,8 +623,9 @@ Inside `inner()`, `values` is an `int *`, and `sizeof` reports the size
 of a pointer, which is 8 bytes on this machine. The `[10]` in the
 parameter is a comment the compiler ignores. gcc warns about it, and gcc
 is right. The pointers article explains how [arrays decay to
-pointers][pointers-arrays]. When a function needs to know how many
-elements an array has, pass the count as another argument.
+pointers][pointers-arrays], and [the ways C spells an array][arrays] has
+the rest. When a function needs to know how many elements an array has,
+pass the count as another argument.
 
 There is more to `sizeof` than its type. It's an operator, which makes
 it different from a function, and padding can make a structure larger
@@ -897,5 +898,6 @@ needs a type to begin with, [that story is waiting][data-types].
 [unix-signals]: ../../unix/signals/article.md
 [data-types]: ../data-types/article.md
 [pointers-arrays]: ../pointers/article.md#pointers-and-arrays
+[arrays]: ../arrays/article.md
 [portable-assembler]: ../portable-assembler/article.md
 [hackers-delight]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
