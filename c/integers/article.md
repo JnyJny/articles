@@ -349,6 +349,12 @@ addition in unsigned, where wrapping is defined, and converted the
 result back, which gcc defines as wrapping. Doing it in `int32_t` would
 be the undefined behavior this section is about.
 
+The fix, generally, is to make `time_t` a 64-bit integer and recompile,
+which is not very sexy. I've done some of that work myself. The bigger
+problem is firmware, because it's rarely updated after it's burned in.
+My guess is that the important things will break and be replaced over
+the next ten years or so, and my guess is as good as anybody's.
+
 ## When Signed Meets Unsigned
 
 Mix a signed and an unsigned integer in one expression and C has to pick
