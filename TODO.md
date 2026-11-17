@@ -206,6 +206,9 @@ Ideas and loose ends that don't belong in the article being written.
   - Erik's own stories of integers gone wrong. The draft has no anecdotes
     because they are his to tell. Good slots: the opener, and the
     signed overflow section.
+- Story seed for the Year 2038 paragraph in `integers`: Erik has done
+  real work to avoid the 2038 problem (2026-11-17). Details unknown; ask
+  Erik. Also a possible Y2K contrast, since he lived through it.
 - `memory-allocation` could link its "wrapped around to zero" sentence
   to `c/integers`. Left alone, since Erik is editing that article.
 
